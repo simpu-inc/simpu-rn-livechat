@@ -16,12 +16,13 @@ import SimpuLiveChat from 'simpu-rn-livechat';
 // ...
 
 const App = () => {
-    
- return (<View >
-...
-     <SimpuLiveChat/>
- </View>)
-}
+  return (
+    <View>
+      . ..
+      <SimpuLiveChat />
+    </View>
+  );
+};
 ```
 
 ## Contributing

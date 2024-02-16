@@ -1,20 +1,12 @@
-import {Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import ChatProvider from './context';
-import ChatBotContainer from './ChatBotContainer';
+import type { LiveChatProps } from './@types/types';
+import LiveChatContainer from './LiveChatContainer';
 
-type chatBotProps = {
-  openLiveChat:boolean
-};
-
-const SimpuLiveChat = (Props: chatBotProps) => {
-
-  const {openLiveChat} = Props
-
-  if(openLiveChat) return 
+const SimpuLiveChat = (Props: LiveChatProps) => {
   return (
     <ChatProvider>
-      <ChatBotContainer {...Props} />
+      <LiveChatContainer {...Props} />
     </ChatProvider>
   );
 };
