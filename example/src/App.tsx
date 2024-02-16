@@ -1,18 +1,29 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'simpu-rn-livechat';
+import { useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import SimpuLiveChat from 'simpu-rn-livechat';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [openLiveChat, setOpenliveChat] = useState(false)
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity
+            onPress={() => setOpenliveChat(!openLiveChat)}
+            style={{
+              backgroundColor: "blue",
+              height: 40,
+              width: 170,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 20,
+            }}>
+            <Text style={{color: '#fff', fontSize: 18}}>Talk to an agent</Text>
+          </TouchableOpacity>
+        </View>
+     <SimpuLiveChat openLiveChat={openLiveChat}/>
     </View>
   );
 }

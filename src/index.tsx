@@ -1,22 +1,22 @@
-import { NativeModules, Platform } from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import ChatProvider from './context';
+import ChatBotContainer from './ChatBotContainer';
 
-const LINKING_ERROR =
-  `The package 'simpu-rn-livechat' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
+type chatBotProps = {
+  openLiveChat:boolean
+};
 
-const SimpuRnLivechat = NativeModules.SimpuRnLivechat
-  ? NativeModules.SimpuRnLivechat
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+const SimpuLiveChat = (Props: chatBotProps) => {
 
-export function multiply(a: number, b: number): Promise<number> {
-  return SimpuRnLivechat.multiply(a, b);
-}
+  const {openLiveChat} = Props
+
+  if(openLiveChat) return 
+  return (
+    <ChatProvider>
+      <ChatBotContainer {...Props} />
+    </ChatProvider>
+  );
+};
+
+export default SimpuLiveChat;

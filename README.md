@@ -11,11 +11,17 @@ npm install simpu-rn-livechat
 ## Usage
 
 ```js
-import { multiply } from 'simpu-rn-livechat';
+import SimpuLiveChat from 'simpu-rn-livechat';
 
 // ...
 
-const result = await multiply(3, 7);
+const App = () => {
+    
+ return (<View >
+...
+     <SimpuLiveChat/>
+ </View>)
+}
 ```
 
 ## Contributing

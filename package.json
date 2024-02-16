@@ -1,6 +1,6 @@
 {
   "name": "simpu-rn-livechat",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "simpu react-native livechat sdk",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -37,7 +37,8 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "LiveChat"
   ],
   "repository": {
     "type": "git",
@@ -61,6 +62,7 @@
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
     "commitlint": "^17.0.2",
+    "date-fns": "^3.3.1",
     "del-cli": "^5.0.0",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.5.0",
@@ -71,6 +73,7 @@
     "react": "18.2.0",
     "react-native": "0.73.4",
     "react-native-builder-bob": "^0.20.0",
+    "react-native-phone-number-input": "^2.1.0",
     "release-it": "^15.0.0",
     "turbo": "^1.10.7",
     "typescript": "^5.0.2"
