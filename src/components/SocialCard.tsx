@@ -1,12 +1,12 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import {theme} from '../utils/theme';
-import {useChatProvider} from '../context';
+import { theme } from '../utils/theme';
+import { useChatProvider } from '../context';
 
 type SocialsProps = {};
 
-const SocialBtn = ({title, url}: {title: string; url: string}) => {
-  const {orgSettings} = useChatProvider();
+const SocialBtn = ({ title, url }: { title: string; url: string }) => {
+  const { orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     btn: {
       height: 40,
@@ -18,7 +18,7 @@ const SocialBtn = ({title, url}: {title: string; url: string}) => {
       justifyContent: 'center',
       flexDirection: 'row',
       borderWidth: 1,
-      borderColor: orgSettings.brandColor ?? theme.SimpuBlue,
+      borderColor: orgSettings?.brandColor ?? theme.SimpuBlue,
     },
     btnIcon: {
       height: 20,

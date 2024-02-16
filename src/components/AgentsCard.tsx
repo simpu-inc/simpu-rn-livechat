@@ -1,13 +1,13 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Avatar from './Avatar';
-import {theme} from '../utils/theme';
+import { theme } from '../utils/theme';
 
 type AgentsCardProps = {
   agents: any[];
 };
-const AgentsCard = ({agents}: AgentsCardProps) => {
-  console.log('agents lentgh', agents?.length);
+const AgentsCard = ({ agents }: AgentsCardProps) => {
+  // console.log('agents lentgh', agents?.length);
   const styles = StyleSheet.create({
     container: {
       padding: 10,

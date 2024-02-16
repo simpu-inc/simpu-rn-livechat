@@ -7,15 +7,15 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {deviceHeight, deviceWidth} from '../utils/responsiveConfig';
-import {theme} from '../utils/theme';
+import { deviceHeight, deviceWidth } from '../utils/responsiveConfig';
+import { theme } from '../utils/theme';
 import ChatInput from '../components/ChatInput';
-import {useChatProvider} from '../context';
-import {ChatData} from '../utils/SampleData';
-import {format} from 'date-fns';
+import { useChatProvider } from '../context';
+import { ChatData } from '../utils/SampleData';
+import { format } from 'date-fns';
 
 const Chat = () => {
-  const {setViewIndex, orgSettings} = useChatProvider();
+  const { setViewIndex, orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -47,7 +47,7 @@ const Chat = () => {
     },
   });
 
-  const ChatList = ({item, index}: {item: any; index: number}) => {
+  const ChatList = ({ item, index }: { item: any; index: number }) => {
     // console.log('itemsss', JSON.stringify(item, null, 2));
     return (
       <View
@@ -56,7 +56,8 @@ const Chat = () => {
           padding: 5,
           marginVertical: 10,
           maxWidth: deviceWidth * 0.5,
-        }}>
+        }}
+      >
         <View
           style={{
             paddingVertical: 6,
@@ -64,9 +65,10 @@ const Chat = () => {
             borderRadius: 4,
             backgroundColor:
               item?.userType === 'agent'
-                ? orgSettings.brandColor ?? theme?.SimpuBlue
+                ? orgSettings?.brandColor ?? theme?.SimpuBlue
                 : theme.SimpuPaleWhite,
-          }}>
+          }}
+        >
           <Text
             style={{
               lineHeight: 22,
@@ -74,7 +76,8 @@ const Chat = () => {
                 item?.userType === 'agent'
                   ? theme.SimpuWhite
                   : theme.SimpuBlack,
-            }}>
+            }}
+          >
             {item?.message}
           </Text>
           <Text
@@ -86,7 +89,8 @@ const Chat = () => {
               fontSize: 9,
               paddingVertical: 4,
               alignSelf: 'flex-end',
-            }}>
+            }}
+          >
             {format(new Date(item?.date), 'p')}
           </Text>
         </View>
@@ -94,9 +98,10 @@ const Chat = () => {
           <Text
             style={{
               paddingTop: 4,
-              color: orgSettings.brandColor ?? theme.SimpuBlue,
+              color: orgSettings?.brandColor ?? theme.SimpuBlue,
               fontSize: 12,
-            }}>
+            }}
+          >
             Agent: {item?.name}
           </Text>
         )}
@@ -107,19 +112,20 @@ const Chat = () => {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <TouchableOpacity
-          style={{flexDirection: 'row', alignItems: 'center'}}
-          onPress={() => setViewIndex(1)}>
+          style={{ flexDirection: 'row', alignItems: 'center' }}
+          onPress={() => setViewIndex(1)}
+        >
           <Image
             source={require('../assets/backIcon.png')}
-            style={{height: 18, width: 18, marginRight: 5}}
+            style={{ height: 18, width: 18, marginRight: 5 }}
           />
           <Image
             resizeMode="contain"
             style={styles.imageStyle}
-            source={{uri: `https://i.pravatar.cc/150?img=${3}`}}
+            source={{ uri: `https://i.pravatar.cc/150?img=${3}` }}
           />
         </TouchableOpacity>
-        <View style={{marginLeft: 5}}>
+        <View style={{ marginLeft: 5 }}>
           <Text style={styles.NameText}>Waka Waka</Text>
           <Text style={styles.responseTimeText}>
             Typically replies in an hour
@@ -134,7 +140,7 @@ const Chat = () => {
         }}
         data={ChatData}
         keyExtractor={(_, i) => i.toString()}
-        renderItem={({item, index}) => <ChatList item={item} index={index} />}
+        renderItem={({ item, index }) => <ChatList item={item} index={index} />}
       />
       <ChatInput />
     </View>

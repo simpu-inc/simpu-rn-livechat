@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 
 import Start from './views/Start';
-import { deviceHeight } from './utils/responsiveConfig';
+import { deviceHeight, deviceWidth } from './utils/responsiveConfig';
 import { theme } from './utils/theme';
 import Footer from './components/Footer';
 import Chat from './views/Chat';
@@ -31,55 +31,60 @@ const LiveChatContainer = (Props: LiveChatProps) => {
   }, []);
 
   return (
-    <>
-      <View style={{ flex: 1, backgroundColor: theme.SimpuPaleWhite }}>
-        {(viewIndex === 1 || viewIndex === 2) && (
-          <View
+    <View
+      style={{
+        flex: 1,
+        height: deviceHeight,
+        width: deviceWidth,
+        backgroundColor: theme.SimpuPaleWhite,
+      }}
+    >
+      {(viewIndex === 1 || viewIndex === 2) && (
+        <View
+          style={{
+            paddingHorizontal: 25,
+            paddingTop: 100, //TODO:adjust this
+            backgroundColor: orgSettings?.brandColor ?? theme.SimpuBlue,
+            height: deviceHeight * 0.3,
+          }}
+        >
+          <Text
             style={{
-              paddingHorizontal: 25,
-              paddingTop: 100, //TODO:adjust this
-              backgroundColor: orgSettings?.brandColor ?? theme.SimpuBlue,
-              height: deviceHeight * 0.3,
+              fontSize: 24,
+              lineHeight: 24,
+              color: theme.SimpuWhite,
             }}
           >
-            <Text
-              style={{
-                fontSize: 24,
-                lineHeight: 24,
-                color: theme.SimpuWhite,
-              }}
-            >
-              Welcome 👋
-            </Text>
-            <Text
-              style={{
-                fontSize: 16,
-                lineHeight: 24,
-                color: theme.SimpuWhite,
-                paddingVertical: 5,
-              }}
-            >
-              {orgSettings?.welcomeMessage}
-            </Text>
-            <Text
-              style={{
-                fontSize: 16,
-                lineHeight: 24,
-                color: theme.SimpuWhite,
-              }}
-            >
-              We reply instantly from {orgSettings?.officeHrs}
-            </Text>
-          </View>
-        )}
-        {viewIndex === 1 && <Start />}
-        {viewIndex === 2 && <ContactForm />}
+            Welcome 👋
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              lineHeight: 24,
+              color: theme.SimpuWhite,
+              paddingVertical: 5,
+            }}
+          >
+            {orgSettings?.welcomeMessage}
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              lineHeight: 24,
+              color: theme.SimpuWhite,
+            }}
+          >
+            We reply instantly from {orgSettings?.officeHrs}
+          </Text>
+        </View>
+      )}
+      {viewIndex === 1 && <Start />}
+      {viewIndex === 2 && <ContactForm />}
 
-        {viewIndex === 3 && <Chat />}
+      {viewIndex === 3 && <Chat />}
 
-        {(viewIndex === 1 || viewIndex === 2) && <Footer />}
-      </View>
-    </>
+      {(viewIndex === 1 || viewIndex === 2) && <Footer />}
+    </View>
   );
 };
 

@@ -1,11 +1,11 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {theme} from '../utils/theme';
-import {deviceHeight} from '../utils/responsiveConfig';
-import {useChatProvider} from '../context';
+import { theme } from '../utils/theme';
+import { deviceHeight } from '../utils/responsiveConfig';
+import { useChatProvider } from '../context';
 
 const Footer = () => {
-  const {orgSettings} = useChatProvider();
+  const { orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     footerContainer: {
       position: 'absolute',
@@ -21,8 +21,8 @@ const Footer = () => {
   return (
     <View style={styles.footerContainer}>
       <Text style={styles.footerText}>
-        <Text style={{color: theme.SimpuBlack}}>Powered by </Text>
-        <Text style={{color: orgSettings.brandColor ?? theme.SimpuBlue}}>
+        <Text style={{ color: theme.SimpuBlack }}>Powered by </Text>
+        <Text style={{ color: orgSettings?.brandColor ?? theme.SimpuBlue }}>
           Simpu
         </Text>
       </Text>

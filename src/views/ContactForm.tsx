@@ -5,17 +5,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
-import {deviceHeight} from '../utils/responsiveConfig';
-import {theme} from '../utils/theme';
+import React, { useRef, useState } from 'react';
+import { deviceHeight } from '../utils/responsiveConfig';
+import { theme } from '../utils/theme';
 import PhoneInput from 'react-native-phone-number-input';
-import {useChatProvider} from '../context';
+import { useChatProvider } from '../context';
 
 const ContactForm = () => {
   const phoneInput = useRef<PhoneInput>(null);
   const [value, setValue] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
-  const {setViewIndex, orgSettings} = useChatProvider();
+  const { setViewIndex, orgSettings } = useChatProvider();
 
   const styles = StyleSheet.create({
     container: {
@@ -38,7 +38,7 @@ const ContactForm = () => {
     input: {
       height: 50,
       borderWidth: 1,
-      borderColor: orgSettings.brandColor ?? theme.SimpuBlue,
+      borderColor: orgSettings?.brandColor ?? theme.SimpuBlue,
       borderRadius: 8,
       paddingHorizontal: 10,
       fontSize: 16,
@@ -47,7 +47,7 @@ const ContactForm = () => {
       height: 40,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: orgSettings.brandColor ?? theme.SimpuBlue,
+      backgroundColor: orgSettings?.brandColor ?? theme.SimpuBlue,
       marginHorizontal: 15,
       marginVertical: 15,
       borderRadius: 10,
@@ -60,8 +60,8 @@ const ContactForm = () => {
   });
   return (
     <View style={styles.container}>
-      <View style={{paddingHorizontal: 15}}>
-        <Text style={{paddingVertical: 10, fontSize: 16, fontWeight: '500'}}>
+      <View style={{ paddingHorizontal: 15 }}>
+        <Text style={{ paddingVertical: 10, fontSize: 16, fontWeight: '500' }}>
           We'll like to know you!
         </Text>
       </View>
@@ -91,10 +91,10 @@ const ContactForm = () => {
             placeholder="900000000"
             defaultCode="US"
             layout="first"
-            onChangeText={text => {
+            onChangeText={(text) => {
               setValue(text);
             }}
-            onChangeFormattedText={text => {
+            onChangeFormattedText={(text) => {
               setFormattedValue(text);
             }}
             withDarkTheme={false}
@@ -103,7 +103,7 @@ const ContactForm = () => {
             containerStyle={{
               borderWidth: 1,
               width: 300,
-              borderColor: orgSettings.brandColor ?? theme.SimpuBlue,
+              borderColor: orgSettings?.brandColor ?? theme.SimpuBlue,
               borderRadius: 8,
               backgroundColor: 'transparent',
               // marginHorizontal: ,
@@ -132,14 +132,15 @@ const ContactForm = () => {
           <Text style={styles.lable}>Message</Text>
           <TextInput
             multiline
-            style={[styles.input, {height: 80}]}
+            style={[styles.input, { height: 80 }]}
             placeholder="write your message"
           />
         </View>
 
         <TouchableOpacity
           style={styles.sendBtn}
-          onPress={() => setViewIndex(3)}>
+          onPress={() => setViewIndex(3)}
+        >
           <Text style={styles.sendBtnTxt}>Send message</Text>
         </TouchableOpacity>
       </View>

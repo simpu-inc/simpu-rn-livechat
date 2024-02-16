@@ -1,8 +1,8 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {formatName} from '../utils/helper';
-import {theme} from '../utils/theme';
-import {useChatProvider} from '../context';
+import { formatName } from '../utils/helper';
+import { theme } from '../utils/theme';
+import { useChatProvider } from '../context';
 
 type AvatarPopsTypes = {
   name: string;
@@ -12,8 +12,8 @@ type AvatarPopsTypes = {
   agentLength: number;
 };
 
-const Avatar = ({name, index, agentLength}: AvatarPopsTypes) => {
-  const {orgSettings} = useChatProvider();
+const Avatar = ({ name, index, agentLength }: AvatarPopsTypes) => {
+  const { orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     avatarContainer: {
       alignItems: 'center',
@@ -21,7 +21,7 @@ const Avatar = ({name, index, agentLength}: AvatarPopsTypes) => {
       height: 50,
       width: 50,
       borderRadius: 25,
-      backgroundColor: orgSettings.brandColor ?? theme.SimpuBlue,
+      backgroundColor: orgSettings?.brandColor ?? theme.SimpuBlue,
       borderWidth: 1,
       borderColor: theme.SimpuWhite,
       zIndex: agentLength - index,

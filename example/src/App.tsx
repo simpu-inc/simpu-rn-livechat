@@ -13,21 +13,27 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <TouchableOpacity
-          onPress={() => setOpenliveChat(!openLiveChat)}
-          style={{
-            backgroundColor: '#4166F5',
-            height: 40,
-            width: 170,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 20,
-          }}
+      {!openLiveChat && (
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
-          <Text style={{ color: '#fff', fontSize: 18 }}>Talk to an agent</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={() => setOpenliveChat(!openLiveChat)}
+            style={{
+              backgroundColor: '#4166F5',
+              height: 40,
+              width: 170,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 20,
+            }}
+          >
+            <Text style={{ color: '#fff', fontSize: 18 }}>
+              Talk to an agent
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
       {openLiveChat && (
         <SimpuLiveChat
           app_id={'e3e8ae1e'}
