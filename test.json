@@ -1,0 +1,98 @@
+{
+  "id": "9f1dd3b835448c626c96edfafbe38c08",
+  "name": "Testacorp",
+  "secret_key": "SM_d4e7e255174b26a4a4073e881c79feab",
+  "platform_id": "e3e8ae1e",
+  "apps": {},
+  "style": {
+    "position": "right",
+    "action_color": "#3525E6",
+    "side_spacing": 20,
+    "bottom_spacing": 20,
+    "custom_launcher": "https://res.cloudinary.com/simpu-inc/image/upload/v1634726327/Live%20Chat/Chat_Bubble_dtwrd1.svg",
+    "background_color": "#3525E6",
+    "header_logo": null
+  },
+  "launcher_text": "Hello ",
+  "response_time": 3600,
+  "integration_id": "3e98e7c739bc44ff8229947a29c7f9b7",
+  "show_watermark": true,
+  "welcome_message": {
+    "greeting": "Hi 👋",
+    "language": "english",
+    "team_intro": "Ask us anything, or share your feedback."
+  },
+  "show_business_hours": true,
+  "members": [
+    {
+      "name": "John Doe",
+      "uuid": "5ab8b23be39f11ea937086d35ec4f76b",
+      "user_id": "5ab599aee39f11ea937086d35ec4f76b",
+      "image_url": "https://res.cloudinary.com/ddvnmm51b/image/upload/v1669906585/zusfggcowtp4l7jjhzb0.png"
+    },
+    {
+      "name": "maxwell iheagwara",
+      "uuid": "38c89e23e42911ea937086d35ec4f76b",
+      "user_id": "6c0ab7bbe3ab11ea937086d35ec4f76b",
+      "image_url": null
+    },
+    {
+      "name": "john maxwell",
+      "uuid": "edd6e41bf1bd11ea937086d35ec4f76b",
+      "user_id": "ce6cd01ff0e411ea937086d35ec4f76b",
+      "image_url": null
+    },
+    {
+      "name": "Maxwell Iheagwara",
+      "uuid": "52fa2263f1bf11ea937086d35ec4f76b",
+      "user_id": "f925f42cf04c11ea937086d35ec4f76b",
+      "image_url": null
+    },
+    {
+      "name": "maxwell okechukwu",
+      "uuid": "f395dd8897b311eba1bb86d35ec4f76b",
+      "user_id": "0bc30144018211eb937086d35ec4f76b",
+      "image_url": null
+    }
+  ],
+  "business_hours": {
+    "schedules": {
+      "0": {
+        "to": "17:00",
+        "from": "08:00",
+        "is_active": false
+      },
+      "1": {
+        "to": "17:00",
+        "from": "08:00",
+        "is_active": false
+      },
+      "2": {
+        "to": "17:00",
+        "from": "08:00",
+        "is_active": false
+      },
+      "3": {
+        "to": "17:00",
+        "from": "08:00",
+        "is_active": false
+      },
+      "4": {
+        "to": "17:00",
+        "from": "08:00",
+        "is_active": false
+      },
+      "5": {
+        "to": "17:00",
+        "from": "08:00",
+        "is_active": false
+      },
+      "6": {
+        "to": "17:00",
+        "from": "08:00",
+        "is_active": false
+      }
+    },
+    "timezone": "Africa/Lagos"
+  }
+}

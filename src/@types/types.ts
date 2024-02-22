@@ -7,3 +7,64 @@ export type LiveChatProps = {
   user_id?: string;
   image_url?: string;
 };
+
+export type welcomeType = {
+  greeting: string;
+  language: string;
+  team_intro: string;
+};
+
+export type StyleType = {
+  position: string;
+  action_color: string;
+  side_spacing: number;
+  bottom_spacing: number;
+  custom_launcher: string;
+  background_color: string;
+  header_logo: any;
+};
+
+export type AgentType = {
+  name: string;
+  uuid: string;
+  user_id: string;
+  image_url: any;
+};
+
+export type scheduleType = {
+  to: string;
+  from: string;
+  is_active: boolean;
+};
+
+type Schedules = {
+  '0': scheduleType;
+  '1': scheduleType;
+  '2': scheduleType;
+  '3': scheduleType;
+  '4': scheduleType;
+  '5': scheduleType;
+  '6': scheduleType;
+};
+
+type Businesshours = {
+  schedules: Schedules;
+};
+
+export type OrgSettingType = {
+  id: string;
+  name: string;
+  secret_key: string;
+  platform_id: string;
+  apps: any;
+  style: StyleType;
+  launcher_text: string;
+  response_time: number;
+  integration_id: string;
+  show_watermark: boolean;
+  welcome_message: welcomeType;
+  show_business_hours: boolean;
+  members: AgentType[];
+  timezone: string;
+  business_hours: Businesshours;
+};

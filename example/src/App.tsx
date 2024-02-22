@@ -17,6 +17,16 @@ export default function App() {
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
+          <View
+            style={{ marginTop: -40, marginBottom: 20, alignItems: 'center' }}
+          >
+            <Text style={{ fontSize: 18, paddingVertical: 10 }}>
+              Welcome to my Waka Waka App
+            </Text>
+            <Text style={{ fontSize: 14 }}>
+              We plane memorable trips for you and your Loved ones
+            </Text>
+          </View>
           <TouchableOpacity
             onPress={() => setOpenliveChat(!openLiveChat)}
             style={{

@@ -1,17 +1,17 @@
-import React, {ReactNode, FC, createContext, useContext, useState} from 'react';
-
-type organisationType = {
-  name: string;
-  brandColor: string;
-  welcomeMessage: string;
-  officeHrs: string;
-};
+import React, {
+  ReactNode,
+  FC,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
+import type { OrgSettingType } from '../@types/types';
 
 type ChatContextType = {
-  orgSettings: organisationType;
+  orgSettings: OrgSettingType;
   openChatBot: boolean;
   viewIndex: number;
-  setOrgSettings: React.Dispatch<React.SetStateAction<organisationType | null>>;
+  setOrgSettings: React.Dispatch<React.SetStateAction<OrgSettingType | null>>;
   setOpenChatBot: React.Dispatch<React.SetStateAction<boolean>>;
   setViewIndex: React.Dispatch<React.SetStateAction<number>>;
 };
@@ -29,8 +29,8 @@ export const useChatProvider = () => {
 //   children: ReactNode;
 // };
 
-const ChatProvider: FC<{children: ReactNode}> = ({children}) => {
-  const [orgSettings, setOrgSettings] = useState<organisationType | null>(null);
+const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [orgSettings, setOrgSettings] = useState<OrgSettingType | null>(null);
   const [openChatBot, setOpenChatBot] = useState(false);
   const [viewIndex, setViewIndex] = useState(1);
   return (
@@ -42,7 +42,8 @@ const ChatProvider: FC<{children: ReactNode}> = ({children}) => {
         setOrgSettings,
         setOpenChatBot,
         setViewIndex,
-      }}>
+      }}
+    >
       {children}
     </ChatContext.Provider>
   );

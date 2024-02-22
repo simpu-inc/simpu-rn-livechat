@@ -22,7 +22,11 @@ const Footer = () => {
     <View style={styles.footerContainer}>
       <Text style={styles.footerText}>
         <Text style={{ color: theme.SimpuBlack }}>Powered by </Text>
-        <Text style={{ color: orgSettings?.brandColor ?? theme.SimpuBlue }}>
+        <Text
+          style={{
+            color: orgSettings?.style?.background_color ?? theme.SimpuBlue,
+          }}
+        >
           Simpu
         </Text>
       </Text>

@@ -18,7 +18,7 @@ const SocialBtn = ({ title, url }: { title: string; url: string }) => {
       justifyContent: 'center',
       flexDirection: 'row',
       borderWidth: 1,
-      borderColor: orgSettings?.brandColor ?? theme.SimpuBlue,
+      borderColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
     },
     btnIcon: {
       height: 20,

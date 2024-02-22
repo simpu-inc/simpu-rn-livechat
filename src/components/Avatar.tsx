@@ -3,6 +3,7 @@ import React from 'react';
 import { formatName } from '../utils/helper';
 import { theme } from '../utils/theme';
 import { useChatProvider } from '../context';
+import { Image } from 'react-native';
 
 type AvatarPopsTypes = {
   name: string;
@@ -12,7 +13,7 @@ type AvatarPopsTypes = {
   agentLength: number;
 };
 
-const Avatar = ({ name, index, agentLength }: AvatarPopsTypes) => {
+const Avatar = ({ name, index, imgUrl, agentLength }: AvatarPopsTypes) => {
   const { orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     avatarContainer: {
@@ -21,17 +22,22 @@ const Avatar = ({ name, index, agentLength }: AvatarPopsTypes) => {
       height: 50,
       width: 50,
       borderRadius: 25,
-      backgroundColor: orgSettings?.brandColor ?? theme.SimpuBlue,
+      backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       borderWidth: 1,
       borderColor: theme.SimpuWhite,
       zIndex: agentLength - index,
       marginRight: -14,
     },
+
     avatarText: {
       color: theme.SimpuWhite,
       fontSize: 18,
     },
   });
+
+  if (!!imgUrl) {
+    return <Image style={styles.avatarContainer} source={{ uri: imgUrl }} />;
+  }
   return (
     <View style={[styles.avatarContainer, {}]}>
       <Text style={styles.avatarText}>{formatName(name)}</Text>

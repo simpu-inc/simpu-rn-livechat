@@ -2,12 +2,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Avatar from './Avatar';
 import { theme } from '../utils/theme';
+import { useChatProvider } from '../context';
 
-type AgentsCardProps = {
-  agents: any[];
-};
-const AgentsCard = ({ agents }: AgentsCardProps) => {
-  // console.log('agents lentgh', agents?.length);
+const AgentsCard = () => {
+  const { orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     container: {
       padding: 10,
@@ -29,19 +27,22 @@ const AgentsCard = ({ agents }: AgentsCardProps) => {
   });
   return (
     <View style={styles.container}>
-      {agents?.slice(0, 5)?.map((ite, i) => {
+      {orgSettings?.members?.slice(0, 5)?.map((ite, i) => {
         return (
           <Avatar
             name={ite?.name}
+            imgUrl={ite?.image_url}
             key={i}
             index={i}
-            agentLength={agents?.length}
+            agentLength={orgSettings?.members?.length}
           />
         );
       })}
-      {agents?.length > 5 && (
+      {orgSettings?.members?.length > 5 && (
         <View style={styles.extraContainer}>
-          <Text style={styles.extraText}>+{agents?.length - 5}</Text>
+          <Text style={styles.extraText}>
+            +{orgSettings?.members?.length - 5}
+          </Text>
         </View>
       )}
     </View>

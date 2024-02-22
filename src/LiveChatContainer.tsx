@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 
 import Start from './views/Start';
@@ -9,8 +9,11 @@ import Chat from './views/Chat';
 import { useChatProvider } from './context';
 import ContactForm from './views/ContactForm';
 import type { LiveChatProps } from './@types/types';
+import { useSettingsQuery } from './utils';
 
 const LiveChatContainer = (Props: LiveChatProps) => {
+  const { name, email, app_id, user_id, public_key } = Props;
+
   const {
     openChatBot,
     orgSettings,
@@ -19,16 +22,17 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     setOrgSettings,
   } = useChatProvider();
 
-  useEffect(() => {
-    setOrgSettings({
-      name: 'Waka Waka',
-      brandColor: '#FD6A02', //6C22A6 FF004D B80000
-      welcomeMessage: 'At Waka Waka we plan a memorable Trip',
-      officeHrs: '8am-5pm Work days',
-    });
+  const { data, error, isLoading } = useSettingsQuery({
+    app_id,
+    public_key,
+  });
 
+  console.log('data from settings', JSON.stringify(data, null, 3));
+
+  useEffect(() => {
+    setOrgSettings(data);
     return () => {};
-  }, []);
+  }, [data]);
 
   return (
     <View
@@ -43,29 +47,34 @@ const LiveChatContainer = (Props: LiveChatProps) => {
         <View
           style={{
             paddingHorizontal: 25,
-            paddingTop: 100, //TODO:adjust this
-            backgroundColor: orgSettings?.brandColor ?? theme.SimpuBlue,
+            paddingTop: 50, //TODO:adjust this
+            backgroundColor:
+              orgSettings?.style.background_color ?? theme.SimpuBlue,
             height: deviceHeight * 0.3,
           }}
         >
+          <Image
+            style={{ height: 60, width: 60 }}
+            source={{ uri: orgSettings?.style?.header_logo }}
+          />
           <Text
             style={{
-              fontSize: 24,
+              fontSize: 26,
               lineHeight: 24,
               color: theme.SimpuWhite,
             }}
           >
-            Welcome 👋
+            {orgSettings?.welcome_message?.greeting}
           </Text>
           <Text
             style={{
-              fontSize: 16,
+              fontSize: 18,
               lineHeight: 24,
               color: theme.SimpuWhite,
               paddingVertical: 5,
             }}
           >
-            {orgSettings?.welcomeMessage}
+            {orgSettings?.welcome_message?.team_intro}
           </Text>
           <Text
             style={{
@@ -74,7 +83,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
               color: theme.SimpuWhite,
             }}
           >
-            We reply instantly from {orgSettings?.officeHrs}
+            {/* We reply instantly from {orgSettings?.officeHrs} */}
           </Text>
         </View>
       )}

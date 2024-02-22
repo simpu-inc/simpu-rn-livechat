@@ -38,7 +38,7 @@ const ContactForm = () => {
     input: {
       height: 50,
       borderWidth: 1,
-      borderColor: orgSettings?.brandColor ?? theme.SimpuBlue,
+      borderColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       borderRadius: 8,
       paddingHorizontal: 10,
       fontSize: 16,
@@ -47,7 +47,7 @@ const ContactForm = () => {
       height: 40,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: orgSettings?.brandColor ?? theme.SimpuBlue,
+      backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       marginHorizontal: 15,
       marginVertical: 15,
       borderRadius: 10,
@@ -103,7 +103,8 @@ const ContactForm = () => {
             containerStyle={{
               borderWidth: 1,
               width: 300,
-              borderColor: orgSettings?.brandColor ?? theme.SimpuBlue,
+              borderColor:
+                orgSettings?.style?.background_color ?? theme.SimpuBlue,
               borderRadius: 8,
               backgroundColor: 'transparent',
               // marginHorizontal: ,

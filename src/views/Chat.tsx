@@ -11,7 +11,6 @@ import { deviceHeight, deviceWidth } from '../utils/responsiveConfig';
 import { theme } from '../utils/theme';
 import ChatInput from '../components/ChatInput';
 import { useChatProvider } from '../context';
-import { ChatData } from '../utils/SampleData';
 import { format } from 'date-fns';
 
 const Chat = () => {
@@ -23,7 +22,7 @@ const Chat = () => {
     headerContainer: {
       flexDirection: 'row',
       height: deviceHeight * 0.15,
-      backgroundColor: orgSettings?.brandColor ?? theme.SimpuBlue,
+      backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       // justifyContent: 'center',
       alignItems: 'center',
       paddingHorizontal: 15,
@@ -55,7 +54,7 @@ const Chat = () => {
           alignSelf: item?.userType === 'agent' ? 'flex-start' : 'flex-end',
           padding: 5,
           marginVertical: 10,
-          maxWidth: deviceWidth * 0.5,
+          maxWidth: deviceWidth * 0.7,
         }}
       >
         <View
@@ -65,7 +64,7 @@ const Chat = () => {
             borderRadius: 4,
             backgroundColor:
               item?.userType === 'agent'
-                ? orgSettings?.brandColor ?? theme?.SimpuBlue
+                ? orgSettings?.style?.background_color ?? theme?.SimpuBlue
                 : theme.SimpuPaleWhite,
           }}
         >
@@ -98,7 +97,7 @@ const Chat = () => {
           <Text
             style={{
               paddingTop: 4,
-              color: orgSettings?.brandColor ?? theme.SimpuBlue,
+              color: orgSettings?.style?.background_color ?? theme.SimpuBlue,
               fontSize: 12,
             }}
           >
