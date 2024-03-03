@@ -7,11 +7,11 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import { deviceHeight, deviceWidth } from '../utils/responsiveConfig';
 import { theme } from '../utils/theme';
 import ChatInput from '../components/ChatInput';
 import { useChatProvider } from '../context';
 import { format } from 'date-fns';
+import { SCREEN_HEIGHT } from '../utils/config';
 
 const Chat = () => {
   const { setViewIndex, orgSettings } = useChatProvider();
@@ -21,7 +21,7 @@ const Chat = () => {
     },
     headerContainer: {
       flexDirection: 'row',
-      height: deviceHeight * 0.15,
+      height: SCREEN_HEIGHT * 0.15,
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       // justifyContent: 'center',
       alignItems: 'center',
@@ -54,7 +54,7 @@ const Chat = () => {
           alignSelf: item?.userType === 'agent' ? 'flex-start' : 'flex-end',
           padding: 5,
           marginVertical: 10,
-          maxWidth: deviceWidth * 0.7,
+          maxWidth: SCREEN_HEIGHT * 0.7,
         }}
       >
         <View

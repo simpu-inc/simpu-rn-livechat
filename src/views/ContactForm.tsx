@@ -6,10 +6,10 @@ import {
   View,
 } from 'react-native';
 import React, { useRef, useState } from 'react';
-import { deviceHeight } from '../utils/responsiveConfig';
 import { theme } from '../utils/theme';
 import PhoneInput from 'react-native-phone-number-input';
 import { useChatProvider } from '../context';
+import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 
 const ContactForm = () => {
   const phoneInput = useRef<PhoneInput>(null);
@@ -17,62 +17,85 @@ const ContactForm = () => {
   const [formattedValue, setFormattedValue] = useState('');
   const { setViewIndex, orgSettings } = useChatProvider();
 
+  const [formDetails, setFormDetails] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+
   const styles = StyleSheet.create({
     container: {
-      height: deviceHeight * 0.65,
-      marginTop: -deviceHeight * 0.05,
-      marginHorizontal: 20,
+      height: SCREEN_HEIGHT * 0.65,
+      marginTop: -SCREEN_HEIGHT * 0.05,
+      marginHorizontal: wp(20),
       backgroundColor: theme.SimpuWhite,
-      borderRadius: 10,
-      padding: 10,
+      borderRadius: hp(10),
+      padding: hp(10),
     },
 
     inputContainer: {
-      marginVertical: 8,
-      marginHorizontal: 15,
+      marginVertical: hp(8),
+      marginHorizontal: hp(15),
     },
     lable: {
-      fontSize: 16,
-      paddingVertical: 5,
+      fontSize: fs(16),
+      paddingVertical: hp(5),
     },
     input: {
-      height: 50,
+      height: hp(55),
       borderWidth: 1,
       borderColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
-      borderRadius: 8,
-      paddingHorizontal: 10,
-      fontSize: 16,
+      borderRadius: hp(8),
+      paddingHorizontal: hp(10),
+      fontSize: fs(16),
     },
     sendBtn: {
-      height: 40,
+      height: hp(45),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
-      marginHorizontal: 15,
-      marginVertical: 15,
-      borderRadius: 10,
+      marginHorizontal: wp(15),
+      marginVertical: hp(20),
+      borderRadius: hp(10),
     },
     sendBtnTxt: {
       color: theme.SimpuWhite,
-      fontSize: 16,
+      fontSize: fs(16),
       fontWeight: '600',
     },
   });
   return (
     <View style={styles.container}>
-      <View style={{ paddingHorizontal: 15 }}>
-        <Text style={{ paddingVertical: 10, fontSize: 16, fontWeight: '500' }}>
+      <View style={{ paddingHorizontal: wp(15) }}>
+        <Text
+          style={{
+            paddingVertical: hp(10),
+            fontSize: fs(16),
+            fontWeight: '500',
+          }}
+        >
           We'll like to know you!
         </Text>
       </View>
       <View>
         <View style={styles.inputContainer}>
           <Text style={styles.lable}>Name</Text>
-          <TextInput style={styles.input} placeholder="Enter your name" />
+          <TextInput
+            value={formDetails?.name}
+            onChangeText={(text) =>
+              setFormDetails({ ...formDetails, name: text })
+            }
+            style={styles.input}
+            placeholder="Enter your name"
+          />
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.lable}>Email</Text>
           <TextInput
+            value={formDetails?.name}
+            onChangeText={(text) =>
+              setFormDetails({ ...formDetails, email: text })
+            }
             keyboardType="email-address"
             style={styles.input}
             placeholder="Enter your email"
@@ -102,22 +125,23 @@ const ContactForm = () => {
             autoFocus
             containerStyle={{
               borderWidth: 1,
-              width: 300,
+              width: wp(310),
               borderColor:
                 orgSettings?.style?.background_color ?? theme.SimpuBlue,
-              borderRadius: 8,
+              borderRadius: hp(8),
               backgroundColor: 'transparent',
               // marginHorizontal: ,
               // height: 40,
             }}
             codeTextStyle={{
-              fontSize: 16,
+              fontSize: fs(16),
               padding: 0,
               margin: 0,
+              // backgroundColor: 'red',
             }}
             textInputStyle={{
               margin: 0,
-              fontSize: 16,
+              fontSize: fs(16),
               padding: 0,
             }}
             // layout="first"
@@ -132,8 +156,12 @@ const ContactForm = () => {
         <View style={styles.inputContainer}>
           <Text style={styles.lable}>Message</Text>
           <TextInput
+            value={formDetails?.name}
+            onChangeText={(text) =>
+              setFormDetails({ ...formDetails, message: text })
+            }
             multiline
-            style={[styles.input, { height: 80 }]}
+            style={[styles.input, { height: hp(120) }]}
             placeholder="write your message"
           />
         </View>

@@ -1,50 +1,50 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import { deviceHeight } from '../utils/responsiveConfig';
 import { theme } from '../utils/theme';
 import AgentsCard from '../components/AgentsCard';
 import SocialCard from '../components/SocialCard';
 import { useChatProvider } from '../context';
 import { responseTimeLabelRegister, useBusinessHoursCheck } from '../utils';
+import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 
 const Start = () => {
   const { setViewIndex, orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     container: {
-      height: deviceHeight * 0.6,
-      marginTop: -deviceHeight * 0.05,
-      marginHorizontal: 20,
+      height: SCREEN_HEIGHT * 0.65,
+      marginTop: -SCREEN_HEIGHT * 0.05,
+      marginHorizontal: wp(20),
     },
     headerContainer: {
-      padding: 5,
+      padding: hp(5),
       backgroundColor: theme.SimpuWhite,
-      borderRadius: 15,
+      borderRadius: hp(15),
     },
     SocialsContainer: {
-      marginTop: 30,
-      paddingTop: 20,
+      marginTop: hp(35),
+      paddingTop: hp(20),
       borderTopColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
-      borderTopWidth: 4,
+      borderTopWidth: hp(4),
       backgroundColor: theme.SimpuWhite,
-      borderRadius: 15,
-      padding: 10,
+      borderRadius: hp(15),
+      padding: hp(10),
     },
     sendMsgBtn: {
-      height: 40,
+      height: hp(44),
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 10,
-      marginHorizontal: 15,
-      marginVertical: 15,
+      borderRadius: hp(10),
+      marginHorizontal: hp(15),
+      marginVertical: hp(15),
     },
     sendMsgTxt: {
       color: theme.SimpuWhite,
-      fontSize: 16,
+      fontSize: fs(16),
     },
 
     openHrsText: {
-      fontSize: 16,
+      fontSize: fs(16),
     },
   });
 
@@ -67,8 +67,8 @@ const Start = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <View style={{ padding: 20 }}>
-          <Text style={{ fontSize: 22, paddingVertical: 5 }}>
+        <View style={{ padding: hp(20) }}>
+          <Text style={{ fontSize: fs(22), paddingVertical: hp(5) }}>
             Start a conversation
           </Text>
           {hasBusinessHours ? (
@@ -101,9 +101,9 @@ const Start = () => {
       <View style={styles.SocialsContainer}>
         <Text
           style={{
-            paddingHorizontal: 10,
+            paddingHorizontal: wp(10),
             color: theme.SimpuBlack,
-            fontSize: 16,
+            fontSize: fs(16),
             fontWeight: '600',
           }}
         >

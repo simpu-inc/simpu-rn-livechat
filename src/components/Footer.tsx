@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { theme } from '../utils/theme';
-import { deviceHeight } from '../utils/responsiveConfig';
 import { useChatProvider } from '../context';
+import { SCREEN_HEIGHT, fs } from '../utils/config';
 
 const Footer = () => {
   const { orgSettings } = useChatProvider();
@@ -11,11 +11,11 @@ const Footer = () => {
       position: 'absolute',
       right: 0,
       left: 0,
-      bottom: deviceHeight * 0.035,
+      bottom: SCREEN_HEIGHT * 0.035,
     },
     footerText: {
       textAlign: 'center',
-      fontSize: 16,
+      fontSize: fs(16),
     },
   });
   return (

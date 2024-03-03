@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { theme } from '../utils/theme';
 import { useChatProvider } from '../context';
+import { fs, hp, wp } from '../utils/config';
 
 type SocialsProps = {};
 
@@ -9,11 +10,11 @@ const SocialBtn = ({ title, url }: { title: string; url: string }) => {
   const { orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     btn: {
-      height: 40,
+      height: hp(44),
       backgroundColor: theme.SimpuWhite,
-      marginVertical: 10,
-      marginHorizontal: 5,
-      borderRadius: 10,
+      marginVertical: hp(10),
+      marginHorizontal: wp(5),
+      borderRadius: hp(10),
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
@@ -21,15 +22,15 @@ const SocialBtn = ({ title, url }: { title: string; url: string }) => {
       borderColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
     },
     btnIcon: {
-      height: 20,
-      width: 20,
-      paddingRight: 7,
+      height: hp(20),
+      width: hp(20),
+      paddingRight: wp(7),
     },
     btnTxt: {
       color: theme.SimpuBlack,
-      fontSize: 16,
+      fontSize: fs(16),
       fontWeight: '600',
-      paddingLeft: 7,
+      paddingLeft: wp(7),
     },
   });
 

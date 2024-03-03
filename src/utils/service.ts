@@ -1,7 +1,12 @@
-import { buildAIUrl } from ".";
-import { client } from "./client";
+import { buildAIUrl, client } from './client';
 
-export async function getWidgetSettings({ app_id, public_key }) {
+export async function getWidgetSettings({
+  app_id,
+  public_key,
+}: {
+  app_id: string;
+  public_key: string;
+}) {
   const response = await client(`channels/livechat/${app_id}/settings`, {
     headers: {
       Authorization: public_key,
@@ -10,10 +15,21 @@ export async function getWidgetSettings({ app_id, public_key }) {
   return response.data;
 }
 
-export async function addOrUpdateUser({ data, app_id, signed_request }) {
+export async function addOrUpdateUser({
+  data,
+  app_id,
+  signed_request,
+}: {
+  data: {
+    name: string;
+    email: string;
+  };
+  app_id: string;
+  signed_request: string;
+}) {
   const response = await client(`channels/livechat/${app_id}/users`, {
     data,
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: signed_request,
     },
@@ -21,10 +37,10 @@ export async function addOrUpdateUser({ data, app_id, signed_request }) {
   return response.data;
 }
 
-export async function sendMessage(data, app_id) {
+export async function sendMessage(data, app_id: string) {
   const response = await client(`channels/livechat/${app_id}/messages`, {
     data,
-    method: "POST",
+    method: 'POST',
   });
   return response.data.message;
 }
@@ -68,7 +84,7 @@ export async function getWidgetApps({ app_id, public_key }) {
 
 export const sendTypingEvent = async ({ app_id }) => {
   const { data } = await client(`channels/livechat/${app_id}/typing`, {
-    method: "POST",
+    method: 'POST',
   });
 
   return data;
@@ -81,7 +97,7 @@ export const updateConversationMessage = async (payload) => {
     `channels/livechat/${app_id}/messages/${message_id}/notification`,
     {
       data: rest,
-      method: "PATCH",
+      method: 'PATCH',
     }
   );
 
@@ -95,10 +111,10 @@ export const uploadConversationFile = async (
 ) => {
   const { data } = await client(`channels/livechat/${app_id}/upload`, {
     data: payload,
-    method: "POST",
+    method: 'POST',
     onUploadProgress,
     headers: {
-      "Content-Type": "multipart/form-data",
+      'Content-Type': 'multipart/form-data',
     },
   });
 
@@ -126,7 +142,7 @@ export const getUserActiveSession = async (app_id) => {
 };
 
 export const getBotOperatorCredentials = async (credential_id) => {
-  const { data } = await client("", {
+  const { data } = await client('', {
     url: buildAIUrl(`bot_operators/credentials/${credential_id}`),
   });
 
@@ -134,7 +150,7 @@ export const getBotOperatorCredentials = async (credential_id) => {
 };
 
 export const getCustomBotRootPath = async (custom_bot_id) => {
-  const { data } = await client("", {
+  const { data } = await client('', {
     url: buildAIUrl(`custom_bots/${custom_bot_id}/root`),
   });
 
@@ -142,7 +158,7 @@ export const getCustomBotRootPath = async (custom_bot_id) => {
 };
 
 export const getCustomBotPath = async (path_id) => {
-  const { data } = await client("", {
+  const { data } = await client('', {
     url: buildAIUrl(`custom_bots/paths/${path_id}`),
   });
 
@@ -151,7 +167,7 @@ export const getCustomBotPath = async (path_id) => {
 
 export const importMessages = async (app_id, payload) => {
   const { data } = await client(`channels/livechat/${app_id}/messages/import`, {
-    method: "POST",
+    method: 'POST',
     data: payload,
   });
 
@@ -159,8 +175,8 @@ export const importMessages = async (app_id, payload) => {
 };
 
 export const saveCSATRating = async (payload, id) => {
-  const { data } = await client("", {
-    method: "POST",
+  const { data } = await client('', {
+    method: 'POST',
     data: payload,
     url: buildAIUrl(`inbox_ratings/rate/${id}}`),
   });

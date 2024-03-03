@@ -7,8 +7,8 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {deviceHeight} from '../utils/responsiveConfig';
-import {theme} from '../utils/theme';
+import { theme } from '../utils/theme';
+import { SCREEN_HEIGHT } from '../utils/config';
 
 const ChatInput = () => {
   const styles = StyleSheet.create({
@@ -16,7 +16,7 @@ const ChatInput = () => {
       borderTopWidth: 2,
       borderTopColor: '#f4f4f4',
       backgroundColor: theme.SimpuPaleWhite,
-      height: deviceHeight * 0.1,
+      height: SCREEN_HEIGHT * 0.1,
       position: 'absolute',
       bottom: 0,
       left: 0,
@@ -47,15 +47,16 @@ const ChatInput = () => {
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btns} onPress={() => {}}>
           <Image
-            style={{height: 25, width: 25}}
+            style={{ height: 25, width: 25 }}
             source={require('../assets/attach.png')}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.btns, {marginRight: 5}]}
-          onPress={() => {}}>
+          style={[styles.btns, { marginRight: 5 }]}
+          onPress={() => {}}
+        >
           <Image
-            style={{height: 25, width: 25}}
+            style={{ height: 25, width: 25 }}
             source={require('../assets/send.png')}
           />
         </TouchableOpacity>

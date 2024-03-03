@@ -1,15 +1,15 @@
 import { Image, Text, TouchableOpacity, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 
 import Start from './views/Start';
-import { deviceHeight, deviceWidth } from './utils/responsiveConfig';
 import { theme } from './utils/theme';
 import Footer from './components/Footer';
 import Chat from './views/Chat';
 import { useChatProvider } from './context';
 import ContactForm from './views/ContactForm';
 import type { LiveChatProps } from './@types/types';
-import { useSettingsQuery } from './utils';
+import { addOrUpdateUser, getUserHash, useSettingsQuery } from './utils';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp, wp } from './utils/config';
 
 const LiveChatContainer = (Props: LiveChatProps) => {
   const { name, email, app_id, user_id, public_key } = Props;
@@ -27,39 +27,77 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     public_key,
   });
 
+  console.log({ app_id, public_key });
+
   console.log('data from settings', JSON.stringify(data, null, 3));
+  console.log('error from settings', JSON.stringify(error, null, 3));
+
+  const handleSaveUserId = useCallback(async () => {
+    //generate user hash
+    const user_hash = getUserHash({
+      public_key,
+      user_id: user_id?.toString() ?? '',
+      secret_key: data?.secret_key,
+    });
+
+    try {
+      const { uuid, user_id: userId } = await addOrUpdateUser({
+        data: {
+          name,
+          email,
+        },
+        app_id,
+        signed_request: user_hash,
+      });
+
+      // initializePusher({ app_id, user_hash, user_id });
+      // saveState({
+      //   ...(loadState() ?? {}),
+      //   uuid,
+      //   user_id: userId,
+      //   signed_request: user_hash,
+      // });
+    } catch (error) {}
+  }, [name, email, app_id, user_id, data?.secret_key]);
 
   useEffect(() => {
     setOrgSettings(data);
     return () => {};
   }, [data]);
 
+  useEffect(() => {
+    // saveState({ ...(loadState() ?? {}), public_key });
+    if (user_id && data) {
+      handleSaveUserId();
+    }
+  }, [data, user_id, public_key, handleSaveUserId]);
+
   return (
     <View
       style={{
         flex: 1,
-        height: deviceHeight,
-        width: deviceWidth,
+        height: SCREEN_HEIGHT,
+        width: SCREEN_WIDTH,
         backgroundColor: theme.SimpuPaleWhite,
       }}
     >
       {(viewIndex === 1 || viewIndex === 2) && (
         <View
           style={{
-            paddingHorizontal: 25,
-            paddingTop: 50, //TODO:adjust this
+            paddingHorizontal: wp(25),
+            paddingTop: hp(50), //TODO:adjust this
             backgroundColor:
               orgSettings?.style.background_color ?? theme.SimpuBlue,
-            height: deviceHeight * 0.3,
+            height: hp(200),
           }}
         >
           <Image
-            style={{ height: 60, width: 60 }}
+            style={{ height: hp(60), width: hp(60) }}
             source={{ uri: orgSettings?.style?.header_logo }}
           />
           <Text
             style={{
-              fontSize: 26,
+              fontSize: fs(26),
               lineHeight: 24,
               color: theme.SimpuWhite,
             }}
@@ -68,17 +106,17 @@ const LiveChatContainer = (Props: LiveChatProps) => {
           </Text>
           <Text
             style={{
-              fontSize: 18,
+              fontSize: fs(18),
               lineHeight: 24,
               color: theme.SimpuWhite,
-              paddingVertical: 5,
+              paddingVertical: hp(5),
             }}
           >
             {orgSettings?.welcome_message?.team_intro}
           </Text>
           <Text
             style={{
-              fontSize: 16,
+              fontSize: fs(16),
               lineHeight: 24,
               color: theme.SimpuWhite,
             }}
