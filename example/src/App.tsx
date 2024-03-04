@@ -11,6 +11,9 @@ export default function App() {
   public_key: "spk__tTecSnzr7KAZtpaizeNmKxflgdmCF4JnPVoOMxKSGYiStSvTVA",
 */
 
+  // app_id: "e3e8ae1e",
+  //       public_key: "spk__T4sfafLijwz09Po1ivc7g8NCGJBn67zclxG6wGINRn2LnnYCsS"
+
   return (
     <View style={styles.container}>
       {!openLiveChat && (
@@ -47,7 +50,7 @@ export default function App() {
       {openLiveChat && (
         <SimpuLiveChat
           app_id={'e3e8ae1e'}
-          public_key={'spk__tTecSnzr7KAZtpaizeNmKxflgdmCF4JnPVoOMxKSGYiStSvTVA'}
+          public_key={'spk__T4sfafLijwz09Po1ivc7g8NCGJBn67zclxG6wGINRn2LnnYCsS'}
         />
       )}
     </View>

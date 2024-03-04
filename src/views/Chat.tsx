@@ -1,6 +1,8 @@
 import {
   FlatList,
   Image,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,7 +13,8 @@ import { theme } from '../utils/theme';
 import ChatInput from '../components/ChatInput';
 import { useChatProvider } from '../context';
 import { format } from 'date-fns';
-import { SCREEN_HEIGHT } from '../utils/config';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp } from '../utils/config';
+import { ChatData, agents } from '../utils/dummyData';
 
 const Chat = () => {
   const { setViewIndex, orgSettings } = useChatProvider();
@@ -21,28 +24,28 @@ const Chat = () => {
     },
     headerContainer: {
       flexDirection: 'row',
-      height: SCREEN_HEIGHT * 0.15,
+      height: SCREEN_HEIGHT * 0.12,
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       // justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: 15,
-      paddingTop: 15,
+      paddingHorizontal: hp(15),
+      paddingTop: hp(28),
     },
 
     imageStyle: {
-      height: 40,
-      width: 40,
-      borderRadius: 25,
+      height: hp(40),
+      width: hp(40),
+      borderRadius: hp(25),
       borderWidth: 1.3,
       borderColor: theme.SimpuWhite,
     },
     NameText: {
       color: theme.SimpuPaleWhite,
-      fontSize: 18,
+      fontSize: fs(18),
     },
     responseTimeText: {
       color: theme.SimpuPaleWhite,
-      fontSize: 14,
+      fontSize: fs(14),
     },
   });
 
@@ -52,16 +55,16 @@ const Chat = () => {
       <View
         style={{
           alignSelf: item?.userType === 'agent' ? 'flex-start' : 'flex-end',
-          padding: 5,
-          marginVertical: 10,
-          maxWidth: SCREEN_HEIGHT * 0.7,
+          padding: hp(5),
+          marginVertical: hp(10),
+          maxWidth: SCREEN_WIDTH * 0.75,
         }}
       >
         <View
           style={{
-            paddingVertical: 6,
-            paddingHorizontal: 8,
-            borderRadius: 4,
+            paddingVertical: hp(6),
+            paddingHorizontal: hp(8),
+            borderRadius: hp(4),
             backgroundColor:
               item?.userType === 'agent'
                 ? orgSettings?.style?.background_color ?? theme?.SimpuBlue
@@ -85,20 +88,20 @@ const Chat = () => {
                 item?.userType === 'agent'
                   ? theme.SimpuWhite
                   : theme.SimpuBlack,
-              fontSize: 9,
-              paddingVertical: 4,
+              fontSize: fs(9),
+              paddingVertical: hp(4),
               alignSelf: 'flex-end',
             }}
           >
-            {format(new Date(item?.date), 'p')}
+            {format(new Date(item?.date) ?? new Date(), 'p')}
           </Text>
         </View>
         {item.userType === 'agent' && (
           <Text
             style={{
-              paddingTop: 4,
+              paddingTop: hp(4),
               color: orgSettings?.style?.background_color ?? theme.SimpuBlue,
-              fontSize: 12,
+              fontSize: fs(12),
             }}
           >
             Agent: {item?.name}
@@ -108,41 +111,48 @@ const Chat = () => {
     );
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={{ flexDirection: 'row', alignItems: 'center' }}
-          onPress={() => setViewIndex(1)}
-        >
-          <Image
-            source={require('../assets/backIcon.png')}
-            style={{ height: 18, width: 18, marginRight: 5 }}
-          />
-          <Image
-            resizeMode="contain"
-            style={styles.imageStyle}
-            source={{ uri: `https://i.pravatar.cc/150?img=${3}` }}
-          />
-        </TouchableOpacity>
-        <View style={{ marginLeft: 5 }}>
-          <Text style={styles.NameText}>Waka Waka</Text>
-          <Text style={styles.responseTimeText}>
-            Typically replies in an hour
-          </Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center' }}
+            onPress={() => setViewIndex(1)}
+          >
+            <Image
+              source={require('../assets/backIcon.png')}
+              style={{ height: hp(18), width: hp(18), marginRight: hp(5) }}
+            />
+            <Image
+              resizeMode="contain"
+              style={styles.imageStyle}
+              source={{ uri: `https://i.pravatar.cc/150?img=${3}` }}
+            />
+          </TouchableOpacity>
+          <View style={{ marginLeft: hp(5) }}>
+            <Text style={styles.NameText}>Waka Waka</Text>
+            <Text style={styles.responseTimeText}>
+              Typically replies in an hour
+            </Text>
+          </View>
         </View>
+        <FlatList
+          style={{
+            flex: 1,
+            backgroundColor: theme.SimpuWhite,
+            paddingHorizontal: hp(10),
+          }}
+          data={ChatData}
+          keyExtractor={(_, i) => i.toString()}
+          renderItem={({ item, index }) => (
+            <ChatList item={item} index={index} />
+          )}
+        />
+        <ChatInput />
       </View>
-      <FlatList
-        style={{
-          flex: 1,
-          backgroundColor: theme.SimpuWhite,
-          paddingHorizontal: 10,
-        }}
-        data={ChatData}
-        keyExtractor={(_, i) => i.toString()}
-        renderItem={({ item, index }) => <ChatList item={item} index={index} />}
-      />
-      <ChatInput />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

@@ -11,11 +11,11 @@ const Footer = () => {
       position: 'absolute',
       right: 0,
       left: 0,
-      bottom: SCREEN_HEIGHT * 0.035,
+      bottom: SCREEN_HEIGHT * 0.015,
     },
     footerText: {
       textAlign: 'center',
-      fontSize: fs(16),
+      fontSize: fs(14),
     },
   });
   return (

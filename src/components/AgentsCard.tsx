@@ -3,6 +3,7 @@ import React from 'react';
 import Avatar from './Avatar';
 import { theme } from '../utils/theme';
 import { useChatProvider } from '../context';
+import { fs, hp } from '../utils/config';
 
 const AgentsCard = () => {
   const { orgSettings } = useChatProvider();
@@ -13,15 +14,15 @@ const AgentsCard = () => {
     },
     extraContainer: {
       backgroundColor: theme.SimpuGray,
-      height: 50,
-      width: 50,
-      borderRadius: 25,
+      height: hp(50),
+      width: hp(50),
+      borderRadius: hp(25),
       alignItems: 'center',
       justifyContent: 'center',
     },
     extraText: {
       color: theme.SimpuBlack,
-      fontSize: 16,
+      fontSize: fs(16),
       fontWeight: '600',
     },
   });

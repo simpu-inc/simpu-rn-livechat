@@ -28,7 +28,7 @@ const SocialBtn = ({ title, url }: { title: string; url: string }) => {
     },
     btnTxt: {
       color: theme.SimpuBlack,
-      fontSize: fs(16),
+      fontSize: fs(14),
       fontWeight: '600',
       paddingLeft: wp(7),
     },

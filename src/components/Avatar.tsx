@@ -4,6 +4,7 @@ import { formatName } from '../utils/helper';
 import { theme } from '../utils/theme';
 import { useChatProvider } from '../context';
 import { Image } from 'react-native';
+import { fs, hp } from '../utils/config';
 
 type AvatarPopsTypes = {
   name: string;
@@ -19,19 +20,19 @@ const Avatar = ({ name, index, imgUrl, agentLength }: AvatarPopsTypes) => {
     avatarContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: 50,
-      width: 50,
-      borderRadius: 25,
+      height: hp(50),
+      width: hp(50),
+      borderRadius: hp(25),
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       borderWidth: 1,
       borderColor: theme.SimpuWhite,
       zIndex: agentLength - index,
-      marginRight: -14,
+      marginRight: -hp(14),
     },
 
     avatarText: {
       color: theme.SimpuWhite,
-      fontSize: 18,
+      fontSize: fs(16),
     },
   });
 

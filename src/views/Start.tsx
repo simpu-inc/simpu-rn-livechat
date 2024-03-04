@@ -11,8 +11,8 @@ const Start = () => {
   const { setViewIndex, orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     container: {
-      height: SCREEN_HEIGHT * 0.65,
-      marginTop: -SCREEN_HEIGHT * 0.05,
+      height: SCREEN_HEIGHT * 0.55,
+      marginTop: -SCREEN_HEIGHT * 0.03,
       marginHorizontal: wp(20),
     },
     headerContainer: {
@@ -21,7 +21,7 @@ const Start = () => {
       borderRadius: hp(15),
     },
     SocialsContainer: {
-      marginTop: hp(35),
+      marginTop: hp(25),
       paddingTop: hp(20),
       borderTopColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       borderTopWidth: hp(4),
@@ -68,7 +68,7 @@ const Start = () => {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <View style={{ padding: hp(20) }}>
-          <Text style={{ fontSize: fs(22), paddingVertical: hp(5) }}>
+          <Text style={{ fontSize: fs(20), paddingVertical: hp(5) }}>
             Start a conversation
           </Text>
           {hasBusinessHours ? (

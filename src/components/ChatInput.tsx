@@ -1,5 +1,7 @@
 import {
   Image,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -8,12 +10,12 @@ import {
 } from 'react-native';
 import React from 'react';
 import { theme } from '../utils/theme';
-import { SCREEN_HEIGHT } from '../utils/config';
+import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 
 const ChatInput = () => {
   const styles = StyleSheet.create({
     inputContainer: {
-      borderTopWidth: 2,
+      borderTopWidth: wp(2),
       borderTopColor: '#f4f4f4',
       backgroundColor: theme.SimpuPaleWhite,
       height: SCREEN_HEIGHT * 0.1,
@@ -21,20 +23,20 @@ const ChatInput = () => {
       bottom: 0,
       left: 0,
       right: 0,
-      paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingHorizontal: hp(20),
+      paddingVertical: hp(10),
       flexDirection: 'row',
       //  alignItems: 'center',
     },
     input: {
-      fontSize: 16,
+      fontSize: fs(16),
       flex: 1,
     },
     btnContainer: {
       flexDirection: 'row',
     },
     btns: {
-      marginHorizontal: 8,
+      marginHorizontal: hp(8),
     },
   });
   return (
@@ -47,16 +49,16 @@ const ChatInput = () => {
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btns} onPress={() => {}}>
           <Image
-            style={{ height: 25, width: 25 }}
+            style={{ height: hp(25), width: hp(25) }}
             source={require('../assets/attach.png')}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.btns, { marginRight: 5 }]}
+          style={[styles.btns, { marginRight: wp(5) }]}
           onPress={() => {}}
         >
           <Image
-            style={{ height: 25, width: 25 }}
+            style={{ height: hp(25), width: hp(25) }}
             source={require('../assets/send.png')}
           />
         </TouchableOpacity>

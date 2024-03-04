@@ -85,10 +85,10 @@ const LiveChatContainer = (Props: LiveChatProps) => {
         <View
           style={{
             paddingHorizontal: wp(25),
-            paddingTop: hp(50), //TODO:adjust this
+            paddingTop: hp(20), //TODO:adjust this
             backgroundColor:
               orgSettings?.style.background_color ?? theme.SimpuBlue,
-            height: hp(200),
+            height: hp(220),
           }}
         >
           <Image
@@ -97,7 +97,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
           />
           <Text
             style={{
-              fontSize: fs(26),
+              fontSize: fs(24),
               lineHeight: 24,
               color: theme.SimpuWhite,
             }}
@@ -106,7 +106,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
           </Text>
           <Text
             style={{
-              fontSize: fs(18),
+              fontSize: fs(16),
               lineHeight: 24,
               color: theme.SimpuWhite,
               paddingVertical: hp(5),
