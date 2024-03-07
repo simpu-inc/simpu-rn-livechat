@@ -2644,6 +2644,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-async-storage/async-storage@npm:^1.22.3":
+  version: 1.22.3
+  resolution: "@react-native-async-storage/async-storage@npm:1.22.3"
+  dependencies:
+    merge-options: ^3.0.4
+  peerDependencies:
+    react-native: ^0.0.0-0 || >=0.60 <1.0
+  checksum: bbf0f49c4441361d24f5c7a236862757d1addb7332d4c11ed7238b7023e882d2280290059602d9099cee094f60aeb11aad3f2017652ab6e143544e61dccadb73
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-clean@npm:12.3.2":
   version: 12.3.2
   resolution: "@react-native-community/cli-clean@npm:12.3.2"
@@ -7818,6 +7829,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"is-plain-obj@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "is-plain-obj@npm:2.1.0"
+  checksum: cec9100678b0a9fe0248a81743041ed990c2d4c99f893d935545cfbc42876cbe86d207f3b895700c690ad2fa520e568c44afc1605044b535a7820c1d40e38daa
+  languageName: node
+  linkType: hard
+
 "is-plain-object@npm:^2.0.4":
   version: 2.0.4
   resolution: "is-plain-object@npm:2.0.4"
@@ -9392,6 +9410,15 @@ __metadata:
     type-fest: ^0.18.0
     yargs-parser: ^20.2.3
   checksum: bc23bf1b4423ef6a821dff9734406bce4b91ea257e7f10a8b7f896f45b59649f07adc0926e2917eacd8cf1df9e4cd89c77623cf63dfd0f8bf54de07a32ee5a85
+  languageName: node
+  linkType: hard
+
+"merge-options@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "merge-options@npm:3.0.4"
+  dependencies:
+    is-plain-obj: ^2.1.0
+  checksum: d86ddb3dd6e85d558dbf25dc944f3527b6bacb944db3fdda6e84a3f59c4e4b85231095f58b835758b9a57708342dee0f8de0dffa352974a48221487fe9f4584f
   languageName: node
   linkType: hard
 
@@ -11021,20 +11048,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-buffer@npm:^6.0.3":
-  version: 6.0.3
-  resolution: "react-native-buffer@npm:6.0.3"
-  dependencies:
-    ieee754: ^1.2.1
-    react-native-fast-base64: ^0.1.1
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-    react-native-fast-base64: "*"
-  checksum: 5a7c1f13791c30e0c6cf83c7f51858296d1b22619e65b9a520f4453ca52e9207a6400974ebe9b2ac2ba2d864022ea7407ac933a916b7c3ceceb439ba0ff8cfb9
-  languageName: node
-  linkType: hard
-
 "react-native-builder-bob@npm:^0.20.0":
   version: 0.20.4
   resolution: "react-native-builder-bob@npm:0.20.4"
@@ -11084,16 +11097,6 @@ __metadata:
     react-native: "*"
     react-native-web: "*"
   checksum: e808169b45c5e8021462a6914f7c3fb28e84ae8d58097ed7b3418fee41efa2bc44012abc09ff3f3bd6ee14427b9efe1b0f8d8b3a19cc01325b2f2cd0137d5d00
-  languageName: node
-  linkType: hard
-
-"react-native-fast-base64@npm:^0.1.1":
-  version: 0.1.2
-  resolution: "react-native-fast-base64@npm:0.1.2"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 7bb9b4076ee5ad4bd2b393ddd5661dc33609f1996c78389fea05970bc643947334270ef68117a32537f718a3b86df6832d19f13827819d1156701ef9eb7ab0c1
   languageName: node
   linkType: hard
 
@@ -12011,6 +12014,7 @@ __metadata:
   dependencies:
     "@commitlint/config-conventional": ^17.0.2
     "@evilmartians/lefthook": ^1.5.0
+    "@react-native-async-storage/async-storage": ^1.22.3
     "@react-native/eslint-config": ^0.72.2
     "@release-it/conventional-changelog": ^5.0.0
     "@tanstack/react-query": ^5.20.5
@@ -12020,6 +12024,7 @@ __metadata:
     "@types/react": ~17.0.21
     "@types/react-native": 0.70.0
     axios: ^1.6.7
+    buffer: ^6.0.3
     commitlint: ^17.0.2
     crypto-js: ^4.2.0
     date-fns: ^3.3.1
@@ -12033,7 +12038,6 @@ __metadata:
     prettier: ^2.0.5
     react: 18.2.0
     react-native: 0.73.4
-    react-native-buffer: ^6.0.3
     react-native-builder-bob: ^0.20.0
     react-native-phone-number-input: ^2.1.0
     release-it: ^15.0.0

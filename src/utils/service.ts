@@ -23,6 +23,7 @@ export async function addOrUpdateUser({
   data: {
     name: string;
     email: string;
+    phone?: string;
   };
   app_id: string;
   signed_request: string;

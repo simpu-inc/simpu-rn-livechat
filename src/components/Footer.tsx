@@ -11,7 +11,7 @@ const Footer = () => {
       position: 'absolute',
       right: 0,
       left: 0,
-      bottom: SCREEN_HEIGHT * 0.015,
+      bottom: SCREEN_HEIGHT * 0.025,
     },
     footerText: {
       textAlign: 'center',

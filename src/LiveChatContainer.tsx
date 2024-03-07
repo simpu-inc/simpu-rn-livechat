@@ -20,6 +20,8 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     viewIndex,
     setOpenChatBot,
     setOrgSettings,
+    setApp_id,
+    setPublic_key,
   } = useChatProvider();
 
   const { data, error, isLoading } = useSettingsQuery({
@@ -40,6 +42,8 @@ const LiveChatContainer = (Props: LiveChatProps) => {
       secret_key: data?.secret_key,
     });
 
+    console.log('Users -hash =========', user_hash);
+
     try {
       const { uuid, user_id: userId } = await addOrUpdateUser({
         data: {
@@ -59,6 +63,12 @@ const LiveChatContainer = (Props: LiveChatProps) => {
       // });
     } catch (error) {}
   }, [name, email, app_id, user_id, data?.secret_key]);
+
+  useEffect(() => {
+    setApp_id(app_id);
+    setPublic_key(public_key);
+    return () => {};
+  }, [app_id, public_key]);
 
   useEffect(() => {
     setOrgSettings(data);

@@ -1,6 +1,6 @@
 import hmacSHA256 from 'crypto-js/hmac-sha256';
 import * as cryptojs from 'crypto-js';
-import buffer from 'react-native-buffer';
+import buffer from 'buffer';
 import unescape from 'lodash/unescape';
 import differenceInYears from 'date-fns/differenceInYears';
 import differenceInDays from 'date-fns/differenceInDays';

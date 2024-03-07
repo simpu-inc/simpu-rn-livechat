@@ -10,18 +10,84 @@ import { theme } from '../utils/theme';
 import PhoneInput from 'react-native-phone-number-input';
 import { useChatProvider } from '../context';
 import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
+import { addOrUpdateUser, getUserHash, sendMessage } from '../utils';
 
 const ContactForm = () => {
   const phoneInput = useRef<PhoneInput>(null);
   const [value, setValue] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
-  const { setViewIndex, orgSettings } = useChatProvider();
+  const { AppId, publicKey, setViewIndex, orgSettings } = useChatProvider();
+
+  console.log({ formattedValue, value });
 
   const [formDetails, setFormDetails] = useState({
     name: '',
     email: '',
     message: '',
   });
+
+  const SendMessage = async () => {
+    const hash = getUserHash({
+      public_key: publicKey,
+      secret_key: orgSettings?.secret_key,
+      user_id: undefined,
+    });
+
+    // console.log('User Hash: ' + hash);
+
+    try {
+      // const { name, email, phone, message } = values;
+
+      // setIsSubmittingContactForm(true);
+
+      const { uuid, user_id } = await addOrUpdateUser({
+        data: {
+          name: formDetails?.name,
+          email: formDetails?.email,
+          phone: formattedValue,
+        },
+        app_id: AppId,
+        signed_request: hash,
+      });
+
+      console.log('response from add user', { uuid, user_id });
+
+      const user_hash = getUserHash({
+        user_id,
+        public_key: publicKey,
+        secret_key: orgSettings?.secret_key,
+      });
+
+      console.log('response generate user', { user_hash });
+      // saveState({
+      //   ...(loadState() ?? {}),
+      //   uuid,
+      //   user_id,
+      //   signed_request: user_hash,
+      // });
+
+      // initializePusher({ app_id, user_hash, user_id });
+
+      const { session_id } = await sendMessage(
+        {
+          content: formDetails?.message,
+        },
+        AppId
+      );
+
+      console.log('Session ID===', { session_id });
+
+      setViewIndex(3);
+      // setIsSubmittingContactForm(false);
+      // resetForm({ name: '', email: '', phone: '', message: '' });
+      // setHomeSectionStep(0);
+      // history.push(`/chat/${session_id}`);
+    } catch (error) {
+      alert(error);
+      console.log(error);
+      // setIsSubmittingContactForm(false);
+    }
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -92,7 +158,7 @@ const ContactForm = () => {
         <View style={styles.inputContainer}>
           <Text style={styles.lable}>Email</Text>
           <TextInput
-            value={formDetails?.name}
+            value={formDetails?.email}
             onChangeText={(text) =>
               setFormDetails({ ...formDetails, email: text })
             }
@@ -156,7 +222,7 @@ const ContactForm = () => {
         <View style={styles.inputContainer}>
           <Text style={styles.lable}>Message</Text>
           <TextInput
-            value={formDetails?.name}
+            value={formDetails?.message}
             onChangeText={(text) =>
               setFormDetails({ ...formDetails, message: text })
             }
@@ -166,10 +232,7 @@ const ContactForm = () => {
           />
         </View>
 
-        <TouchableOpacity
-          style={styles.sendBtn}
-          onPress={() => setViewIndex(3)}
-        >
+        <TouchableOpacity style={styles.sendBtn} onPress={SendMessage}>
           <Text style={styles.sendBtnTxt}>Send message</Text>
         </TouchableOpacity>
       </View>
