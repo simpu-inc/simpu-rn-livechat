@@ -4,6 +4,7 @@ import { getUnreadMessageCount, getWidgetApps, loadState, useWidget } from '.';
 // import { pusher, subscribeToPresenceChannel } from './pusher';
 import {
   getBotOperatorCredentials,
+  getConversationMessages,
   getCustomBotPath,
   getCustomBotRootPath,
   getSessionById,
@@ -25,12 +26,15 @@ export const useSettingsQuery = ({
     queryFn: () => getWidgetSettings({ app_id, public_key }),
   });
 
-export const useSessionQuery = ({ app_id, session_id }, options) =>
-  useQuery(
-    ['session', session_id],
-    () => getSessionById(app_id, session_id),
-    options
-  );
+export const useSessionQuery = (
+  { app_id, session_id }: { app_id: string; session_id: string },
+  options: Object
+) =>
+  useQuery({
+    queryKey: ['session', session_id],
+    queryFn: () => getSessionById(app_id, session_id),
+    ...options,
+  });
 
 export const useWidgetAppsQuery = ({ app_id, public_key }) => {
   return useQuery(['widget-apps', app_id], () =>

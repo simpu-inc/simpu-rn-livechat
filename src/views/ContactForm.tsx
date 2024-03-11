@@ -11,12 +11,20 @@ import PhoneInput from 'react-native-phone-number-input';
 import { useChatProvider } from '../context';
 import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 import { addOrUpdateUser, getUserHash, sendMessage } from '../utils';
+import { KEYS, storeCache } from '../utils/cache';
 
 const ContactForm = () => {
   const phoneInput = useRef<PhoneInput>(null);
   const [value, setValue] = useState('');
   const [formattedValue, setFormattedValue] = useState('');
-  const { AppId, publicKey, setViewIndex, orgSettings } = useChatProvider();
+  const {
+    AppId,
+    publicKey,
+    setViewIndex,
+    orgSettings,
+    setSessionID,
+    setUserHash,
+  } = useChatProvider();
 
   console.log({ formattedValue, value });
 
@@ -59,6 +67,8 @@ const ContactForm = () => {
       });
 
       console.log('response generate user', { user_hash });
+
+      setUserHash(user_hash);
       // saveState({
       //   ...(loadState() ?? {}),
       //   uuid,
@@ -66,17 +76,21 @@ const ContactForm = () => {
       //   signed_request: user_hash,
       // });
 
+      // await storeCache(KEYS.SIGNED_REQUEST, user_hash);
+
       // initializePusher({ app_id, user_hash, user_id });
 
       const { session_id } = await sendMessage(
         {
           content: formDetails?.message,
         },
-        AppId
+        AppId,
+        user_hash
       );
 
       console.log('Session ID===', { session_id });
 
+      setSessionID(session_id);
       setViewIndex(3);
       // setIsSubmittingContactForm(false);
       // resetForm({ name: '', email: '', phone: '', message: '' });

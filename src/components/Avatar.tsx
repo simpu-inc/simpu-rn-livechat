@@ -12,22 +12,29 @@ type AvatarPopsTypes = {
   orgColor?: string;
   index: number;
   agentLength: number;
+  size?: 'small' | 'big';
 };
 
-const Avatar = ({ name, index, imgUrl, agentLength }: AvatarPopsTypes) => {
+const Avatar = ({
+  name,
+  index,
+  imgUrl,
+  agentLength,
+  size,
+}: AvatarPopsTypes) => {
   const { orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     avatarContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: hp(50),
-      width: hp(50),
-      borderRadius: hp(25),
+      height: size === 'small' ? hp(40) : hp(50),
+      width: size === 'small' ? hp(40) : hp(50),
+      borderRadius: size === 'small' ? hp(20) : hp(50),
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       borderWidth: 1,
       borderColor: theme.SimpuWhite,
       zIndex: agentLength - index,
-      marginRight: -hp(14),
+      marginRight: size === 'small' ? -hp(18) : -hp(16),
     },
 
     avatarText: {

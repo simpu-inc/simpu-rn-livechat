@@ -5,7 +5,10 @@ import { theme } from '../utils/theme';
 import { useChatProvider } from '../context';
 import { fs, hp } from '../utils/config';
 
-const AgentsCard = () => {
+type AgentsCardProps = {
+  size: 'small' | 'big';
+};
+const AgentsCard = ({ size }: AgentsCardProps) => {
   const { orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     container: {
@@ -14,15 +17,15 @@ const AgentsCard = () => {
     },
     extraContainer: {
       backgroundColor: theme.SimpuGray,
-      height: hp(50),
-      width: hp(50),
-      borderRadius: hp(25),
+      height: size === 'small' ? hp(20) : hp(50),
+      width: size === 'small' ? hp(20) : hp(50),
+      borderRadius: size === 'small' ? hp(20) : hp(50),
       alignItems: 'center',
       justifyContent: 'center',
     },
     extraText: {
       color: theme.SimpuBlack,
-      fontSize: fs(16),
+      fontSize: size === 'small' ? fs(12) : fs(16),
       fontWeight: '600',
     },
   });
@@ -36,6 +39,7 @@ const AgentsCard = () => {
             key={i}
             index={i}
             agentLength={orgSettings?.members?.length}
+            size={size}
           />
         );
       })}

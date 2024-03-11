@@ -3,21 +3,85 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import groupBy from 'lodash/groupBy';
 import { theme } from '../utils/theme';
 import ChatInput from '../components/ChatInput';
 import { useChatProvider } from '../context';
 import { format } from 'date-fns';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp } from '../utils/config';
 import { ChatData, agents } from '../utils/dummyData';
+import {
+  fetchThreadMessages,
+  getConversationMessages,
+  responseTimeRegister,
+  useSessionQuery,
+} from '../utils';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import AgentsCard from '../components/AgentsCard';
 
 const Chat = () => {
-  const { setViewIndex, orgSettings } = useChatProvider();
+  const { AppId, userHash, sessionID, setViewIndex, orgSettings } =
+    useChatProvider();
+  const [refreshing, setRefreshing] = useState(false);
+
+  console.log('userHassh inside chat...', userHash);
+  const { data: session } = useSessionQuery(
+    {
+      app_id: AppId,
+      session_id: sessionID,
+    },
+    { enabled: !!sessionID, initialData: orgSettings?.members }
+  );
+
+  console.log('Session from use session', JSON.stringify(session, null, 3));
+
+  const {
+    data: threadMessages,
+    isLoading: isFetchingThreadMessges,
+    hasNextPage: threadMessagesHasNextPage,
+    fetchNextPage: threadMessagesFetchNextPage,
+    refetch: threadMessagesRefetch,
+  } = useInfiniteQuery({
+    queryKey: ['messages', sessionID],
+    queryFn: ({ pageParam }) =>
+      fetchThreadMessages({
+        pageParam,
+        app_id: AppId,
+        session_id: sessionID,
+        user_hash: userHash,
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      console.log(
+        'nextPage from inifinite query',
+        JSON.stringify(lastPage, null, 3)
+      );
+      return lastPage.meta.page < lastPage.meta.page_count
+        ? lastPage.meta.page + 1
+        : undefined;
+    },
+    enabled: !!sessionID,
+  });
+
+  const messages =
+    threadMessages?.pages?.reduce(
+      (acc, page) => [...acc, ...page.messages],
+      []
+    ) ?? [];
+
+  // const groupedMessages = groupBy(messages, (message) =>
+  //   format(new Date(message.created_datetime), 'MMM dd, yyyy')
+  // );
+
+  console.log('Thread message:===', JSON.stringify(threadMessages, null, 3));
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -42,6 +106,7 @@ const Chat = () => {
     NameText: {
       color: theme.SimpuPaleWhite,
       fontSize: fs(18),
+      fontWeight: '600',
     },
     responseTimeText: {
       color: theme.SimpuPaleWhite,
@@ -125,16 +190,21 @@ const Chat = () => {
               source={require('../assets/backIcon.png')}
               style={{ height: hp(18), width: hp(18), marginRight: hp(5) }}
             />
-            <Image
+            {/* <Image
               resizeMode="contain"
               style={styles.imageStyle}
               source={{ uri: `https://i.pravatar.cc/150?img=${3}` }}
-            />
+            /> */}
+            <AgentsCard size="small" />
           </TouchableOpacity>
-          <View style={{ marginLeft: hp(5) }}>
-            <Text style={styles.NameText}>Waka Waka</Text>
+          <View style={{ marginLeft: hp(15) }}>
+            <Text style={styles.NameText}>{orgSettings?.name}</Text>
             <Text style={styles.responseTimeText}>
-              Typically replies in an hour
+              {orgSettings?.response_time
+                ? `Typically replies ${
+                    responseTimeRegister[orgSettings?.response_time]
+                  }`
+                : orgSettings?.welcome_message?.team_intro}
             </Text>
           </View>
         </View>
@@ -144,10 +214,21 @@ const Chat = () => {
             backgroundColor: theme.SimpuWhite,
             paddingHorizontal: hp(10),
           }}
-          data={ChatData}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={threadMessagesRefetch}
+            />
+          }
+          data={messages ?? []}
           keyExtractor={(_, i) => i.toString()}
           renderItem={({ item, index }) => (
             <ChatList item={item} index={index} />
+          )}
+          ListEmptyComponent={() => (
+            <View>
+              <Text>Start a conversation</Text>
+            </View>
           )}
         />
         <ChatInput />

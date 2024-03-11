@@ -1,6 +1,7 @@
 // import { loadState } from ".";
 // import { pusher } from "./pusher";
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { KEYS, getCache } from './cache';
 
 // const CONVERSATION_API_URL = "https://conversation.simpu.co/api/v1";
 const CONVERSATION_API_URL = 'https://conversation.simpu.sh/api/v1';
@@ -16,6 +17,7 @@ export async function client(
   url: string,
   {
     data,
+    signed_request,
     method = 'GET',
     headers: customHeaders,
     ...customConfig
@@ -23,7 +25,9 @@ export async function client(
   tokenProtected = true
 ) {
   // const { signed_request } = loadState() ?? {};
-  const signed_request = '';
+  // const signed_request = await getCache(KEYS.SIGNED_REQUEST);
+
+  console.log('User assssssh inside client', signed_request);
 
   const headers = {
     'Authorization': signed_request ? signed_request : undefined,
@@ -38,7 +42,9 @@ export async function client(
     method,
     data,
     url: buildConversationUrl(url),
-    ...customConfig,
+    params: {
+      ...customConfig,
+    },
   };
 
   try {
@@ -49,3 +55,42 @@ export async function client(
     throw error;
   }
 }
+
+const axiosRequestInterceptor = Axios.interceptors.request.use(
+  (config) => {
+    // Do something before request is sent
+    console.log(
+      `###########  All Outgoing API  Request ######\n`,
+      JSON.stringify(config, null, 2)
+    );
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+const axiosResponseInterceptor = Axios.interceptors.response.use(
+  function (response: AxiosResponse) {
+    return response;
+  },
+  function (error: AxiosError) {
+    console.log('Error occurred===', error);
+    if (error.response && error.response.data) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 410)
+      ) {
+        //Unauthorized error, navigate back to the login screen
+        // ForceUserLogOut();
+      }
+      //@ts-ignore
+      if (error.response.data.conversationErrorPayload) {
+        return Promise.reject(error.response.data);
+      }
+      //@ts-ignore
+      return Promise.reject(error.response.data.message);
+    }
+    return Promise.reject(error.message);
+  }
+);

@@ -1,5 +1,7 @@
 import { buildAIUrl, client } from './client';
 
+const perPageFetch = 20;
+
 export async function getWidgetSettings({
   app_id,
   public_key,
@@ -14,6 +16,25 @@ export async function getWidgetSettings({
   });
   return response.data;
 }
+
+export const fetchThreadMessages = ({
+  pageParam = 1,
+  app_id,
+  session_id,
+  user_hash,
+}: {
+  pageParam: number;
+  app_id: string;
+  session_id: string;
+  user_hash: string;
+}) => {
+  return getConversationMessages({
+    app_id,
+    page: pageParam,
+    session_id: session_id ?? '',
+    signed_request: user_hash,
+  });
+};
 
 export async function addOrUpdateUser({
   data,
@@ -38,21 +59,37 @@ export async function addOrUpdateUser({
   return response.data;
 }
 
-export async function sendMessage(data, app_id: string) {
+export async function sendMessage(
+  data,
+  app_id: string,
+  signed_request?: string
+) {
   const response = await client(`channels/livechat/${app_id}/messages`, {
     data,
     method: 'POST',
+    signed_request: signed_request,
   });
   return response.data.message;
 }
 
 export async function getConversationMessages(params) {
-  const { session_id, app_id, ...rest } = params;
+  const { session_id, page, app_id, signed_request, ...rest } = params;
 
+  // console.log(
+  //   'SIgned request insed to get conversation messages',
+  //   signed_request
+  // );
+
+  let query = {
+    page,
+    per_page: perPageFetch,
+  };
   const response = await client(
     `channels/livechat/${app_id}/messages/${session_id}`,
     {
-      params: rest,
+      signed_request: signed_request,
+      ...query,
+      ...rest,
     }
   );
   return response.data;
