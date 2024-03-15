@@ -1,3 +1,5 @@
+import { types } from 'react-native-document-picker';
+
 export type LiveChatProps = {
   app_id: string;
   name?: string;
@@ -68,3 +70,15 @@ export type OrgSettingType = {
   timezone: string;
   business_hours: Businesshours;
 };
+
+export const acceptedFileTypes = [
+  types.images,
+  types.audio,
+  types.video,
+  types.doc,
+  types.docx,
+  types.pdf,
+  types.xls,
+  types.ppt,
+  types.xlsx,
+];

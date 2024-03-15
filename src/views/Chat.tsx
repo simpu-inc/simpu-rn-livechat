@@ -17,18 +17,90 @@ import { useChatProvider } from '../context';
 import { format } from 'date-fns';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp } from '../utils/config';
 import { ChatData, agents } from '../utils/dummyData';
+import DocumentPicker from 'react-native-document-picker';
 import {
   fetchThreadMessages,
+  generateNewMessage,
   getConversationMessages,
   responseTimeRegister,
+  sendMessage,
   useSessionQuery,
 } from '../utils';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import AgentsCard from '../components/AgentsCard';
+import { acceptedFileTypes } from '../@types/types';
 
 const Chat = () => {
+  const queryClient = useQueryClient();
   const { AppId, userHash, sessionID, setViewIndex, orgSettings } =
     useChatProvider();
+
+  const { mutate: mutateSendMessage } = useMutation(
+    (payload) => {
+      return sendMessage(payload, AppId, userHash);
+    },
+    {
+      onMutate: async (data) => {
+        const { attachments, user_id, content } = data;
+        const newMessage = generateNewMessage({
+          attachments,
+          user_id,
+          content,
+        });
+
+        await queryClient.cancelQueries({
+          queryKey: ['messages', sessionID],
+          exact: true,
+        });
+
+        const previousMessages = queryClient.getQueryData([
+          'messages',
+          sessionID,
+        ]);
+
+        queryClient.setQueryData(['messages', sessionID], (old) => ({
+          ...old,
+          pages: old?.pages?.map((page) => {
+            if (page.meta.page === 1) {
+              return {
+                ...page,
+                messages: [newMessage, ...page.messages],
+              };
+            }
+            return page;
+          }),
+        }));
+
+        // setText("");
+        // setAttachments();
+        // setUploadedFiles();
+
+        return { previousMessages };
+      },
+      onError: (error) => {
+        // toast({
+        //   position: "top",
+        //   render: ({ onClose }) => (
+        //     <ToastBox
+        //       onClose={onClose}
+        //       message={
+        //         typeof error === "string"
+        //           ? error
+        //           : error?.message ?? "Error! Failed to send message"
+        //       }
+        //     />
+        //   ),
+        // });
+      },
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({
+          queryKey: ['messages', data.session_id],
+          exact: true,
+        });
+        // history.push(`/chat/${data.session_id}`);
+      },
+    }
+  );
   const [refreshing, setRefreshing] = useState(false);
 
   console.log('userHassh inside chat...', userHash);
@@ -119,9 +191,10 @@ const Chat = () => {
     return (
       <View
         style={{
-          alignSelf: item?.userType === 'agent' ? 'flex-start' : 'flex-end',
+          marginBottom: index === 0 ? hp(120) : hp(3),
+          alignSelf: item?.by_account ? 'flex-start' : 'flex-end',
           padding: hp(5),
-          marginVertical: hp(10),
+          marginVertical: hp(8),
           maxWidth: SCREEN_WIDTH * 0.75,
         }}
       >
@@ -129,39 +202,32 @@ const Chat = () => {
           style={{
             paddingVertical: hp(6),
             paddingHorizontal: hp(8),
-            borderRadius: hp(4),
-            backgroundColor:
-              item?.userType === 'agent'
-                ? orgSettings?.style?.background_color ?? theme?.SimpuBlue
-                : theme.SimpuPaleWhite,
+            borderRadius: hp(8),
+            backgroundColor: item?.by_account
+              ? orgSettings?.style?.background_color ?? theme?.SimpuBlue
+              : theme.SimpuPaleWhite,
           }}
         >
           <Text
             style={{
               lineHeight: 22,
-              color:
-                item?.userType === 'agent'
-                  ? theme.SimpuWhite
-                  : theme.SimpuBlack,
+              color: item?.by_account ? theme.SimpuWhite : theme.SimpuBlack,
             }}
           >
-            {item?.message}
+            {item?.entity?.content?.body}
           </Text>
           <Text
             style={{
-              color:
-                item?.userType === 'agent'
-                  ? theme.SimpuWhite
-                  : theme.SimpuBlack,
+              color: item?.by_account ? theme.SimpuWhite : theme.SimpuBlack,
               fontSize: fs(9),
               paddingVertical: hp(4),
               alignSelf: 'flex-end',
             }}
           >
-            {format(new Date(item?.date) ?? new Date(), 'p')}
+            {format(new Date(item?.created_datetime) ?? new Date(), 'p')}
           </Text>
         </View>
-        {item.userType === 'agent' && (
+        {item?.by_account && (
           <Text
             style={{
               paddingTop: hp(4),
@@ -169,12 +235,69 @@ const Chat = () => {
               fontSize: fs(12),
             }}
           >
-            Agent: {item?.name}
+            Agent: {item?.author?.name ?? item?.author?.Platform_name}
           </Text>
         )}
       </View>
     );
   };
+
+  const pickFile = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        allowMultiSelection: false,
+        type: acceptedFileTypes,
+      });
+
+      const file = {
+        uri: res[0]?.uri,
+        type: res[0]?.type,
+        name: res[0]?.name,
+        size: res[0]?.size,
+      };
+
+      // const isFileTooLarge = file?.size !== null && file?.size >= 10271520;
+
+      // if (isFileTooLarge) {
+      //   Toast.show({
+      //     type: ToastTypes.WARNING,
+      //     text1: 'File too large',
+      //     text2: 'Maximum file size allowed is 10 Mb',
+      //   });
+
+      //   return;
+      // }
+      // setAttachmentDetails([file, ...attachmentDetails]);
+
+      // const newFileData = new FormData();
+      // newFileData.append('files', file);
+      // newFileData.append('type', messageType);
+
+      // mutate({
+      //   file: newFileData,
+      //   Auth: token,
+      //   organisationId: organisation?.id,
+      //   credentialId,
+      // });
+    } catch (error) {
+      // crashlytics().log(`${error}`);
+    }
+  };
+
+  const handleSendMessage = () => {
+    if (userHash) {
+      mutateSendMessage({
+        user_id,
+        content: text,
+        attachment_ids: uploadedFiles,
+      });
+    } else {
+      // clearState();
+      setHomeSectionStep(1);
+      history.push('/home');
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -209,6 +332,7 @@ const Chat = () => {
           </View>
         </View>
         <FlatList
+          inverted
           style={{
             flex: 1,
             backgroundColor: theme.SimpuWhite,
@@ -231,7 +355,7 @@ const Chat = () => {
             </View>
           )}
         />
-        <ChatInput />
+        <ChatInput pickFile={pickFile} handleSendMessage={handleSendMessage} />
       </View>
     </KeyboardAvoidingView>
   );

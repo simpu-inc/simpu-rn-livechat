@@ -7,12 +7,17 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  type GestureResponderEvent,
 } from 'react-native';
 import React from 'react';
 import { theme } from '../utils/theme';
 import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 
-const ChatInput = () => {
+type ChatInputprops = {
+  pickFile: (event: GestureResponderEvent) => void;
+  handleSendMessage: (event: GestureResponderEvent) => void;
+};
+const ChatInput = ({ pickFile }: ChatInputprops) => {
   const styles = StyleSheet.create({
     inputContainer: {
       borderTopWidth: wp(2),
@@ -47,7 +52,7 @@ const ChatInput = () => {
         style={styles.input}
       />
       <View style={styles.btnContainer}>
-        <TouchableOpacity style={styles.btns} onPress={() => {}}>
+        <TouchableOpacity style={styles.btns} onPress={pickFile}>
           <Image
             style={{ height: hp(25), width: hp(25) }}
             source={require('../assets/attach.png')}

@@ -99,3 +99,42 @@ export function html2Text(html: string) {
     (html || '').replace(/<\/?[^>]+>/gi, '').replace(/&nbsp;/g, ' ')
   );
 }
+
+export const generateNewMessage = ({
+  attachments,
+  content,
+  user_id,
+  user_name,
+}: {
+  attachments: any;
+  content: string;
+  user_name: string;
+  user_id: string;
+}) => {
+  return {
+    type: 'message/normal',
+    uuid: Date.now(),
+    content_id: Date.now(),
+    session_id: Date.now(),
+    entity: {
+      attachments,
+      quoted: null,
+      status: 'sent',
+      uuid: Date.now(),
+      content: {
+        body: content,
+      },
+      meta: { type: 'normal' },
+      has_attachment: !!attachments?.length,
+      created_datetime: new Date().toISOString(),
+    },
+    author: {
+      uuid: user_id,
+      name: user_name,
+      type: 'customer',
+    },
+    author_type: 'customer',
+    author_id: user_id ?? '',
+    created_datetime: new Date(),
+  };
+};

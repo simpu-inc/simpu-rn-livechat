@@ -11107,6 +11107,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-document-picker@npm:^9.1.1":
+  version: 9.1.1
+  resolution: "react-native-document-picker@npm:9.1.1"
+  dependencies:
+    invariant: ^2.2.4
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-windows: "*"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: e29b9406dd77e16f461e64035a5f7056b1fcb0d05fb26b23f0073ff2211520a7ac9b57da7e58e61ff03bcbe1120d2e104fb1c90282412736feeb12abe96e2d3b
+  languageName: node
+  linkType: hard
+
 "react-native-phone-number-input@npm:^2.1.0":
   version: 2.1.0
   resolution: "react-native-phone-number-input@npm:2.1.0"
@@ -12047,13 +12063,17 @@ __metadata:
     react: 18.2.0
     react-native: 0.73.4
     react-native-builder-bob: ^0.20.0
+    react-native-document-picker: ^9.1.1
     react-native-phone-number-input: ^2.1.0
     release-it: ^15.0.0
     turbo: ^1.10.7
     typescript: ^5.0.2
   peerDependencies:
+    "@react-native-async-storage/async-storage": "*"
+    axios: ^1.6.7
     react: "*"
     react-native: "*"
+    react-native-document-picker: "*"
   languageName: unknown
   linkType: soft
 
