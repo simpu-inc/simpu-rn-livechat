@@ -17,7 +17,7 @@ import { useChatProvider } from '../context';
 import { format } from 'date-fns';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp } from '../utils/config';
 import { ChatData, agents } from '../utils/dummyData';
-import DocumentPicker from 'react-native-document-picker';
+// import DocumentPicker from 'react-native-document-picker';
 import {
   fetchThreadMessages,
   generateNewMessage,
@@ -26,7 +26,11 @@ import {
   sendMessage,
   useSessionQuery,
 } from '../utils';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import AgentsCard from '../components/AgentsCard';
 import { acceptedFileTypes } from '../@types/types';
 
@@ -35,72 +39,82 @@ const Chat = () => {
   const { AppId, userHash, sessionID, setViewIndex, orgSettings } =
     useChatProvider();
 
-  const { mutate: mutateSendMessage } = useMutation(
-    (payload) => {
+  const [message, setMessage] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState();
+
+  const { mutate: mutateSendMessage } = useMutation({
+    mutationFn: (payload) => {
       return sendMessage(payload, AppId, userHash);
     },
-    {
-      onMutate: async (data) => {
-        const { attachments, user_id, content } = data;
-        const newMessage = generateNewMessage({
-          attachments,
-          user_id,
-          content,
-        });
+    onMutate: async (data) => {
+      const { attachments, user_id, content } = data;
 
-        await queryClient.cancelQueries({
-          queryKey: ['messages', sessionID],
-          exact: true,
-        });
+      const newMessage = generateNewMessage({
+        attachments,
+        user_id,
+        content,
+      });
 
-        const previousMessages = queryClient.getQueryData([
-          'messages',
-          sessionID,
-        ]);
+      // console.log(
+      //   '===new Generated message ===',
+      //   JSON.stringify(newMessage, null, 3)
+      // );
 
-        queryClient.setQueryData(['messages', sessionID], (old) => ({
-          ...old,
-          pages: old?.pages?.map((page) => {
-            if (page.meta.page === 1) {
-              return {
-                ...page,
-                messages: [newMessage, ...page.messages],
-              };
-            }
-            return page;
-          }),
-        }));
+      await queryClient.cancelQueries({
+        queryKey: ['messages', sessionID],
+        exact: true,
+      });
 
-        // setText("");
-        // setAttachments();
-        // setUploadedFiles();
+      const previousMessages = queryClient.getQueryData([
+        'messages',
+        sessionID,
+      ]);
 
-        return { previousMessages };
-      },
-      onError: (error) => {
-        // toast({
-        //   position: "top",
-        //   render: ({ onClose }) => (
-        //     <ToastBox
-        //       onClose={onClose}
-        //       message={
-        //         typeof error === "string"
-        //           ? error
-        //           : error?.message ?? "Error! Failed to send message"
-        //       }
-        //     />
-        //   ),
-        // });
-      },
-      onSuccess: (data) => {
-        queryClient.invalidateQueries({
-          queryKey: ['messages', data.session_id],
-          exact: true,
-        });
-        // history.push(`/chat/${data.session_id}`);
-      },
-    }
-  );
+      queryClient.setQueryData(['messages', sessionID], (old) => ({
+        ...old,
+        pages: old?.pages?.map((page) => {
+          if (page.meta.page === 1) {
+            return {
+              ...page,
+              messages: [newMessage, ...page.messages],
+            };
+          }
+          return page;
+        }),
+      }));
+
+      // setText("");
+      // setAttachments();
+      setUploadedFiles([]);
+
+      setMessage('');
+
+      return { previousMessages };
+    },
+    onError: (error) => {
+      // toast({
+      //   position: "top",
+      //   render: ({ onClose }) => (
+      //     <ToastBox
+      //       onClose={onClose}
+      //       message={
+      //         typeof error === "string"
+      //           ? error
+      //           : error?.message ?? "Error! Failed to send message"
+      //       }
+      //     />
+      //   ),
+      // });
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['messages', data.session_id],
+        exact: true,
+      });
+      // history.push(`/chat/${data.session_id}`);
+    },
+  });
+
   const [refreshing, setRefreshing] = useState(false);
 
   console.log('userHassh inside chat...', userHash);
@@ -152,7 +166,7 @@ const Chat = () => {
   //   format(new Date(message.created_datetime), 'MMM dd, yyyy')
   // );
 
-  console.log('Thread message:===', JSON.stringify(threadMessages, null, 3));
+  // console.log('=====Thread message:===', JSON.stringify(threadMessages, null, 3));
 
   const styles = StyleSheet.create({
     container: {
@@ -243,58 +257,53 @@ const Chat = () => {
   };
 
   const pickFile = async () => {
-    try {
-      const res = await DocumentPicker.pick({
-        allowMultiSelection: false,
-        type: acceptedFileTypes,
-      });
-
-      const file = {
-        uri: res[0]?.uri,
-        type: res[0]?.type,
-        name: res[0]?.name,
-        size: res[0]?.size,
-      };
-
-      // const isFileTooLarge = file?.size !== null && file?.size >= 10271520;
-
-      // if (isFileTooLarge) {
-      //   Toast.show({
-      //     type: ToastTypes.WARNING,
-      //     text1: 'File too large',
-      //     text2: 'Maximum file size allowed is 10 Mb',
-      //   });
-
-      //   return;
-      // }
-      // setAttachmentDetails([file, ...attachmentDetails]);
-
-      // const newFileData = new FormData();
-      // newFileData.append('files', file);
-      // newFileData.append('type', messageType);
-
-      // mutate({
-      //   file: newFileData,
-      //   Auth: token,
-      //   organisationId: organisation?.id,
-      //   credentialId,
-      // });
-    } catch (error) {
-      // crashlytics().log(`${error}`);
-    }
+    // try {
+    //   const res = await DocumentPicker.pick({
+    //     allowMultiSelection: false,
+    //     type: acceptedFileTypes,
+    //   });
+    //   const file = {
+    //     uri: res[0]?.uri,
+    //     type: res[0]?.type,
+    //     name: res[0]?.name,
+    //     size: res[0]?.size,
+    //   };
+    //   // const isFileTooLarge = file?.size !== null && file?.size >= 10271520;
+    //   // if (isFileTooLarge) {
+    //   //   Toast.show({
+    //   //     type: ToastTypes.WARNING,
+    //   //     text1: 'File too large',
+    //   //     text2: 'Maximum file size allowed is 10 Mb',
+    //   //   });
+    //   //   return;
+    //   // }
+    //   // setAttachmentDetails([file, ...attachmentDetails]);
+    //   // const newFileData = new FormData();
+    //   // newFileData.append('files', file);
+    //   // newFileData.append('type', messageType);
+    //   // mutate({
+    //   //   file: newFileData,
+    //   //   Auth: token,
+    //   //   organisationId: organisation?.id,
+    //   //   credentialId,
+    //   // });
+    // } catch (error) {
+    //   // crashlytics().log(`${error}`);
+    // }
   };
 
   const handleSendMessage = () => {
+    // console.log('message from input=====', message);
     if (userHash) {
       mutateSendMessage({
-        user_id,
-        content: text,
+        user_id: AppId,
+        content: message,
         attachment_ids: uploadedFiles,
       });
     } else {
       // clearState();
-      setHomeSectionStep(1);
-      history.push('/home');
+      // setHomeSectionStep(1);
+      // history.push('/home');
     }
   };
 
@@ -330,8 +339,13 @@ const Chat = () => {
                 : orgSettings?.welcome_message?.team_intro}
             </Text>
           </View>
+          {/* <TouchableOpacity>
+
+          </TouchableOpacity>
+          <Text>Close</Text> */}
         </View>
         <FlatList
+          showsVerticalScrollIndicator={false}
           inverted
           style={{
             flex: 1,
@@ -355,7 +369,12 @@ const Chat = () => {
             </View>
           )}
         />
-        <ChatInput pickFile={pickFile} handleSendMessage={handleSendMessage} />
+        <ChatInput
+          message={message}
+          setMessage={setMessage}
+          pickFile={pickFile}
+          handleSendMessage={handleSendMessage}
+        />
       </View>
     </KeyboardAvoidingView>
   );

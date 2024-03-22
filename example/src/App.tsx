@@ -49,8 +49,8 @@ export default function App() {
       )}
       {openLiveChat && (
         <SimpuLiveChat
-          app_id={'e3e8ae1e'}
-          public_key={'spk__T4sfafLijwz09Po1ivc7g8NCGJBn67zclxG6wGINRn2LnnYCsS'}
+          app_id={'f2f37798'}
+          public_key={'spk__FdGQKmc3jsHc1ndqdyYsODZWyuQGF2hJVtLuQPxBpQKRKY0a2b'}
         />
       )}
     </View>

@@ -14,10 +14,17 @@ import { theme } from '../utils/theme';
 import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 
 type ChatInputprops = {
+  message: string;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
   pickFile: (event: GestureResponderEvent) => void;
   handleSendMessage: (event: GestureResponderEvent) => void;
 };
-const ChatInput = ({ pickFile }: ChatInputprops) => {
+const ChatInput = ({
+  pickFile,
+  message,
+  setMessage,
+  handleSendMessage,
+}: ChatInputprops) => {
   const styles = StyleSheet.create({
     inputContainer: {
       borderTopWidth: wp(2),
@@ -48,6 +55,8 @@ const ChatInput = ({ pickFile }: ChatInputprops) => {
     <View style={styles.inputContainer}>
       <TextInput
         multiline
+        value={message}
+        onChangeText={(text) => setMessage(text)}
         placeholder="Write your message"
         style={styles.input}
       />
@@ -60,7 +69,7 @@ const ChatInput = ({ pickFile }: ChatInputprops) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.btns, { marginRight: wp(5) }]}
-          onPress={() => {}}
+          onPress={handleSendMessage}
         >
           <Image
             style={{ height: hp(25), width: hp(25) }}
