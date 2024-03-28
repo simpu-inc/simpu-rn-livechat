@@ -12,6 +12,16 @@ import { useChatProvider } from '../context';
 import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 import { addOrUpdateUser, getUserHash, sendMessage } from '../utils';
 import { KEYS, storeCache } from '../utils/cache';
+import { z } from 'zod';
+
+const Message = z.object({
+  name: z.string().min(3, { message: 'Name should be more than 3 characters' }),
+  email: z.string().email({ message: 'Enter a valid Email address' }),
+  phone: z.string().min(9, { message: 'Enter a valid phone number' }),
+  message: z
+    .string()
+    .min(5, { message: 'Message should be more than 5 characters' }),
+});
 
 const ContactForm = () => {
   const phoneInput = useRef<PhoneInput>(null);
@@ -34,7 +44,28 @@ const ContactForm = () => {
     message: '',
   });
 
+  const [formatedErrors, setformatedErrors] = useState({});
+
+  const parsedMessage = Message.safeParse(formDetails);
+
+  console.log('form send status: ', parsedMessage?.success);
+  console.log('form send status: ', JSON.stringify(formatedErrors, null, 2));
+
   const SendMessage = async () => {
+    if (!parsedMessage.success) {
+      const errors = parsedMessage?.error;
+
+      let newErrors = {};
+
+      for (const issue of errors.issues) {
+        newErrors = {
+          ...newErrors,
+          [issue?.path[0]]: issue.message,
+        };
+      }
+      setformatedErrors(newErrors);
+    }
+    if (!parsedMessage.success) return;
     const hash = getUserHash({
       public_key: publicKey,
       secret_key: orgSettings?.secret_key,
@@ -114,7 +145,7 @@ const ContactForm = () => {
     },
 
     inputContainer: {
-      marginVertical: hp(8),
+      marginVertical: hp(5),
       marginHorizontal: hp(15),
     },
     lable: {
@@ -135,13 +166,20 @@ const ContactForm = () => {
       justifyContent: 'center',
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       marginHorizontal: wp(15),
-      marginVertical: hp(20),
+      marginVertical: hp(15),
       borderRadius: hp(10),
     },
     sendBtnTxt: {
       color: theme.SimpuWhite,
       fontSize: fs(16),
       fontWeight: '600',
+    },
+
+    errorText: {
+      fontSize: fs(10),
+      color: 'red',
+      marginLeft: wp(4),
+      paddingTop: hp(4),
     },
   });
   return (
@@ -168,6 +206,7 @@ const ContactForm = () => {
             style={styles.input}
             placeholder="Enter your name"
           />
+          <Text style={styles.errorText}>{formatedErrors?.name}</Text>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.lable}>Email</Text>
@@ -180,6 +219,7 @@ const ContactForm = () => {
             style={styles.input}
             placeholder="Enter your email"
           />
+          <Text style={styles.errorText}>{formatedErrors?.email}</Text>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.lable}>Phone number</Text>
@@ -232,6 +272,7 @@ const ContactForm = () => {
               backgroundColor: 'transparent',
             }}
           />
+          <Text style={styles.errorText}>{formatedErrors?.phone}</Text>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.lable}>Message</Text>
@@ -244,9 +285,14 @@ const ContactForm = () => {
             style={[styles.input, { height: hp(120) }]}
             placeholder="write your message"
           />
+          <Text style={styles.errorText}>{formatedErrors?.message}</Text>
         </View>
 
-        <TouchableOpacity style={styles.sendBtn} onPress={SendMessage}>
+        <TouchableOpacity
+          // disabled={!enabled}
+          style={[styles.sendBtn, {}]}
+          onPress={SendMessage}
+        >
           <Text style={styles.sendBtnTxt}>Send message</Text>
         </TouchableOpacity>
       </View>
