@@ -26,7 +26,6 @@ const Message = z.object({
 const ContactForm = () => {
   const phoneInput = useRef<PhoneInput>(null);
   const [value, setValue] = useState('');
-  const [formattedValue, setFormattedValue] = useState('');
   const {
     AppId,
     publicKey,
@@ -36,17 +35,20 @@ const ContactForm = () => {
     setUserHash,
   } = useChatProvider();
 
-  console.log({ formattedValue, value });
-
+  const [formattedValue, setFormattedValue] = useState('');
   const [formDetails, setFormDetails] = useState({
     name: '',
     email: '',
     message: '',
   });
 
+  // console.log({ formattedValue, value });
   const [formatedErrors, setformatedErrors] = useState({});
 
-  const parsedMessage = Message.safeParse(formDetails);
+  const parsedMessage = Message.safeParse({
+    ...formDetails,
+    phone: formattedValue,
+  });
 
   console.log('form send status: ', parsedMessage?.success);
   console.log('form send status: ', JSON.stringify(formatedErrors, null, 2));
@@ -60,12 +62,14 @@ const ContactForm = () => {
       for (const issue of errors.issues) {
         newErrors = {
           ...newErrors,
-          [issue?.path[0]]: issue.message,
+          [issue?.path?.[0]]: issue.message,
         };
       }
       setformatedErrors(newErrors);
     }
+
     if (!parsedMessage.success) return;
+
     const hash = getUserHash({
       public_key: publicKey,
       secret_key: orgSettings?.secret_key,
@@ -153,7 +157,7 @@ const ContactForm = () => {
       paddingVertical: hp(5),
     },
     input: {
-      height: hp(55),
+      height: hp(50),
       borderWidth: 1,
       borderColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       borderRadius: hp(8),
@@ -187,7 +191,7 @@ const ContactForm = () => {
       <View style={{ paddingHorizontal: wp(15) }}>
         <Text
           style={{
-            paddingVertical: hp(10),
+            paddingVertical: hp(7),
             fontSize: fs(16),
             fontWeight: '500',
           }}

@@ -1,6 +1,5 @@
-import { Image, Text, TouchableOpacity, View } from 'react-native';
-import React, { useCallback, useContext, useEffect } from 'react';
-
+import { Image, Text, TouchableOpacity, View, Alert } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
 import Start from './views/Start';
 import { theme } from './utils/theme';
 import Footer from './components/Footer';
@@ -45,6 +44,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     console.log('Users -hash =========', user_hash);
 
     try {
+      //@ts-ignore
       const { uuid, user_id: userId } = await addOrUpdateUser({
         data: {
           name,
@@ -81,6 +81,21 @@ const LiveChatContainer = (Props: LiveChatProps) => {
       handleSaveUserId();
     }
   }, [data, user_id, public_key, handleSaveUserId]);
+
+  const handleCloseLiveChat = () => {
+    Alert.alert('Close LiveChat', 'your about to close the live chat window', [
+      {
+        text: 'Stay',
+        onPress: () => console.log('Cancel Pressed'),
+        // style: 'default',
+      },
+      {
+        text: 'Close',
+        onPress: () => console.log('OK Pressed'),
+        // style: 'cancel',
+      },
+    ]);
+  };
 
   return (
     <View
@@ -133,6 +148,16 @@ const LiveChatContainer = (Props: LiveChatProps) => {
           >
             {/* We reply instantly from {orgSettings?.officeHrs} */}
           </Text>
+
+          <TouchableOpacity
+            onPress={handleCloseLiveChat}
+            style={{ position: 'absolute', top: hp(80), right: wp(30) }}
+          >
+            <Image
+              style={{ height: hp(18), width: hp(20) }}
+              source={require('./assets/closeIcon.png')}
+            />
+          </TouchableOpacity>
         </View>
       )}
       {viewIndex === 1 && <Start />}
