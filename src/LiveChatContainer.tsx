@@ -83,18 +83,22 @@ const LiveChatContainer = (Props: LiveChatProps) => {
   }, [data, user_id, public_key, handleSaveUserId]);
 
   const handleCloseLiveChat = () => {
-    Alert.alert('Close LiveChat', 'your about to close the live chat window', [
-      {
-        text: 'Stay',
-        onPress: () => console.log('Cancel Pressed'),
-        // style: 'default',
-      },
-      {
-        text: 'Close',
-        onPress: () => console.log('OK Pressed'),
-        // style: 'cancel',
-      },
-    ]);
+    Alert.alert(
+      'Close LiveChat',
+      'you are about to close the live chat window',
+      [
+        {
+          text: 'Stay',
+          onPress: () => console.log('Cancel Pressed'),
+          // style: 'default',
+        },
+        {
+          text: 'Close',
+          onPress: () => console.log('OK Pressed'),
+          // style: 'cancel',
+        },
+      ]
+    );
   };
 
   return (

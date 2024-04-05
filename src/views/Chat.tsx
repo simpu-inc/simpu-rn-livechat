@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Image,
   KeyboardAvoidingView,
@@ -15,9 +16,9 @@ import { theme } from '../utils/theme';
 import ChatInput from '../components/ChatInput';
 import { useChatProvider } from '../context';
 import { format } from 'date-fns';
-import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp } from '../utils/config';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp, wp } from '../utils/config';
 import { ChatData, agents } from '../utils/dummyData';
-// import DocumentPicker from 'react-native-document-picker';
+import DocumentPicker from 'react-native-document-picker';
 import {
   fetchThreadMessages,
   generateNewMessage,
@@ -176,7 +177,7 @@ const Chat = () => {
       flexDirection: 'row',
       height: SCREEN_HEIGHT * 0.12,
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
-      // justifyContent: 'center',
+      justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: hp(15),
       paddingTop: hp(28),
@@ -257,39 +258,40 @@ const Chat = () => {
   };
 
   const pickFile = async () => {
-    // try {
-    //   const res = await DocumentPicker.pick({
-    //     allowMultiSelection: false,
-    //     type: acceptedFileTypes,
-    //   });
-    //   const file = {
-    //     uri: res[0]?.uri,
-    //     type: res[0]?.type,
-    //     name: res[0]?.name,
-    //     size: res[0]?.size,
-    //   };
-    //   // const isFileTooLarge = file?.size !== null && file?.size >= 10271520;
-    //   // if (isFileTooLarge) {
-    //   //   Toast.show({
-    //   //     type: ToastTypes.WARNING,
-    //   //     text1: 'File too large',
-    //   //     text2: 'Maximum file size allowed is 10 Mb',
-    //   //   });
-    //   //   return;
-    //   // }
-    //   // setAttachmentDetails([file, ...attachmentDetails]);
-    //   // const newFileData = new FormData();
-    //   // newFileData.append('files', file);
-    //   // newFileData.append('type', messageType);
-    //   // mutate({
-    //   //   file: newFileData,
-    //   //   Auth: token,
-    //   //   organisationId: organisation?.id,
-    //   //   credentialId,
-    //   // });
-    // } catch (error) {
-    //   // crashlytics().log(`${error}`);
-    // }
+    try {
+      const res = await DocumentPicker.pick({
+        allowMultiSelection: false,
+        type: acceptedFileTypes,
+      });
+      const file = {
+        uri: res[0]?.uri,
+        type: res[0]?.type,
+        name: res[0]?.name,
+        size: res[0]?.size,
+      };
+      // const isFileTooLarge = file?.size !== null && file?.size >= 10271520;
+      // if (isFileTooLarge) {
+      //   Toast.show({
+      //     type: ToastTypes.WARNING,
+      //     text1: 'File too large',
+      //     text2: 'Maximum file size allowed is 10 Mb',
+      //   });
+      //   return;
+      // }
+      // setAttachmentDetails([file, ...attachmentDetails]);
+      // const newFileData = new FormData();
+      // newFileData.append('files', file);
+      // newFileData.append('type', messageType);
+      // mutate({
+      //   file: newFileData,
+      //   Auth: token,
+      //   organisationId: organisation?.id,
+      //   credentialId,
+      // });
+    } catch (error) {
+      // crashlytics().log(`${error}`);
+      console.log('Error from  picker', error);
+    }
   };
 
   const handleSendMessage = () => {
@@ -307,6 +309,25 @@ const Chat = () => {
     }
   };
 
+  const handleCloseLiveChat = () => {
+    Alert.alert(
+      'Close LiveChat',
+      'you are about to close the live chat window',
+      [
+        {
+          text: 'Stay',
+          onPress: () => console.log('Cancel Pressed'),
+          // style: 'default',
+        },
+        {
+          text: 'Close',
+          onPress: () => console.log('OK Pressed'),
+          // style: 'cancel',
+        },
+      ]
+    );
+  };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -314,35 +335,43 @@ const Chat = () => {
     >
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <TouchableOpacity
-            style={{ flexDirection: 'row', alignItems: 'center' }}
-            onPress={() => setViewIndex(1)}
-          >
-            <Image
-              source={require('../assets/backIcon.png')}
-              style={{ height: hp(18), width: hp(18), marginRight: hp(5) }}
-            />
-            {/* <Image
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <TouchableOpacity
+              style={{ flexDirection: 'row', alignItems: 'center' }}
+              onPress={() => setViewIndex(1)}
+            >
+              <Image
+                source={require('../assets/backIcon.png')}
+                style={{ height: hp(18), width: hp(18) }}
+              />
+              {/* <Image
               resizeMode="contain"
               style={styles.imageStyle}
               source={{ uri: `https://i.pravatar.cc/150?img=${3}` }}
             /> */}
-            <AgentsCard size="small" />
-          </TouchableOpacity>
-          <View style={{ marginLeft: hp(15) }}>
-            <Text style={styles.NameText}>{orgSettings?.name}</Text>
-            <Text style={styles.responseTimeText}>
-              {orgSettings?.response_time
-                ? `Typically replies ${
-                    responseTimeRegister[orgSettings?.response_time]
-                  }`
-                : orgSettings?.welcome_message?.team_intro}
-            </Text>
+              <AgentsCard size="small" />
+            </TouchableOpacity>
+            <View style={{ marginLeft: hp(15) }}>
+              <Text style={styles.NameText}>{orgSettings?.name}</Text>
+              <Text style={styles.responseTimeText}>
+                {orgSettings?.response_time
+                  ? `Typically replies ${
+                      responseTimeRegister[orgSettings?.response_time]
+                    }`
+                  : orgSettings?.welcome_message?.team_intro}
+              </Text>
+            </View>
           </View>
-          {/* <TouchableOpacity>
-
+          <TouchableOpacity
+            onPress={handleCloseLiveChat}
+            // style={{ position: 'absolute', top: hp(70), right: wp(30) }}
+            style={{ alignSelf: 'center', marginRight: wp(10) }}
+          >
+            <Image
+              style={{ height: hp(16), width: hp(16) }}
+              source={require('../assets/closeIcon.png')}
+            />
           </TouchableOpacity>
-          <Text>Close</Text> */}
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
