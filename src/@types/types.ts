@@ -1,6 +1,7 @@
 import type { SetStateAction } from 'react';
 import { types } from 'react-native-document-picker';
-
+//@ts-ignore
+import { CountryCode } from 'react-native-country-picker-modal';
 export type LiveChatProps = {
   app_id: string;
   name?: string;
@@ -71,6 +72,7 @@ export type OrgSettingType = {
   members: AgentType[];
   timezone: string;
   business_hours: Businesshours;
+  country_code?: CountryCode;
 };
 
 export const acceptedFileTypes = [

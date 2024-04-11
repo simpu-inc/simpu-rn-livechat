@@ -12,9 +12,13 @@ import {
 import React from 'react';
 import { theme } from '../utils/theme';
 import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
+import Attachment from './Attachment';
 
 type ChatInputprops = {
   message: string;
+  attachements: Object;
+  onUploaded: () => {};
+  onDelete: () => {};
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   pickFile: (event: GestureResponderEvent) => void;
   handleSendMessage: (event: GestureResponderEvent) => void;
@@ -23,18 +27,28 @@ const ChatInput = ({
   pickFile,
   message,
   setMessage,
+  attachements,
+  onUploaded,
+  onDelete,
   handleSendMessage,
 }: ChatInputprops) => {
   const styles = StyleSheet.create({
-    inputContainer: {
+    mainContainer: {
       borderTopWidth: wp(2),
       borderTopColor: '#f4f4f4',
       backgroundColor: theme.SimpuPaleWhite,
-      height: SCREEN_HEIGHT * 0.1,
       position: 'absolute',
       bottom: 0,
       left: 0,
       right: 0,
+    },
+
+    attachContainer: {
+      paddingHorizontal: hp(20),
+      paddingVertical: hp(10),
+    },
+    inputContainer: {
+      height: SCREEN_HEIGHT * 0.1,
       paddingHorizontal: hp(20),
       paddingVertical: hp(10),
       flexDirection: 'row',
@@ -52,30 +66,42 @@ const ChatInput = ({
     },
   });
   return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        multiline
-        value={message}
-        onChangeText={(text) => setMessage(text)}
-        placeholder="Write your message"
-        style={styles.input}
-      />
-      <View style={styles.btnContainer}>
-        <TouchableOpacity style={styles.btns} onPress={pickFile}>
-          <Image
-            style={{ height: hp(25), width: hp(25) }}
-            source={require('../assets/attach.png')}
+    <View style={styles.mainContainer}>
+      <View style={styles.attachContainer}>
+        {attachements?.map((attach, index) => (
+          <Attachment
+            attach={attach}
+            key={`${index}`}
+            onUploaded={onUploaded}
+            onDelete={onDelete}
           />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.btns, { marginRight: wp(5) }]}
-          onPress={handleSendMessage}
-        >
-          <Image
-            style={{ height: hp(25), width: hp(25) }}
-            source={require('../assets/send.png')}
-          />
-        </TouchableOpacity>
+        ))}
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          multiline
+          value={message}
+          onChangeText={(text) => setMessage(text)}
+          placeholder="Write your message"
+          style={styles.input}
+        />
+        <View style={styles.btnContainer}>
+          <TouchableOpacity style={styles.btns} onPress={pickFile}>
+            <Image
+              style={{ height: hp(25), width: hp(25) }}
+              source={require('../assets/attach.png')}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.btns, { marginRight: wp(5) }]}
+            onPress={handleSendMessage}
+          >
+            <Image
+              style={{ height: hp(25), width: hp(25) }}
+              source={require('../assets/send.png')}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

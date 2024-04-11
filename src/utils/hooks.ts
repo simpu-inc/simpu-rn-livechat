@@ -53,32 +53,40 @@ export const useNotificationsQuery = ({ app_id }) => {
 export const useActiveSessionQuery = ({ app_id }, options) =>
   useQuery('user-active-session', () => getUserActiveSession(app_id), options);
 
-export const useCustomBotRootPath = (custom_bot_id, options) =>
-  useQuery(
-    ['custom-bot-root-path', custom_bot_id],
-    () => getCustomBotRootPath(custom_bot_id),
-    options
-  );
+// export const useCustomBotRootPath = (custom_bot_id, options) =>
+//   useQuery(
+//     ['custom-bot-root-path', custom_bot_id],
+//     () => getCustomBotRootPath(custom_bot_id),
+//     options
+//   );
 
-export const useCustomBotPath = (path_id, options) =>
-  useQuery(
-    ['custom-bot-path', path_id],
-    () => getCustomBotPath(path_id),
-    options
-  );
+// export const useCustomBotPath = (path_id, options) =>
+//   useQuery(
+//     ['custom-bot-path', path_id],
+//     () => getCustomBotPath(path_id),
+//     options
+//   );
 
-export const useBotOperatorCredential = (credential_id, options) => {
-  const { data } = useQuery(
-    ['bot-operator-credential', credential_id],
-    () => getBotOperatorCredentials(credential_id),
-    options
-  );
+// export const useBotOperatorCredential = (credential_id, options) => {
+//   const { data } = useQuery(
+//     ['bot-operator-credential', credential_id],
+//     () => getBotOperatorCredentials(credential_id),
+//     options
+//   );
 
-  // saveState({ ...loadState(), ...data?.bots });
-  return data;
-};
+//   // saveState({ ...loadState(), ...data?.bots });
+//   return data;
+// };
 
-export const useCloudinary = ({ app_id, file, onUploaded }) => {
+export const useCloudinary = ({
+  app_id,
+  file,
+  onUploaded,
+}: {
+  app_id: string;
+  file: any;
+  onUploaded: () => {};
+}) => {
   const [progress, setProgress] = useState(0);
   const [response, setResponse] = useState();
 

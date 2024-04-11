@@ -5,8 +5,10 @@ import React, {
   useContext,
   useState,
   useMemo,
+  useEffect,
 } from 'react';
 import type { OrgSettingType } from '../@types/types';
+import { getCompanyConfig } from '../utils/cache';
 
 type ChatContextType = {
   AppId: string;
@@ -44,6 +46,19 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [userHash, setUserHash] = useState('');
   // const [onlineAgents, setOnlineAgents] = useState([]);
   // const [userTypingData, setUserTypingData] = useState();
+
+  const getOrgSettingsLocalStorage = async () => {
+    const config = await getCompanyConfig();
+    setOrgSettings(config);
+  };
+
+  useEffect(() => {
+    getOrgSettingsLocalStorage();
+
+    // return () => {
+
+    // }
+  }, []);
 
   const values = useMemo(
     () => ({

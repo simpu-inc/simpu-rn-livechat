@@ -9,7 +9,7 @@ import ContactForm from './ContactForm';
 import type { LiveChatProps } from '../@types/types';
 import { addOrUpdateUser, getUserHash, useSettingsQuery } from '../utils';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp, wp } from '../utils/config';
-import { KEYS, storeCache } from '../utils/cache';
+import { KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
 import Heading from '../components/Heading';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';
 
@@ -77,6 +77,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
 
   useEffect(() => {
     setOrgSettings(data);
+    storeCompanyConfig(data);
     return () => {};
   }, [data]);
 

@@ -12,7 +12,7 @@ import PhoneInput from 'react-native-phone-number-input';
 import { useChatProvider } from '../context';
 import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 import { addOrUpdateUser, getUserHash, sendMessage } from '../utils';
-import { KEYS, storeCache } from '../utils/cache';
+import { getCompanyConfig, KEYS, storeCache } from '../utils/cache';
 import { z } from 'zod';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';
 
@@ -58,6 +58,10 @@ const ContactForm = () => {
   console.log('form send status: ', JSON.stringify(formatedErrors, null, 2));
 
   const SendMessage = async () => {
+    const res = await getCompanyConfig();
+
+    console.log('company config', JSON.stringify(res, null, 3));
+
     if (!parsedMessage.success) {
       const errors = parsedMessage?.error;
 
@@ -146,6 +150,8 @@ const ContactForm = () => {
       // alert(error);
       console.log(error);
       // setIsSubmittingContactForm(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -247,7 +253,7 @@ const ContactForm = () => {
             ref={phoneInput}
             defaultValue={value}
             placeholder="900000000"
-            defaultCode="US"
+            defaultCode={orgSettings?.country_code ?? 'US'}
             layout="first"
             onChangeText={(text) => {
               setValue(text);

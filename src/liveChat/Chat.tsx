@@ -34,6 +34,7 @@ import {
 } from '@tanstack/react-query';
 import AgentsCard from '../components/AgentsCard';
 import { acceptedFileTypes } from '../@types/types';
+import Attachment from '../components/Attachment';
 
 const Chat = () => {
   const queryClient = useQueryClient();
@@ -41,6 +42,8 @@ const Chat = () => {
     useChatProvider();
 
   const [message, setMessage] = useState('');
+
+  const [attachements, setAttachements] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState();
 
   const { mutate: mutateSendMessage } = useMutation({
@@ -118,7 +121,8 @@ const Chat = () => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  console.log('userHassh inside chat...', userHash);
+  // console.log('userHassh inside chat...', userHash);
+
   const { data: session } = useSessionQuery(
     {
       app_id: AppId,
@@ -127,7 +131,7 @@ const Chat = () => {
     { enabled: !!sessionID, initialData: orgSettings?.members }
   );
 
-  console.log('Session from use session', JSON.stringify(session, null, 3));
+  // console.log('Session from use session', JSON.stringify(session, null, 3));
 
   const {
     data: threadMessages,
@@ -269,6 +273,10 @@ const Chat = () => {
         name: res[0]?.name,
         size: res[0]?.size,
       };
+
+      console.log('FILE====', JSON.stringify(file, null, 3));
+
+      setAttachements((prev) => [...prev, file]);
       // const isFileTooLarge = file?.size !== null && file?.size >= 10271520;
       // if (isFileTooLarge) {
       //   Toast.show({
@@ -325,6 +333,25 @@ const Chat = () => {
           // style: 'cancel',
         },
       ]
+    );
+  };
+
+  const handleFileUploadCompleted = (file) => {
+    setUploadedFiles((prevUploadedFiles) => {
+      if (!!prevUploadedFiles && !!prevUploadedFiles?.length) {
+        return prevUploadedFiles.concat(file);
+      }
+      return file;
+    });
+  };
+
+  const handleDeleteUploadedFile = (id) => {
+    setUploadedFiles((prevUploadedFiles) =>
+      prevUploadedFiles.filter((item, index) => index !== id)
+    );
+
+    setAttachements((prevAttachments) =>
+      prevAttachments.filter((item, index) => index !== id)
     );
   };
 
@@ -398,12 +425,17 @@ const Chat = () => {
             </View>
           )}
         />
-        <ChatInput
-          message={message}
-          setMessage={setMessage}
-          pickFile={pickFile}
-          handleSendMessage={handleSendMessage}
-        />
+        <View>
+          <ChatInput
+            message={message}
+            setMessage={setMessage}
+            pickFile={pickFile}
+            attachements={attachements}
+            handleSendMessage={handleSendMessage}
+            onUploaded={handleFileUploadCompleted}
+            onDelete={() => handleDeleteUploadedFile(index)}
+          />
+        </View>
       </View>
     </KeyboardAvoidingView>
   );

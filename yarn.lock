@@ -10876,6 +10876,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pretty-bytes@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "pretty-bytes@npm:6.1.1"
+  checksum: 43d29d909d2d88072da2c3d72f8fd0f2d2523c516bfa640aff6e31f596ea1004b6601f4cabc50d14b2cf10e82635ebe5b7d9378f3d5bae1c0067131829421b8a
+  languageName: node
+  linkType: hard
+
 "pretty-format@npm:^26.5.2, pretty-format@npm:^26.6.2":
   version: 26.6.2
   resolution: "pretty-format@npm:26.6.2"
@@ -12165,6 +12172,7 @@ __metadata:
     lodash.unescape: ^4.0.1
     pod-install: ^0.1.0
     prettier: ^2.0.5
+    pretty-bytes: ^6.1.1
     react: 18.2.0
     react-native: 0.73.4
     react-native-builder-bob: ^0.20.0

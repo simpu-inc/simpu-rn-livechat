@@ -25,18 +25,18 @@ export const storeCache = async (Key: string, value: string) => {
   }
 };
 
-export const storeCompanyConfig = async (key: string, value: Object) => {
+export const storeCompanyConfig = async (value: Object) => {
   try {
     const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem(key, jsonValue);
+    await AsyncStorage.setItem(KEYS.COMPANY_CONFIG, jsonValue);
   } catch (e) {
     // saving error
   }
 };
 
-export const getCompanyConfig = async (key: string) => {
+export const getCompanyConfig = async () => {
   try {
-    const jsonValue = await AsyncStorage.getItem(key);
+    const jsonValue = await AsyncStorage.getItem(KEYS.COMPANY_CONFIG);
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     // error reading value

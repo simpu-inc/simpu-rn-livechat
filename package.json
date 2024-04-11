@@ -64,6 +64,7 @@
     "date-fns": "^3.3.1",
     "lodash.groupby": "^4.6.0",
     "lodash.unescape": "^4.0.1",
+    "pretty-bytes": "^6.1.1",
     "react-native-document-picker": "^9.1.1",
     "react-native-phone-number-input": "^2.1.0",
     "zod": "^3.22.4"
