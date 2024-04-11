@@ -62,7 +62,7 @@ const Start = () => {
   const { isAvailable, nextAvailableDay } =
     useBusinessHoursCheck(business_hours);
 
-  console.log('has business hrs', hasBusinessHours);
+  // console.log('has business hrs', hasBusinessHours);
 
   return (
     <View style={styles.container}>
@@ -90,7 +90,7 @@ const Start = () => {
           )}
           {/* <Text style={{ fontSize: 14 }}>We'll be back on friday</Text> */}
         </View>
-        <AgentsCard />
+        <AgentsCard size="big" />
         <TouchableOpacity
           style={styles.sendMsgBtn}
           onPress={() => setViewIndex(2)}

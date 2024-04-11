@@ -1,3 +1,4 @@
+import type { SetStateAction } from 'react';
 import { types } from 'react-native-document-picker';
 
 export type LiveChatProps = {
@@ -8,6 +9,7 @@ export type LiveChatProps = {
   public_key: string;
   user_id?: string;
   image_url?: string;
+  setOpenliveChat: React.Dispatch<SetStateAction<boolean>>;
 };
 
 export type welcomeType = {
@@ -82,3 +84,11 @@ export const acceptedFileTypes = [
   types.ppt,
   types.xlsx,
 ];
+
+export type UserTyingType = {
+  typer_id: string;
+  thread_id: string;
+  user_type: 'user' | 'customer';
+  message_type: 'message' | 'comment';
+  typer_info: { name: string; id: string; image_url?: string | null };
+};

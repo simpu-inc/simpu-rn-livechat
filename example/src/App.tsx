@@ -51,6 +51,7 @@ export default function App() {
         <SimpuLiveChat
           app_id={'f2f37798'}
           public_key={'spk__FdGQKmc3jsHc1ndqdyYsODZWyuQGF2hJVtLuQPxBpQKRKY0a2b'}
+          setOpenliveChat={setOpenliveChat}
         />
       )}
     </View>

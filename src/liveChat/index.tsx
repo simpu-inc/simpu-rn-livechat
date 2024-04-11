@@ -1,27 +1,26 @@
 import { Image, Text, TouchableOpacity, View, Alert } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
-import Start from './views/Start';
-import { theme } from './utils/theme';
-import Footer from './components/Footer';
-import Chat from './views/Chat';
-import { useChatProvider } from './context';
-import ContactForm from './views/ContactForm';
-import type { LiveChatProps } from './@types/types';
-import { addOrUpdateUser, getUserHash, useSettingsQuery } from './utils';
-import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp, wp } from './utils/config';
+import Start from './Start';
+import { theme } from '../utils/theme';
+import Footer from '../components/Footer';
+import Chat from './Chat';
+import { useChatProvider } from '../context';
+import ContactForm from './ContactForm';
+import type { LiveChatProps } from '../@types/types';
+import { addOrUpdateUser, getUserHash, useSettingsQuery } from '../utils';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp, wp } from '../utils/config';
+import { KEYS, storeCache } from '../utils/cache';
+import Heading from '../components/Heading';
+import { usePusherWebsocket } from '../Hooks/pusherSocket';
 
 const LiveChatContainer = (Props: LiveChatProps) => {
-  const { name, email, app_id, user_id, public_key } = Props;
+  const { name, email, app_id, user_id, public_key, setOpenliveChat } = Props;
 
-  const {
-    openChatBot,
-    orgSettings,
-    viewIndex,
-    setOpenChatBot,
-    setOrgSettings,
-    setApp_id,
-    setPublic_key,
-  } = useChatProvider();
+  const { viewIndex, setOrgSettings, setApp_id, setPublic_key } =
+    useChatProvider();
+  const { pusherInit } = usePusherWebsocket();
+
+  console.log('Prps  LiveChat container===', Props);
 
   const { data, error, isLoading } = useSettingsQuery({
     app_id,
@@ -31,7 +30,10 @@ const LiveChatContainer = (Props: LiveChatProps) => {
   console.log({ app_id, public_key });
 
   console.log('data from settings', JSON.stringify(data, null, 3));
-  console.log('error from settings', JSON.stringify(error, null, 3));
+  console.log(
+    'error from settuseSettingsQueryings',
+    JSON.stringify(error, null, 3)
+  );
 
   const handleSaveUserId = useCallback(async () => {
     //generate user hash
@@ -47,14 +49,17 @@ const LiveChatContainer = (Props: LiveChatProps) => {
       //@ts-ignore
       const { uuid, user_id: userId } = await addOrUpdateUser({
         data: {
-          name,
-          email,
+          name: name ?? '',
+          email: email ?? '',
         },
         app_id,
         signed_request: user_hash,
       });
 
       // initializePusher({ app_id, user_hash, user_id });
+      await storeCache(KEYS.UUID, uuid);
+      await storeCache(KEYS.SIGNED_REQUEST, user_hash);
+      await storeCache(KEYS.USER_ID, userId);
       // saveState({
       //   ...(loadState() ?? {}),
       //   uuid,
@@ -94,7 +99,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
         },
         {
           text: 'Close',
-          onPress: () => console.log('OK Pressed'),
+          onPress: () => setOpenliveChat((prev) => !prev),
           // style: 'cancel',
         },
       ]
@@ -111,64 +116,11 @@ const LiveChatContainer = (Props: LiveChatProps) => {
       }}
     >
       {(viewIndex === 1 || viewIndex === 2) && (
-        <View
-          style={{
-            paddingHorizontal: wp(25),
-            paddingTop: hp(20), //TODO:adjust this
-            backgroundColor:
-              orgSettings?.style.background_color ?? theme.SimpuBlue,
-            height: hp(220),
-          }}
-        >
-          <Image
-            style={{ height: hp(60), width: hp(60) }}
-            source={{ uri: orgSettings?.style?.header_logo }}
-          />
-          <Text
-            style={{
-              fontSize: fs(24),
-              lineHeight: 24,
-              color: theme.SimpuWhite,
-            }}
-          >
-            {orgSettings?.welcome_message?.greeting}
-          </Text>
-          <Text
-            style={{
-              fontSize: fs(16),
-              lineHeight: 24,
-              color: theme.SimpuWhite,
-              paddingVertical: hp(5),
-            }}
-          >
-            {orgSettings?.welcome_message?.team_intro}
-          </Text>
-          <Text
-            style={{
-              fontSize: fs(16),
-              lineHeight: 24,
-              color: theme.SimpuWhite,
-            }}
-          >
-            {/* We reply instantly from {orgSettings?.officeHrs} */}
-          </Text>
-
-          <TouchableOpacity
-            onPress={handleCloseLiveChat}
-            style={{ position: 'absolute', top: hp(80), right: wp(30) }}
-          >
-            <Image
-              style={{ height: hp(18), width: hp(20) }}
-              source={require('./assets/closeIcon.png')}
-            />
-          </TouchableOpacity>
-        </View>
+        <Heading handleCloseLiveChat={handleCloseLiveChat} />
       )}
       {viewIndex === 1 && <Start />}
       {viewIndex === 2 && <ContactForm />}
-
       {viewIndex === 3 && <Chat />}
-
       {(viewIndex === 1 || viewIndex === 2) && <Footer />}
     </View>
   );

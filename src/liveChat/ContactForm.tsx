@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { theme } from '../utils/theme';
@@ -13,6 +14,7 @@ import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 import { addOrUpdateUser, getUserHash, sendMessage } from '../utils';
 import { KEYS, storeCache } from '../utils/cache';
 import { z } from 'zod';
+import { usePusherWebsocket } from '../Hooks/pusherSocket';
 
 const Message = z.object({
   name: z.string().min(3, { message: 'Name should be more than 3 characters' }),
@@ -34,6 +36,7 @@ const ContactForm = () => {
     setSessionID,
     setUserHash,
   } = useChatProvider();
+  const { pusherInit } = usePusherWebsocket();
 
   const [formattedValue, setFormattedValue] = useState('');
   const [formDetails, setFormDetails] = useState({
@@ -44,6 +47,7 @@ const ContactForm = () => {
 
   // console.log({ formattedValue, value });
   const [formatedErrors, setformatedErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const parsedMessage = Message.safeParse({
     ...formDetails,
@@ -69,6 +73,7 @@ const ContactForm = () => {
     }
 
     if (!parsedMessage.success) return;
+    setIsLoading(true);
 
     const hash = getUserHash({
       public_key: publicKey,
@@ -104,12 +109,17 @@ const ContactForm = () => {
       console.log('response generate user', { user_hash });
 
       setUserHash(user_hash);
+
       // saveState({
       //   ...(loadState() ?? {}),
       //   uuid,
       //   user_id,
       //   signed_request: user_hash,
       // });
+
+      await storeCache(KEYS.UUID, uuid);
+      await storeCache(KEYS.SIGNED_REQUEST, user_hash);
+      await storeCache(KEYS.USER_ID, user_id);
 
       // await storeCache(KEYS.SIGNED_REQUEST, user_hash);
 
@@ -127,12 +137,13 @@ const ContactForm = () => {
 
       setSessionID(session_id);
       setViewIndex(3);
+      setIsLoading(false);
       // setIsSubmittingContactForm(false);
       // resetForm({ name: '', email: '', phone: '', message: '' });
       // setHomeSectionStep(0);
       // history.push(`/chat/${session_id}`);
     } catch (error) {
-      alert(error);
+      // alert(error);
       console.log(error);
       // setIsSubmittingContactForm(false);
     }
@@ -293,11 +304,15 @@ const ContactForm = () => {
         </View>
 
         <TouchableOpacity
-          // disabled={!enabled}
+          disabled={isLoading}
           style={[styles.sendBtn, {}]}
           onPress={SendMessage}
         >
-          <Text style={styles.sendBtnTxt}>Send message</Text>
+          {!isLoading ? (
+            <Text style={styles.sendBtnTxt}>Send message</Text>
+          ) : (
+            <ActivityIndicator color={theme.SimpuWhite} />
+          )}
         </TouchableOpacity>
       </View>
     </View>

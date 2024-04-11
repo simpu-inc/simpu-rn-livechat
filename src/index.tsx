@@ -1,10 +1,9 @@
 import React from 'react';
-import ChatProvider from './context';
 import type { LiveChatProps } from './@types/types';
-import LiveChatContainer from './LiveChatContainer';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import App from './App';
 
-const MAX_RETRIES = 2;
+const MAX_RETRIES = 3;
 const HTTP_STATUS_TO_NOT_RETRY = [400, 401, 403, 404];
 
 const SimpuLiveChat = (Props: LiveChatProps) => {
@@ -28,11 +27,11 @@ const SimpuLiveChat = (Props: LiveChatProps) => {
       },
     },
   });
+
+  // console.log('Prps  LiveChat index===', Props);
   return (
     <QueryClientProvider client={queryClient}>
-      <ChatProvider>
-        <LiveChatContainer {...Props} />
-      </ChatProvider>
+      <App {...Props} />
     </QueryClientProvider>
   );
 };
