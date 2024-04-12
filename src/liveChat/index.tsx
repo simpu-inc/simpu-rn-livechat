@@ -3,7 +3,6 @@ import React, { useCallback, useEffect } from 'react';
 import Start from './Start';
 import { theme } from '../utils/theme';
 import Footer from '../components/Footer';
-import Chat from './Chat';
 import { useChatProvider } from '../context';
 import ContactForm from './ContactForm';
 import type { LiveChatProps } from '../@types/types';
@@ -12,6 +11,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp, wp } from '../utils/config';
 import { KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
 import Heading from '../components/Heading';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';
+import Chat from './chat';
 
 const LiveChatContainer = (Props: LiveChatProps) => {
   const { name, email, app_id, user_id, public_key, setOpenliveChat } = Props;
@@ -56,7 +56,8 @@ const LiveChatContainer = (Props: LiveChatProps) => {
         signed_request: user_hash,
       });
 
-      // initializePusher({ app_id, user_hash, user_id });
+      pusherInit({ app_id, user_hash, user_id: user_id ?? '' });
+
       await storeCache(KEYS.UUID, uuid);
       await storeCache(KEYS.SIGNED_REQUEST, user_hash);
       await storeCache(KEYS.USER_ID, userId);

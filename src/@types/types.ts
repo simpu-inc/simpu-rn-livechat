@@ -94,3 +94,64 @@ export type UserTyingType = {
   message_type: 'message' | 'comment';
   typer_info: { name: string; id: string; image_url?: string | null };
 };
+
+export type messageType = {
+  type: string;
+  author: AuthorType;
+  entity: EntityType;
+  id: number;
+  uuid: string;
+  account_id: string;
+  by_account: any;
+  show_in_thread: any;
+  created_datetime: string;
+  updated_datetime: any;
+  author_id: string;
+  author_type: string;
+  content_id: string;
+  content_type: string;
+};
+
+export type AuthorType = {
+  contacts: any;
+  contact: ContactType;
+  meta: MetaType;
+  image_url: any;
+  platform_id: string;
+  channel_name: string;
+  name: string;
+  id: number;
+  platform_name: any;
+  platform_nick: string;
+  uuid: string;
+  channel_id: string;
+  is_valid: boolean;
+};
+
+export type ContactType = {
+  name: string;
+  phone: string;
+  account_id: string;
+};
+
+export type MetaType = {
+  phone: string;
+};
+
+export type EntityType = {
+  content: ContentType;
+  id: number;
+  pid: string;
+  uuid: string;
+  meta: any;
+  status: string;
+  quoted_id: any;
+  author_id: string;
+  attachments: any;
+  mention_ids: any;
+  recipient_ids: any;
+};
+
+export type ContentType = {
+  body: string;
+};

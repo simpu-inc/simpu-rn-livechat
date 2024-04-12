@@ -82,8 +82,11 @@ export const usePusherWebsocket = () => {
       apiKey: PUSHER_APP_KEY_DEMO,
       cluster: PUSHER_APP_CLUSTER,
       authEndpoint: buildConversationUrl(
-        `channels/livechat/${app_id}/websocket`
+        `channels/livechat/${app_id}/websocket2?token=${user_hash}`
       ),
+      // authEndpoint: buildConversationUrl(
+      //   `channels/livechat/${app_id}/websocket`
+      // ),
       onConnectionStateChange,
       onError,
       onEvent,

@@ -12,29 +12,31 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import groupBy from 'lodash/groupBy';
-import { theme } from '../utils/theme';
-import ChatInput from '../components/ChatInput';
-import { useChatProvider } from '../context';
 import { format } from 'date-fns';
-import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp, wp } from '../utils/config';
-import { ChatData, agents } from '../utils/dummyData';
 import DocumentPicker from 'react-native-document-picker';
 import {
   fetchThreadMessages,
   generateNewMessage,
+  generateUUID,
   getConversationMessages,
   responseTimeRegister,
   sendMessage,
   useSessionQuery,
-} from '../utils';
+} from '../../utils';
 import {
   useInfiniteQuery,
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import AgentsCard from '../components/AgentsCard';
-import { acceptedFileTypes } from '../@types/types';
-import Attachment from '../components/Attachment';
+
+import { acceptedFileTypes } from '../../@types/types';
+import Attachment from '../../components/Attachment';
+import AgentsCard from '../../components/AgentsCard';
+import ChatInput from './ChatInput';
+import { fs, hp, SCREEN_HEIGHT, SCREEN_WIDTH, wp } from '../../utils/config';
+import { theme } from '../../utils/theme';
+import { useChatProvider } from '../../context';
+import ChatItem from './chatItem';
 
 const Chat = () => {
   const queryClient = useQueryClient();
@@ -205,62 +207,6 @@ const Chat = () => {
     },
   });
 
-  const ChatList = ({ item, index }: { item: any; index: number }) => {
-    // console.log('itemsss', JSON.stringify(item, null, 2));
-    return (
-      <View
-        style={{
-          marginBottom: index === 0 ? hp(120) : hp(3),
-          alignSelf: item?.by_account ? 'flex-start' : 'flex-end',
-          padding: hp(5),
-          marginVertical: hp(8),
-          maxWidth: SCREEN_WIDTH * 0.75,
-        }}
-      >
-        <View
-          style={{
-            paddingVertical: hp(6),
-            paddingHorizontal: hp(8),
-            borderRadius: hp(8),
-            backgroundColor: item?.by_account
-              ? orgSettings?.style?.background_color ?? theme?.SimpuBlue
-              : theme.SimpuPaleWhite,
-          }}
-        >
-          <Text
-            style={{
-              lineHeight: 22,
-              color: item?.by_account ? theme.SimpuWhite : theme.SimpuBlack,
-            }}
-          >
-            {item?.entity?.content?.body}
-          </Text>
-          <Text
-            style={{
-              color: item?.by_account ? theme.SimpuWhite : theme.SimpuBlack,
-              fontSize: fs(9),
-              paddingVertical: hp(4),
-              alignSelf: 'flex-end',
-            }}
-          >
-            {format(new Date(item?.created_datetime) ?? new Date(), 'p')}
-          </Text>
-        </View>
-        {item?.by_account && (
-          <Text
-            style={{
-              paddingTop: hp(4),
-              color: orgSettings?.style?.background_color ?? theme.SimpuBlue,
-              fontSize: fs(12),
-            }}
-          >
-            Agent: {item?.author?.name ?? item?.author?.Platform_name}
-          </Text>
-        )}
-      </View>
-    );
-  };
-
   const pickFile = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -272,12 +218,15 @@ const Chat = () => {
         type: res[0]?.type,
         name: res[0]?.name,
         size: res[0]?.size,
+        id: generateUUID(),
       };
+      const isFileTooLarge = file?.size !== null && file?.size >= 10271520;
+
+      if (isFileTooLarge) return;
 
       console.log('FILE====', JSON.stringify(file, null, 3));
 
       setAttachements((prev) => [...prev, file]);
-      // const isFileTooLarge = file?.size !== null && file?.size >= 10271520;
       // if (isFileTooLarge) {
       //   Toast.show({
       //     type: ToastTypes.WARNING,
@@ -345,13 +294,14 @@ const Chat = () => {
     });
   };
 
-  const handleDeleteUploadedFile = (id) => {
-    setUploadedFiles((prevUploadedFiles) =>
-      prevUploadedFiles.filter((item, index) => index !== id)
-    );
+  const handleDeleteUploadedFile = (id: string) => {
+    console.log('@ file id ===', id);
+    // setUploadedFiles((prevUploadedFiles) =>
+    //   prevUploadedFiles.filter((item, index) => item?.id !== id)
+    // );
 
     setAttachements((prevAttachments) =>
-      prevAttachments.filter((item, index) => index !== id)
+      prevAttachments.filter((item, index) => item?.id !== id)
     );
   };
 
@@ -368,14 +318,14 @@ const Chat = () => {
               onPress={() => setViewIndex(1)}
             >
               <Image
-                source={require('../assets/backIcon.png')}
+                source={require('../../assets/backIcon.png')}
                 style={{ height: hp(18), width: hp(18) }}
               />
               {/* <Image
-              resizeMode="contain"
-              style={styles.imageStyle}
-              source={{ uri: `https://i.pravatar.cc/150?img=${3}` }}
-            /> */}
+                 resizeMode="contain"
+                 style={styles.imageStyle}
+                 source={{ uri: `https://i.pravatar.cc/150?img=${3}` }}
+               /> */}
               <AgentsCard size="small" />
             </TouchableOpacity>
             <View style={{ marginLeft: hp(15) }}>
@@ -396,7 +346,7 @@ const Chat = () => {
           >
             <Image
               style={{ height: hp(16), width: hp(16) }}
-              source={require('../assets/closeIcon.png')}
+              source={require('../../assets/closeIcon.png')}
             />
           </TouchableOpacity>
         </View>
@@ -417,7 +367,7 @@ const Chat = () => {
           data={messages ?? []}
           keyExtractor={(_, i) => i.toString()}
           renderItem={({ item, index }) => (
-            <ChatList item={item} index={index} />
+            <ChatItem item={item} index={index} />
           )}
           ListEmptyComponent={() => (
             <View>
@@ -433,7 +383,7 @@ const Chat = () => {
             attachements={attachements}
             handleSendMessage={handleSendMessage}
             onUploaded={handleFileUploadCompleted}
-            onDelete={() => handleDeleteUploadedFile(index)}
+            onDelete={handleDeleteUploadedFile}
           />
         </View>
       </View>

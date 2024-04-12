@@ -138,3 +138,23 @@ export const generateNewMessage = ({
     created_datetime: new Date(),
   };
 };
+
+export const generateUUID = () => {
+  // Get current time in milliseconds
+  let d = new Date().getTime();
+
+  // Define the UUID template with placeholder characters
+  let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+
+  // Replace the placeholders with random hexadecimal digits
+  return uuid.replace(/[xy]/g, function (c) {
+    // Generate a random number between 0 and 15
+    var r = (d + Math.random() * 16) % 16 | 0;
+
+    // Update value of d for the next placeholder
+    d = Math.floor(d / 16);
+
+    // Convert the number to a hexadecimal digit and return it
+    return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+};

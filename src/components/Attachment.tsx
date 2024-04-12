@@ -5,6 +5,8 @@ import { TouchableOpacity } from 'react-native';
 import prettyBytes from 'pretty-bytes';
 import { useCloudinary } from '../utils';
 import { useChatProvider } from '../context';
+import { ActivityIndicator } from 'react-native';
+import { theme } from '../utils/theme';
 
 const Attachment = ({
   attach,
@@ -17,12 +19,13 @@ const Attachment = ({
 }) => {
   const { AppId, userHash, sessionID } = useChatProvider();
 
-  const { response } = useCloudinary({
-    file: attach,
-    app_id: AppId,
-    onUploaded,
-  });
-  //   console.log('Attachment $$$$$ ', JSON.stringify(attach, null, 3));
+  // const { response } = useCloudinary({
+  //   file: attach,
+  //   app_id: AppId,
+  //   onUploaded,
+  // });
+
+  console.log('Attachment $$$$$ ', JSON.stringify(attach, null, 3));
   return (
     <View
       style={{
@@ -39,16 +42,18 @@ const Attachment = ({
         {attach?.name} {prettyBytes(attach?.size)}
       </Text>
 
-      <TouchableOpacity>
-        <Image
-          style={{ height: hp(18), width: hp(18) }}
-          source={require('../assets/trashIcon.png')}
-        />
+      <TouchableOpacity onPress={() => onDelete(attach?.id)}>
+        {true ? (
+          <ActivityIndicator size={'small'} color={theme?.SimpuBlack} />
+        ) : (
+          <Image
+            style={{ height: hp(18), width: hp(18) }}
+            source={require('../assets/trashIcon.png')}
+          />
+        )}
       </TouchableOpacity>
     </View>
   );
 };
 
 export default Attachment;
-
-const styles = StyleSheet.create({});

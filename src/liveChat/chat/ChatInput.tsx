@@ -10,15 +10,15 @@ import {
   type GestureResponderEvent,
 } from 'react-native';
 import React from 'react';
-import { theme } from '../utils/theme';
-import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
-import Attachment from './Attachment';
+import { theme } from '../../utils/theme';
+import { SCREEN_HEIGHT, fs, hp, wp } from '../../utils/config';
+import Attachment from '../../components/Attachment';
 
 type ChatInputprops = {
   message: string;
   attachements: Object;
-  onUploaded: () => {};
-  onDelete: () => {};
+  onUploaded: any;
+  onDelete: any;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
   pickFile: (event: GestureResponderEvent) => void;
   handleSendMessage: (event: GestureResponderEvent) => void;
@@ -68,7 +68,7 @@ const ChatInput = ({
   return (
     <View style={styles.mainContainer}>
       <View style={styles.attachContainer}>
-        {attachements?.map((attach, index) => (
+        {attachements?.map((attach, index: number) => (
           <Attachment
             attach={attach}
             key={`${index}`}
@@ -89,7 +89,7 @@ const ChatInput = ({
           <TouchableOpacity style={styles.btns} onPress={pickFile}>
             <Image
               style={{ height: hp(25), width: hp(25) }}
-              source={require('../assets/attach.png')}
+              source={require('../../assets/attach.png')}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -98,7 +98,7 @@ const ChatInput = ({
           >
             <Image
               style={{ height: hp(25), width: hp(25) }}
-              source={require('../assets/send.png')}
+              source={require('../../assets/send.png')}
             />
           </TouchableOpacity>
         </View>
