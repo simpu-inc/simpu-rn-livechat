@@ -20,20 +20,20 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     useChatProvider();
   const { pusherInit } = usePusherWebsocket();
 
-  console.log('Prps  LiveChat container===', Props);
+  // console.log('Prps  LiveChat container===', Props);
 
   const { data, error, isLoading } = useSettingsQuery({
     app_id,
     public_key,
   });
 
-  console.log({ app_id, public_key });
+  // console.log({ app_id, public_key });
 
-  console.log('data from settings', JSON.stringify(data, null, 3));
-  console.log(
-    'error from settuseSettingsQueryings',
-    JSON.stringify(error, null, 3)
-  );
+  // console.log('data from settings', JSON.stringify(data, null, 3));
+  // console.log(
+  //   'error from settuseSettingsQueryings',
+  //   JSON.stringify(error, null, 3)
+  // );
 
   const handleSaveUserId = useCallback(async () => {
     //generate user hash
@@ -43,7 +43,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
       secret_key: data?.secret_key,
     });
 
-    console.log('Users -hash =========', user_hash);
+    // console.log('Users -hash =========', user_hash);
 
     try {
       //@ts-ignore

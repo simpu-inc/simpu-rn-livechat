@@ -13,7 +13,7 @@ const ChatItem = ({ item, index }: { item: messageType; index: number }) => {
 
   const { entity } = item;
 
-  if (entity?.attachments.length > 0) {
+  if (entity?.attachments?.length > 0) {
     <File files={entity?.attachments} />;
   }
 

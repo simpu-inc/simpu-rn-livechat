@@ -10,6 +10,7 @@ import { useCallback } from 'react';
 import { getCache, KEYS } from '../utils/cache';
 import { useChatProvider } from '../context';
 import type { UserTyingType } from '../@types/types';
+import { Platform } from 'react-native';
 
 const PUSHER_APP_CLUSTER = 'eu';
 const PUSHER_APP_KEY_DEMO = '37a83ec66a78f2436be5';
@@ -31,21 +32,21 @@ export const usePusherWebsocket = () => {
     currentState: string,
     previousState: string
   ) {
-    // console.log(
-    //   `${Platform.OS} onConnectionStateChange. previousState=${previousState} newState=${currentState}`,
-    // );
+    console.log(
+      `${Platform.OS} onConnectionStateChange. previousState=${previousState} newState=${currentState}`
+    );
   }
 
   function onError(message: string, code: Number, error: any) {
-    // console.log(`onError: ${message} code: ${code} exception: ${error}`);
+    console.log(`onError: ${message} code: ${code} exception: ${error}`);
   }
 
   async function onEvent(event: PusherEvent) {
-    // const data = await JSON.parse(event?.data);
-    // console.log(
-    //   'listening to event from pusher init event',
-    //   JSON.stringify(data, null, 2),
-    // );
+    const data = await JSON.parse(event?.data);
+    console.log(
+      'listening to event from pusher init event',
+      JSON.stringify(data, null, 2)
+    );
   }
 
   function onSubscriptionSucceeded(channelName: string, data: any) {
@@ -73,7 +74,7 @@ export const usePusherWebsocket = () => {
     user_hash: string;
     user_id: string;
   }) => {
-    // console.log('current pusher Enviroment', ENVIROMENT);
+    console.log('Pusher was initiated !!');
 
     if (!app_id) return;
 
