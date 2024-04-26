@@ -159,8 +159,16 @@ export const uploadConversationFile = async (
   return data.upload_ids;
 };
 
-export const getWebsocketChannel = async (app_id) => {
-  const { data } = await client(`channels/livechat/${app_id}/websocket`);
+export const getWebsocketChannel = async (
+  app_id: string,
+  signed_request: string
+) => {
+  const { data } = await client(`channels/livechat/${app_id}/websocket`, {
+    headers: {
+      Authorization: signed_request,
+    },
+    signed_request: signed_request,
+  });
 
   return data.channels;
 };

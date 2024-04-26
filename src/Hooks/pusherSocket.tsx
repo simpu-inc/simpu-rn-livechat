@@ -4,7 +4,7 @@ import {
   PusherChannel,
   PusherEvent,
 } from '@pusher/pusher-websocket-react-native';
-import { buildConversationUrl, getWebsocketChannel } from '../utils';
+import { buildConversationUrl, client, getWebsocketChannel } from '../utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { getCache, KEYS } from '../utils/cache';
@@ -74,9 +74,12 @@ export const usePusherWebsocket = () => {
     user_hash: string;
     user_id: string;
   }) => {
-    console.log('Pusher was initiated !!');
+    // console.log('Pusher was initiated !!');
 
-    if (!app_id) return;
+    if (!(app_id && user_hash)) return;
+
+    // console.log('COPY APP_ID: ====' + app_id);
+    // console.log('COPY USER_HASH: ====' + user_hash);
 
     await pusher.init({
       //     apiKey: ENVIROMENT ? PUSHER_APP_KEY_DEMO : PUSHER_APP_KEY_PRODUCTION,
@@ -85,9 +88,7 @@ export const usePusherWebsocket = () => {
       authEndpoint: buildConversationUrl(
         `channels/livechat/${app_id}/websocket2?token=${user_hash}`
       ),
-      // authEndpoint: buildConversationUrl(
-      //   `channels/livechat/${app_id}/websocket`
-      // ),
+
       onConnectionStateChange,
       onError,
       onEvent,
@@ -95,7 +96,7 @@ export const usePusherWebsocket = () => {
     });
 
     await pusher.connect();
-    // await subscribeTochannels();
+    await subscribeTochannels();
   };
 
   // console.log(
@@ -139,6 +140,8 @@ export const usePusherWebsocket = () => {
   const EventHandler = (event: PusherEvent) => {
     const eventName = event?.eventName;
 
+    console.log('Event name from event handler===', eventName);
+
     switch (eventName) {
       case EventType.MESSAGE_NEW:
         handleMessageEvent(event);
@@ -165,18 +168,24 @@ export const usePusherWebsocket = () => {
 
   //call all subscribe  channels
   const subscribeTochannels = async () => {
+    const user_hash = await getCache(KEYS.SIGNED_REQUEST);
+
     const [privateChannelName, presenceChannelName] = await getWebsocketChannel(
-      AppId
+      AppId,
+      user_hash ?? ''
     );
+
+    // console.log('private channel===>', privateChannelName);
+    // console.log('presence channel===>', presenceChannelName);
 
     const user_id = await getCache(KEYS.USER_ID);
     const privateChanel = `private-${user_id}`;
     try {
       await subscribeHandler(privateChanel, EventHandler);
-      // await subscribeHandler(liveChatChannelName, EventHandler);
-      // await subscribeHandler(orgChannelName, EventHandler);
+      await subscribeHandler(privateChannelName, EventHandler);
+      await subscribeHandler(presenceChannelName, EventHandler);
     } catch (error) {
-      // console.log('error from Subscription try/catch', error);
+      console.log('error from Subscription try/catch', error);
     }
   };
 

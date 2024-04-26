@@ -37,11 +37,14 @@ import { fs, hp, SCREEN_HEIGHT, SCREEN_WIDTH, wp } from '../../utils/config';
 import { theme } from '../../utils/theme';
 import { useChatProvider } from '../../context';
 import ChatItem from './chatItem';
+import { usePusherWebsocket } from '../../Hooks/pusherSocket';
 
 const Chat = () => {
   const queryClient = useQueryClient();
   const { AppId, userHash, sessionID, setViewIndex, orgSettings } =
     useChatProvider();
+
+  const { subscribeTochannels } = usePusherWebsocket();
 
   const [message, setMessage] = useState('');
 
@@ -152,10 +155,10 @@ const Chat = () => {
       }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      console.log(
-        'nextPage from inifinite query',
-        JSON.stringify(lastPage, null, 3)
-      );
+      // console.log(
+      //   'nextPage from inifinite query',
+      //   JSON.stringify(lastPage, null, 3)
+      // );
       return lastPage.meta.page < lastPage.meta.page_count
         ? lastPage.meta.page + 1
         : undefined;
@@ -224,7 +227,7 @@ const Chat = () => {
 
       if (isFileTooLarge) return;
 
-      console.log('FILE====', JSON.stringify(file, null, 3));
+      // console.log('FILE====', JSON.stringify(file, null, 3));
 
       setAttachements((prev) => [...prev, file]);
       // if (isFileTooLarge) {
@@ -340,7 +343,8 @@ const Chat = () => {
             </View>
           </View>
           <TouchableOpacity
-            onPress={handleCloseLiveChat}
+            // onPress={handleCloseLiveChat}
+            onPress={subscribeTochannels}
             // style={{ position: 'absolute', top: hp(70), right: wp(30) }}
             style={{ alignSelf: 'center', marginRight: wp(10) }}
           >

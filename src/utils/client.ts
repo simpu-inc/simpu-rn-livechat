@@ -27,7 +27,7 @@ export async function client(
   // const { signed_request } = loadState() ?? {};
   // const signed_request = await getCache(KEYS.SIGNED_REQUEST);
 
-  console.log('User assssssh inside client', signed_request);
+  console.log('User signed_request inside client', signed_request);
 
   const headers = {
     'Authorization': signed_request ? signed_request : undefined,
@@ -59,10 +59,10 @@ export async function client(
 const axiosRequestInterceptor = Axios.interceptors.request.use(
   (config) => {
     // Do something before request is sent
-    console.log(
-      `###########  All Outgoing API  Request ######\n`,
-      JSON.stringify(config, null, 2)
-    );
+    // console.log(
+    //   `###########  All Outgoing API  Request ######\n`,
+    //   JSON.stringify(config, null, 2)
+    // );
     return config;
   },
   (error) => {
@@ -72,10 +72,11 @@ const axiosRequestInterceptor = Axios.interceptors.request.use(
 );
 const axiosResponseInterceptor = Axios.interceptors.response.use(
   function (response: AxiosResponse) {
+    // console.log('Error occurred===', response);
     return response;
   },
   function (error: AxiosError) {
-    console.log('Error occurred===', error);
+    console.log('Error occurred===', JSON.stringify(error, null, 3));
     if (error.response && error.response.data) {
       if (
         error.response &&

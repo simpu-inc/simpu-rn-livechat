@@ -54,13 +54,13 @@ const ContactForm = () => {
     phone: formattedValue,
   });
 
-  console.log('form send status: ', parsedMessage?.success);
-  console.log('form send status: ', JSON.stringify(formatedErrors, null, 2));
+  // console.log('form send status: ', parsedMessage?.success);
+  // console.log('form send status: ', JSON.stringify(formatedErrors, null, 2));
 
   const SendMessage = async () => {
     const res = await getCompanyConfig();
 
-    console.log('company config', JSON.stringify(res, null, 3));
+    // console.log('company config', JSON.stringify(res, null, 3));
 
     if (!parsedMessage.success) {
       const errors = parsedMessage?.error;
@@ -102,7 +102,7 @@ const ContactForm = () => {
         signed_request: hash,
       });
 
-      console.log('response from add user', { uuid, user_id });
+      // console.log('response from add user', { uuid, user_id });
 
       const user_hash = getUserHash({
         user_id,
@@ -110,7 +110,7 @@ const ContactForm = () => {
         secret_key: orgSettings?.secret_key,
       });
 
-      console.log('response generate user', { user_hash });
+      // console.log('response generate user', { user_hash });
 
       setUserHash(user_hash);
 
@@ -128,6 +128,7 @@ const ContactForm = () => {
       // await storeCache(KEYS.SIGNED_REQUEST, user_hash);
 
       // initializePusher({ app_id, user_hash, user_id });
+      pusherInit({ app_id: AppId, user_hash, user_id: user_id ?? '' });
 
       const { session_id } = await sendMessage(
         {
@@ -137,7 +138,7 @@ const ContactForm = () => {
         user_hash
       );
 
-      console.log('Session ID===', { session_id });
+      // console.log('Session ID===', { session_id });
 
       setSessionID(session_id);
       setViewIndex(3);
