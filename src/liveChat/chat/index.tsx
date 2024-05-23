@@ -289,6 +289,8 @@ const Chat = () => {
   };
 
   const handleFileUploadCompleted = (file) => {
+    console.log('==== on - UPLoaded Files=== ', JSON.stringify(file, null, 3));
+
     setUploadedFiles((prevUploadedFiles) => {
       if (!!prevUploadedFiles && !!prevUploadedFiles?.length) {
         return prevUploadedFiles.concat(file);
@@ -307,6 +309,11 @@ const Chat = () => {
       prevAttachments.filter((item, index) => item?.id !== id)
     );
   };
+
+  console.log(
+    '==== UPLoaded Files=== ',
+    JSON.stringify(uploadedFiles, null, 3)
+  );
 
   return (
     <KeyboardAvoidingView

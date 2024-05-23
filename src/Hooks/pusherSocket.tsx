@@ -50,15 +50,15 @@ export const usePusherWebsocket = () => {
   }
 
   function onSubscriptionSucceeded(channelName: string, data: any) {
-    // console.log(
-    //   ` ${
-    //     Platform.OS
-    //   } onSubscriptionSucceeded: ${channelName} data: ${JSON.stringify(
-    //     data,
-    //     null,
-    //     2,
-    //   )}`,
-    // );
+    console.log(
+      ` ${
+        Platform.OS
+      } onSubscriptionSucceeded: ${channelName} data: ${JSON.stringify(
+        data,
+        null,
+        2
+      )}`
+    );
 
     //@ts-ignore
     const channel: PusherChannel = pusher.getChannel(channelName);
@@ -175,8 +175,8 @@ export const usePusherWebsocket = () => {
       user_hash ?? ''
     );
 
-    // console.log('private channel===>', privateChannelName);
-    // console.log('presence channel===>', presenceChannelName);
+    console.log('private channel===>', privateChannelName);
+    console.log('presence channel===>', presenceChannelName);
 
     const user_id = await getCache(KEYS.USER_ID);
     const privateChanel = `private-${user_id}`;

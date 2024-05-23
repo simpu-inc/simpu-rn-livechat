@@ -13,6 +13,7 @@ import {
   uploadConversationFile,
 } from './service';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getCache, KEYS } from './cache';
 
 export const useSettingsQuery = ({
   app_id,
@@ -79,20 +80,21 @@ export const useActiveSessionQuery = ({ app_id }, options) =>
 // };
 
 export const useCloudinary = ({
-  app_id,
   file,
+  app_id,
   onUploaded,
 }: {
-  app_id: string;
   file: any;
+  app_id: string;
   onUploaded: () => {};
 }) => {
   const [progress, setProgress] = useState(0);
   const [response, setResponse] = useState();
+  const [Uploading, setUploading] = useState(false);
 
   const handleUploadProgress = (progressEvent) => {
     const percentage = parseInt(
-      Math.round((progressEvent.loaded * 100) / progressEvent.total)
+      Math.round((progressEvent?.loaded * 100) / progressEvent?.total)
     );
     setProgress(percentage);
   };
@@ -101,28 +103,43 @@ export const useCloudinary = ({
     if (file) {
       const formData = new FormData();
       formData.append('files', file);
-
+      const signed_request = await getCache(KEYS.SIGNED_REQUEST);
       try {
+        setUploading(true);
         const response = await uploadConversationFile(
           app_id,
+          signed_request,
           formData,
           handleUploadProgress
         );
+
+        console.log('RESPONSE FROM UPLOAD', JSON.stringify(response, null, 3));
         setResponse(response);
 
         onUploaded?.(response);
 
         return response;
-      } catch (error) {}
+      } catch (error) {
+        console.log('ERROR FROM UPLOAD', JSON.stringify(error, null, 3));
+      } finally {
+        setUploading(false);
+      }
     }
   };
 
-  useQuery(['file-upload', file.name], () => handleUpload(file), {
+  // useQuery(['file-upload', file.name], () => handleUpload(file), {
+  //   enabled: !!file.name,
+  //   refetchOnWindowFocus: false,
+  // });
+
+  useQuery({
+    queryKey: ['file-upload', file.name],
+    queryFn: () => handleUpload(file),
     enabled: !!file.name,
-    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
-  return { progress, response };
+  return { progress, response, Uploading };
 };
 
 export const useReactQuerySubscription = ({ app_id }) => {

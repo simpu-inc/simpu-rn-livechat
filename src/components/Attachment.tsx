@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { hp } from '../utils/config';
+import { hp, wp } from '../utils/config';
 import { TouchableOpacity } from 'react-native';
 import prettyBytes from 'pretty-bytes';
 import { useCloudinary } from '../utils';
@@ -19,13 +19,19 @@ const Attachment = ({
 }) => {
   const { AppId, userHash, sessionID } = useChatProvider();
 
-  // const { response } = useCloudinary({
-  //   file: attach,
-  //   app_id: AppId,
-  //   onUploaded,
-  // });
+  const { response, progress, Uploading } = useCloudinary({
+    file: attach,
+    app_id: AppId,
+    onUploaded,
+  });
 
+  console.log('Upload response', JSON.stringify(response, null, 3));
+  console.log('Upload progress', JSON.stringify(progress, null, 3));
   console.log('Attachment $$$$$ ', JSON.stringify(attach, null, 3));
+
+  const handleDelete = () => {
+    !Uploading && onDelete(attach?.id);
+  };
   return (
     <View
       style={{
@@ -39,13 +45,15 @@ const Attachment = ({
       }}
     >
       <Text>
-        {attach?.name} {prettyBytes(attach?.size)}
+        <Text style={{ marginRight: wp(4) }}>{attach?.name}</Text>
+        <Text style={{}}>{prettyBytes(attach?.size)}</Text>
       </Text>
 
-      <TouchableOpacity onPress={() => onDelete(attach?.id)}>
-        {true ? (
+      <TouchableOpacity onPress={handleDelete}>
+        {Uploading ? (
           <ActivityIndicator size={'small'} color={theme?.SimpuBlack} />
         ) : (
+          // <Text>{progress}</Text>
           <Image
             style={{ height: hp(18), width: hp(18) }}
             source={require('../assets/trashIcon.png')}

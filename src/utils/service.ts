@@ -143,16 +143,19 @@ export const updateConversationMessage = async (payload) => {
 };
 
 export const uploadConversationFile = async (
-  app_id,
-  payload,
-  onUploadProgress
+  app_id: string,
+  signed_request: string,
+  payload: any,
+  onUploadProgress: any
 ) => {
   const { data } = await client(`channels/livechat/${app_id}/upload`, {
     data: payload,
     method: 'POST',
     onUploadProgress,
+    signed_request: signed_request,
     headers: {
       'Content-Type': 'multipart/form-data',
+      'Authorization': signed_request,
     },
   });
 
