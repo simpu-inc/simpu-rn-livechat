@@ -4041,6 +4041,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios@npm:^1.6.5":
+  version: 1.7.9
+  resolution: "axios@npm:1.7.9"
+  dependencies:
+    follow-redirects: ^1.15.6
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: cb8ce291818effda09240cb60f114d5625909b345e10f389a945320e06acf0bc949d0f8422d25720f5dd421362abee302c99f5e97edec4c156c8939814b23d19
+  languageName: node
+  linkType: hard
+
 "axios@npm:^1.6.7":
   version: 1.6.8
   resolution: "axios@npm:1.6.8"
@@ -11067,6 +11078,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"qs@npm:^6.12.1":
+  version: 6.13.1
+  resolution: "qs@npm:6.13.1"
+  dependencies:
+    side-channel: ^1.0.6
+  checksum: 86c5059146955fab76624e95771031541328c171b1d63d48a7ac3b1fdffe262faf8bc5fcadc1684e6f3da3ec87a8dedc8c0009792aceb20c5e94dc34cf468bb9
+  languageName: node
+  linkType: hard
+
 "queue-microtask@npm:^1.2.2":
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
@@ -12118,6 +12138,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"simpu-api-sdk@npm:^1.2.177":
+  version: 1.2.177
+  resolution: "simpu-api-sdk@npm:1.2.177"
+  dependencies:
+    axios: ^1.6.5
+    qs: ^6.12.1
+  checksum: 8ac22fa31f717b515837cb5c646f4b6f2bf6a119a6dd18698be80cbe17a3a11c9c7444e68c515e5dc65b9fe7176db72b50990d62fdd6e7548f2bb930b7180f6e
+  languageName: node
+  linkType: hard
+
 "simpu-rn-livechat-example@workspace:example":
   version: 0.0.0-use.local
   resolution: "simpu-rn-livechat-example@workspace:example"
@@ -12179,6 +12209,7 @@ __metadata:
     react-native-document-picker: ^9.1.1
     react-native-phone-number-input: ^2.1.0
     release-it: ^15.0.0
+    simpu-api-sdk: ^1.2.177
     turbo: ^1.10.7
     typescript: ^5.0.2
     zod: ^3.22.4

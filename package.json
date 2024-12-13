@@ -69,6 +69,7 @@
     "pretty-bytes": "^6.1.1",
     "react-native-document-picker": "^9.1.1",
     "react-native-phone-number-input": "^2.1.0",
+    "simpu-api-sdk": "^1.2.177",
     "zod": "^3.22.4"
   },
   "devDependencies": {
