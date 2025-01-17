@@ -8,7 +8,7 @@ const CONVERSATION_API_URL = "https://conversation.v1.simpu.sh/chat";
 // const AI_API_URL = "https://ai.simpu.co/";
 const AI_API_URL = "https://ai.simpu.sh/";
 
-export const apiClient = new APIClient({
+ const apiClient = new APIClient({
   graph: "",
   events: "",
   "knowledge-base": "",
@@ -69,3 +69,8 @@ apiClient.instance.interceptors.response.use(
       return Promise.reject(error);
     }
   );
+
+
+
+
+  export default apiClient;

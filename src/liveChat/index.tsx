@@ -1,4 +1,4 @@
-import { Image, Text, TouchableOpacity, View, Alert } from 'react-native';
+import {  View, Alert } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
 import Start from './Start';
 import { theme } from '../utils/theme';
@@ -7,7 +7,7 @@ import { useChatProvider } from '../context';
 import ContactForm from './ContactForm';
 import type { LiveChatProps } from '../@types/types';
 import { addOrUpdateUser, getUserHash, useSettingsQuery } from '../utils';
-import { SCREEN_HEIGHT, SCREEN_WIDTH, fs, hp, wp } from '../utils/config';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/config';
 import { KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
 import Heading from '../components/Heading';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';

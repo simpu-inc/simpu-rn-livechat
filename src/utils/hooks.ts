@@ -14,6 +14,7 @@ import {
 } from './service';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getCache, KEYS } from './cache';
+import apiClient from '../Provider';
 
 export const useSettingsQuery = ({
   app_id,
@@ -24,7 +25,13 @@ export const useSettingsQuery = ({
 }) =>
   useQuery({
     queryKey: ['widget-settings', app_id],
-    queryFn: () => getWidgetSettings({ app_id, public_key }),
+    queryFn:    () => 
+      apiClient.inbox.livechat.getWidgetSettings(app_id,{
+        headers:{
+          Authorization: public_key
+        }
+      }),
+    // queryFn: () => getWidgetSettings({ app_id, public_key }),
   });
 
 export const useSessionQuery = (
