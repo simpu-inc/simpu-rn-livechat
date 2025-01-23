@@ -49,8 +49,10 @@ export default function App() {
       )}
       {openLiveChat && (
         <SimpuLiveChat
-          app_id={'f2f37798'}
-          public_key={'spk__FdGQKmc3jsHc1ndqdyYsODZWyuQGF2hJVtLuQPxBpQKRKY0a2b'}
+          // app_id={'f2f37798'}
+          // public_key={'spk__FdGQKmc3jsHc1ndqdyYsODZWyuQGF2hJVtLuQPxBpQKRKY0a2b'}
+          app_id={"54edf912"}
+          public_key={"spk__AWecxUYSEhk7AyWIUpDhRY0c2JVD8saYTqlfZAqvi4Fh3xpQZH"}
           setOpenliveChat={setOpenliveChat}
         />
       )}

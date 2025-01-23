@@ -1,3 +1,4 @@
+import apiClient from '../Provider';
 import { buildAIUrl, client } from './client';
 
 const perPageFetch = 20;
@@ -49,27 +50,29 @@ export async function addOrUpdateUser({
   app_id: string;
   signed_request: string;
 }) {
-  const response = await client(`channels/livechat/${app_id}/users`, {
-    data,
-    method: 'POST',
-    headers: {
-      Authorization: signed_request,
-    },
+
+ const response = await apiClient.inbox.livechat.addUpdateUser(app_id,data,{
+    headers:{
+      Authorization: `ssr__${signed_request}`
+    }
   });
-  return response.data;
+
+  return response;
 }
 
 export async function sendMessage(
-  data,
+  message:{body:string},
   app_id: string,
   signed_request?: string
 ) {
-  const response = await client(`channels/livechat/${app_id}/messages`, {
-    data,
-    method: 'POST',
-    signed_request: signed_request,
-  });
-  return response.data.message;
+ const response = await apiClient.inbox.livechat.sendMessage(app_id,message,{
+    headers:{
+      Authorization: `ssr__${signed_request}`
+    }
+  })
+
+
+  return response.message;
 }
 
 export async function getConversationMessages(params) {

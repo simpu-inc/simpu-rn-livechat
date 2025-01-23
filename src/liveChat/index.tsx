@@ -20,7 +20,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     useChatProvider();
   const { pusherInit } = usePusherWebsocket();
 
-  // console.log('Prps  LiveChat container===', Props);
+
 
   const { data, error, isLoading } = useSettingsQuery({
     app_id,
@@ -40,7 +40,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     const user_hash = getUserHash({
       public_key,
       user_id: user_id?.toString() ?? '',
-      secret_key: data?.secret_key,
+      secret_key: data?.secret_key!,
     });
 
     // console.log('Users -hash =========', user_hash);

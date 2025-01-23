@@ -54,13 +54,11 @@ const ContactForm = () => {
     phone: formattedValue,
   });
 
-  // console.log('form send status: ', parsedMessage?.success);
-  // console.log('form send status: ', JSON.stringify(formatedErrors, null, 2));
+
 
   const SendMessage = async () => {
     const res = await getCompanyConfig();
 
-    // console.log('company config', JSON.stringify(res, null, 3));
 
     if (!parsedMessage.success) {
       const errors = parsedMessage?.error;
@@ -82,15 +80,12 @@ const ContactForm = () => {
     const hash = getUserHash({
       public_key: publicKey,
       secret_key: orgSettings?.secret_key,
-      user_id: undefined,
+      user_id: undefined!,
     });
 
-    // console.log('User Hash: ' + hash);
+
 
     try {
-      // const { name, email, phone, message } = values;
-
-      // setIsSubmittingContactForm(true);
 
       const { uuid, user_id } = await addOrUpdateUser({
         data: {
@@ -102,7 +97,7 @@ const ContactForm = () => {
         signed_request: hash,
       });
 
-      // console.log('response from add user', { uuid, user_id });
+      console.log('response from add user', { uuid, user_id });
 
       const user_hash = getUserHash({
         user_id,
@@ -132,7 +127,7 @@ const ContactForm = () => {
 
       const { session_id } = await sendMessage(
         {
-          content: formDetails?.message,
+          body: formDetails?.message,
         },
         AppId,
         user_hash

@@ -9,6 +9,9 @@ import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 
 const Start = () => {
   const { setViewIndex, orgSettings } = useChatProvider();
+
+
+  // console.log("orgSettings", JSON.stringify(orgSettings,null,3));
   const styles = StyleSheet.create({
     container: {
       height: SCREEN_HEIGHT * 0.55,
@@ -58,6 +61,8 @@ const Start = () => {
     !!Object.keys(business_hours?.schedules ?? {}).filter(
       (key) => business_hours?.schedules?.[key]?.is_active
     ).length;
+
+
 
   const { isAvailable, nextAvailableDay } =
     useBusinessHoursCheck(business_hours);

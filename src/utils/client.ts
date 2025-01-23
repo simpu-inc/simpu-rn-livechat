@@ -27,7 +27,7 @@ export async function client(
   // const { signed_request } = loadState() ?? {};
   // const signed_request = await getCache(KEYS.SIGNED_REQUEST);
 
-  console.log('User signed_request inside client', signed_request);
+  // console.log('User signed_request inside client', signed_request);
 
   const headers = {
     'Authorization': signed_request ? signed_request : undefined,
