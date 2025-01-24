@@ -1,4 +1,4 @@
-import {  View, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
 import Start from './Start';
 import { theme } from '../utils/theme';
@@ -6,37 +6,34 @@ import Footer from '../components/Footer';
 import { useChatProvider } from '../context';
 import ContactForm from './ContactForm';
 import type { LiveChatProps } from '../@types/types';
-import { addOrUpdateUser, getUserHash, useSettingsQuery, useWidgetAppsQuery } from '../utils';
+import {
+  addOrUpdateUser,
+  getUserHash,
+  useSettingsQuery,
+  useWidgetAppsQuery,
+} from '../utils';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/config';
-import { KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
+import { getCache, KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
 import Heading from '../components/Heading';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';
 import Chat from './chat';
-import { KeyboardAwareScrollView } from '../components/KeyboardView';
-
 
 const LiveChatContainer = (Props: LiveChatProps) => {
   const { name, email, app_id, user_id, public_key, setOpenliveChat } = Props;
 
-  const { viewIndex, setOrgSettings, setApp_id, setPublic_key ,setWidgetApps} =
+  const { userId,viewIndex, setOrgSettings, setApp_id, setPublic_key, setWidgetApps,setUserHash,setUserId } =
     useChatProvider();
   const { pusherInit } = usePusherWebsocket();
-
-
 
   const { data, error, isLoading } = useSettingsQuery({
     app_id,
     public_key,
   });
 
-
   const { data: apps } = useWidgetAppsQuery({
-app_id,
+    app_id,
     public_key,
   });
-
-
-
 
   // console.log({ app_id, public_key });
 
@@ -119,7 +116,20 @@ app_id,
     );
   };
 
+  useEffect(() => {
+    (async () => {
+      const signed_request = await getCache(KEYS.SIGNED_REQUEST);
+      const user_id = await getCache(KEYS.USER_ID);
 
+      if (signed_request) {
+        setUserHash(signed_request);
+      }
+
+      if(user_id){
+        setUserId(user_id);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (apps) {
@@ -127,12 +137,7 @@ app_id,
     }
   }, [apps]);
 
-
-
   return (
-
-
-
     <View
       style={{
         flex: 1,
@@ -149,7 +154,6 @@ app_id,
       {viewIndex === 3 && <Chat />}
       {(viewIndex === 1 || viewIndex === 2) && <Footer />}
     </View>
-
   );
 };
 

@@ -14,7 +14,7 @@ const SocialBtn = ({ title, url }: { title: string; url: string }) => {
       height: hp(44),
       backgroundColor: theme.SimpuWhite,
       marginVertical: hp(10),
-      marginHorizontal: wp(5),
+      marginHorizontal: wp(15),
       borderRadius: hp(10),
       alignItems: 'center',
       justifyContent: 'center',

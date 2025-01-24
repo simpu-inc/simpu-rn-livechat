@@ -52,18 +52,18 @@ const ChatInput = ({
       paddingHorizontal: hp(20),
       paddingVertical: hp(10),
       flexDirection: 'row',
-      backgroundColor:'red'
+      // backgroundColor:'red'
       //  alignItems: 'center',
     },
     input: {
       fontSize: fs(16),
       flex: 1,
       color: theme.SimpuBlack,
-      backgroundColor:'green'
+      // backgroundColor:'green'
     },
     btnContainer: {
       flexDirection: 'row',
-      backgroundColor:'blue'
+      // backgroundColor:'blue'
     },
     btns: {
       marginHorizontal: hp(8),

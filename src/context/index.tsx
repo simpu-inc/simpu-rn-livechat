@@ -20,6 +20,7 @@ type ChatContextType = {
   openChatBot: boolean;
   viewIndex: number;
   userHash: string;
+  userId: string;
   setWidgetApps: React.Dispatch<React.SetStateAction<LivechatWidgetApp[]>>
   setUserHash: React.Dispatch<React.SetStateAction<string>>;
   setApp_id: React.Dispatch<React.SetStateAction<string>>;
@@ -28,6 +29,7 @@ type ChatContextType = {
   setOrgSettings: React.Dispatch<React.SetStateAction<OrgSettingType | null>>;
   setOpenChatBot: React.Dispatch<React.SetStateAction<boolean>>;
   setViewIndex: React.Dispatch<React.SetStateAction<number>>;
+  setUserId: React.Dispatch<React.SetStateAction<string>>
 };
 
 export const ChatContext = createContext<ChatContextType | null>(null);
@@ -48,6 +50,7 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [openChatBot, setOpenChatBot] = useState(false);
   const [viewIndex, setViewIndex] = useState(1);
   const [userHash, setUserHash] = useState('');
+  const [userId, setUserId] = useState('')
 
   const getOrgSettingsLocalStorage = async () => {
     const config = await getCompanyConfig();
@@ -72,6 +75,7 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       viewIndex,
       sessionID,
       userHash,
+      userId,
       setApp_id,
       setViewIndex,
       setOrgSettings,
@@ -79,7 +83,8 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPublic_key,
       setSessionID,
       setUserHash,
-      setWidgetApps
+      setWidgetApps,
+      setUserId
     }),
     [
       AppId,
@@ -89,6 +94,7 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       orgSettings,
       openChatBot,
       viewIndex,
+      userId,
       sessionID,
       setApp_id,
       setViewIndex,
@@ -96,6 +102,7 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setOpenChatBot,
       setPublic_key,
       setSessionID,
+      setUserHash,
     ]
   );
 

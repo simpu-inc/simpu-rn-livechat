@@ -25,39 +25,50 @@ export const useSettingsQuery = ({
 }) =>
   useQuery({
     queryKey: ['widget-settings', app_id],
-    queryFn:    () => 
-      apiClient.inbox.livechat.getWidgetSettings(app_id,{
-        headers:{
-          Authorization: public_key
-        }
+    queryFn: () =>
+      apiClient.inbox.livechat.getWidgetSettings(app_id, {
+        headers: {
+          Authorization: public_key,
+        },
       }),
     // queryFn: () => getWidgetSettings({ app_id, public_key }),
   });
 
 export const useSessionQuery = (
-  { app_id, session_id ,signed_request}: { app_id: string; session_id: string,signed_request:string},
+  {
+    app_id,
+    session_id,
+    signed_request,
+  }: { app_id: string; session_id: string; signed_request: string },
   options: Object
 ) =>
   useQuery({
     queryKey: ['session', session_id],
-    queryFn:()=>  apiClient.inbox.livechat.getSessionById(app_id,session_id,{
-      headers:{
-        Authorization:signed_request ? `ssr__${signed_request}` : undefined
-      }
-    }),
+    queryFn: () =>
+      apiClient.inbox.livechat.getSessionById(app_id, session_id, {
+        headers: {
+          Authorization: signed_request ? `ssr__${signed_request}` : undefined,
+        },
+      }),
     // queryFn: () => getSessionById(app_id, session_id),
     ...options,
   });
 
-export const useWidgetAppsQuery = ({ app_id, public_key }:{app_id:string,public_key:string}) => {
+export const useWidgetAppsQuery = ({
+  app_id,
+  public_key,
+}: {
+  app_id: string;
+  public_key: string;
+}) => {
   return useQuery({
     queryKey: ['widget-apps', app_id],
-    queryFn: () => 
-      apiClient.inbox.livechat.getApps(app_id,{
-        headers:{
+    queryFn: () =>
+      apiClient.inbox.livechat.getApps(app_id, {
+        headers: {
           Authorization: public_key,
-        }
-      })
+        },
+      }),
   });
 };
 
@@ -69,8 +80,22 @@ export const useNotificationsQuery = ({ app_id }) => {
   });
 };
 
-export const useActiveSessionQuery = ({ app_id }, options) =>
-  useQuery('user-active-session', () => getUserActiveSession(app_id), options);
+export const useActiveSessionQuery = ({ app_id ,signed_request}:{app_id:string,signed_request:string}, options:any) =>
+  useQuery({
+    queryKey: ['user-active-session'],
+    queryFn: () => apiClient.inbox.livechat.getUserActiveSession(app_id,
+      {
+        headers:{
+          Authorization:signed_request ? `ssr__${signed_request}` : undefined
+        }
+      }
+      
+    ),
+    ...options,
+  });
+
+// export const useActiveSessionQuery = ({ app_id }, options) =>
+//   useQuery('user-active-session', () => getUserActiveSession(app_id), options);
 
 // export const useCustomBotRootPath = (custom_bot_id, options) =>
 //   useQuery(

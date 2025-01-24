@@ -54,7 +54,7 @@ const Chat = () => {
 
   const { mutate: mutateSendMessage } = useMutation({
     mutationFn: (payload) => {
-      console.log('===payload===', JSON.stringify(payload, null, 3));
+      // console.log('===payload===', JSON.stringify(payload, null, 3));
       return sendMessage(payload, AppId, userHash);
     },
     onMutate: async (data) => {
