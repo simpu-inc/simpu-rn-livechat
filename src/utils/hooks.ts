@@ -35,12 +35,17 @@ export const useSettingsQuery = ({
   });
 
 export const useSessionQuery = (
-  { app_id, session_id }: { app_id: string; session_id: string },
+  { app_id, session_id ,signed_request}: { app_id: string; session_id: string,signed_request:string},
   options: Object
 ) =>
   useQuery({
     queryKey: ['session', session_id],
-    queryFn: () => getSessionById(app_id, session_id),
+    queryFn:()=>  apiClient.inbox.livechat.getSessionById(app_id,session_id,{
+      headers:{
+        Authorization:signed_request ? `ssr__${signed_request}` : undefined
+      }
+    }),
+    // queryFn: () => getSessionById(app_id, session_id),
     ...options,
   });
 

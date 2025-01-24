@@ -44,8 +44,6 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [openChatBot, setOpenChatBot] = useState(false);
   const [viewIndex, setViewIndex] = useState(1);
   const [userHash, setUserHash] = useState('');
-  // const [onlineAgents, setOnlineAgents] = useState([]);
-  // const [userTypingData, setUserTypingData] = useState();
 
   const getOrgSettingsLocalStorage = async () => {
     const config = await getCompanyConfig();

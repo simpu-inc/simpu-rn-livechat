@@ -15,6 +15,8 @@ import { addOrUpdateUser, getUserHash, sendMessage } from '../utils';
 import { getCompanyConfig, KEYS, storeCache } from '../utils/cache';
 import { z } from 'zod';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';
+import { Platform } from 'react-native';
+import { KeyboardAwareScrollView } from '../components/KeyboardView';
 
 const Message = z.object({
   name: z.string().min(3, { message: 'Name should be more than 3 characters' }),
@@ -54,11 +56,8 @@ const ContactForm = () => {
     phone: formattedValue,
   });
 
-
-
   const SendMessage = async () => {
     const res = await getCompanyConfig();
-
 
     if (!parsedMessage.success) {
       const errors = parsedMessage?.error;
@@ -83,10 +82,7 @@ const ContactForm = () => {
       user_id: undefined!,
     });
 
-
-
     try {
-
       const { uuid, user_id } = await addOrUpdateUser({
         data: {
           name: formDetails?.name,
@@ -97,7 +93,7 @@ const ContactForm = () => {
         signed_request: hash,
       });
 
-      console.log('response from add user', { uuid, user_id });
+      // console.log('response from add user', { uuid, user_id });
 
       const user_hash = getUserHash({
         user_id,
@@ -154,7 +150,10 @@ const ContactForm = () => {
   const styles = StyleSheet.create({
     container: {
       height: SCREEN_HEIGHT * 0.65,
-      marginTop: -SCREEN_HEIGHT * 0.05,
+      marginTop:
+        Platform.OS === 'android'
+          ? -SCREEN_HEIGHT * 0.07
+          : -SCREEN_HEIGHT * 0.04,
       marginHorizontal: wp(20),
       backgroundColor: theme.SimpuWhite,
       borderRadius: hp(10),
@@ -162,16 +161,18 @@ const ContactForm = () => {
     },
 
     inputContainer: {
-      marginVertical: hp(5),
+      marginVertical: hp(2),
       marginHorizontal: hp(15),
     },
     lable: {
       fontSize: fs(16),
-      paddingVertical: hp(5),
+      paddingVertical: hp(2),
+      color: theme.SimpuBlack,
     },
     input: {
-      height: hp(50),
+      height: hp(45),
       borderWidth: 1,
+      color: theme.SimpuBlack,
       borderColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       borderRadius: hp(8),
       paddingHorizontal: hp(10),
@@ -183,7 +184,7 @@ const ContactForm = () => {
       justifyContent: 'center',
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       marginHorizontal: wp(15),
-      marginVertical: hp(15),
+      marginVertical: hp(10),
       borderRadius: hp(10),
     },
     sendBtnTxt: {
@@ -200,124 +201,133 @@ const ContactForm = () => {
     },
   });
   return (
-    <View style={styles.container}>
-      <View style={{ paddingHorizontal: wp(15) }}>
-        <Text
-          style={{
-            paddingVertical: hp(7),
-            fontSize: fs(16),
-            fontWeight: '500',
-          }}
-        >
-          We'll like to know you!
-        </Text>
-      </View>
-      <View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.lable}>Name</Text>
-          <TextInput
-            value={formDetails?.name}
-            onChangeText={(text) =>
-              setFormDetails({ ...formDetails, name: text })
-            }
-            style={styles.input}
-            placeholder="Enter your name"
-          />
-          <Text style={styles.errorText}>{formatedErrors?.name}</Text>
+ 
+      <View style={styles.container}>
+        <View style={{ paddingHorizontal: wp(15) }}>
+          <Text
+            style={{
+              paddingVertical: hp(7),
+              fontSize: fs(16),
+              fontWeight: '500',
+              color: theme.SimpuBlack,
+            }}
+          >
+            We'll like to know you!
+          </Text>
         </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.lable}>Email</Text>
-          <TextInput
-            value={formDetails?.email}
-            onChangeText={(text) =>
-              setFormDetails({ ...formDetails, email: text })
-            }
-            keyboardType="email-address"
-            style={styles.input}
-            placeholder="Enter your email"
-          />
-          <Text style={styles.errorText}>{formatedErrors?.email}</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.lable}>Phone number</Text>
-          {/* <TextInput
+        <KeyboardAwareScrollView>
+          <View style={styles.inputContainer}>
+            <Text style={styles.lable}>Name</Text>
+            <TextInput
+              value={formDetails?.name}
+              onChangeText={(text) =>
+                setFormDetails({ ...formDetails, name: text })
+              }
+              style={styles.input}
+              placeholder="Enter your name"
+              placeholderTextColor={theme.SimpuGray}
+            />
+            <Text style={styles.errorText}>{formatedErrors?.name}</Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.lable}>Email</Text>
+            <TextInput
+              value={formDetails?.email}
+              placeholderTextColor={theme.SimpuGray}
+              onChangeText={(text) =>
+                setFormDetails({ ...formDetails, email: text })
+              }
+              keyboardType="email-address"
+              style={styles.input}
+              placeholder="Enter your email"
+            />
+            <Text style={styles.errorText}>{formatedErrors?.email}</Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.lable}>Phone number</Text>
+            {/* <TextInput
             keyboardType="number-pad"
             style={styles.input}
             placeholder="Enter your phone number"
           /> */}
-          <PhoneInput
-            ref={phoneInput}
-            defaultValue={value}
-            placeholder="900000000"
-            defaultCode={orgSettings?.country_code ?? 'US'}
-            layout="first"
-            onChangeText={(text) => {
-              setValue(text);
-            }}
-            onChangeFormattedText={(text) => {
-              setFormattedValue(text);
-            }}
-            withDarkTheme={false}
-            // withShadow
-            autoFocus
-            containerStyle={{
-              borderWidth: 1,
-              width: wp(310),
-              borderColor:
-                orgSettings?.style?.background_color ?? theme.SimpuBlue,
-              borderRadius: hp(8),
-              backgroundColor: 'transparent',
-              // marginHorizontal: ,
-              // height: 40,
-            }}
-            codeTextStyle={{
-              fontSize: fs(16),
-              padding: 0,
-              margin: 0,
-              // backgroundColor: 'red',
-            }}
-            textInputStyle={{
-              margin: 0,
-              fontSize: fs(16),
-              padding: 0,
-            }}
-            // layout="first"
-            textContainerStyle={{
-              // height: 40,
-              padding: 0,
+            <PhoneInput
+              ref={phoneInput}
+              defaultValue={value}
+              placeholder="900000000"
+              defaultCode={orgSettings?.country_code ?? 'NG'}
+              layout="first"
+              onChangeText={(text) => {
+                setValue(text);
+              }}
+              onChangeFormattedText={(text) => {
+                setFormattedValue(text);
+              }}
+              withDarkTheme={false}
+              // withShadow
+              autoFocus
+              containerStyle={{
+                borderWidth: 1,
+                width: wp(300),
+                borderColor:
+                  orgSettings?.style?.background_color ?? theme.SimpuBlue,
+                borderRadius: hp(8),
+                backgroundColor: 'transparent',
+                // marginHorizontal: ,
+                // height: 40,
+              }}
+              codeTextStyle={{
+                fontSize: fs(16),
+                padding: 0,
+                margin: 0,
+                color: theme.SimpuBlack,
+                // backgroundColor: 'red',
+              }}
+              textInputStyle={{
+                margin: 0,
+                fontSize: fs(16),
+                padding: 0,
+                color: theme.SimpuBlack,
+              }}
+              // layout="first"
+              textContainerStyle={{
+                // height: 40,
+                padding: 0,
 
-              backgroundColor: 'transparent',
-            }}
-          />
-          <Text style={styles.errorText}>{formatedErrors?.phone}</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.lable}>Message</Text>
-          <TextInput
-            value={formDetails?.message}
-            onChangeText={(text) =>
-              setFormDetails({ ...formDetails, message: text })
-            }
-            multiline
-            style={[styles.input, { height: hp(120) }]}
-            placeholder="write your message"
-          />
-          <Text style={styles.errorText}>{formatedErrors?.message}</Text>
-        </View>
+                backgroundColor: 'transparent',
+              }}
+            />
+            <Text style={styles.errorText}>{formatedErrors?.phone}</Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.lable}>Message</Text>
+            <TextInput
+              value={formDetails?.message}
+              textAlignVertical="top"
+              onChangeText={(text) =>
+                setFormDetails({ ...formDetails, message: text })
+              }
+              multiline
+              style={[styles.input, { height: hp(90) }]}
+              placeholder="write your message"
+              placeholderTextColor={theme.SimpuGray}
+            />
+            <Text style={styles.errorText}>{formatedErrors?.message}</Text>
+          </View>
 
-        <TouchableOpacity
-          disabled={isLoading}
-          style={[styles.sendBtn, {}]}
-          onPress={SendMessage}
-        >
-          {!isLoading ? (
-            <Text style={styles.sendBtnTxt}>Send message</Text>
-          ) : (
-            <ActivityIndicator color={theme.SimpuWhite} />
-          )}
-        </TouchableOpacity>
+          <TouchableOpacity
+            disabled={isLoading}
+            style={[styles.sendBtn, {}]}
+            onPress={SendMessage}
+          >
+            {!isLoading ? (
+              <Text style={styles.sendBtnTxt}>Send message</Text>
+            ) : (
+              <ActivityIndicator color={theme.SimpuWhite} />
+            )}
+          </TouchableOpacity>
+        </KeyboardAwareScrollView>
       </View>
-    </View>
+
   );
 };
 

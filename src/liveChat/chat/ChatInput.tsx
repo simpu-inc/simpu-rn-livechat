@@ -16,7 +16,7 @@ import Attachment from '../../components/Attachment';
 
 type ChatInputprops = {
   message: string;
-  attachements: Object;
+  attachements: Array<any>;
   onUploaded: any;
   onDelete: any;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -52,14 +52,18 @@ const ChatInput = ({
       paddingHorizontal: hp(20),
       paddingVertical: hp(10),
       flexDirection: 'row',
+      backgroundColor:'red'
       //  alignItems: 'center',
     },
     input: {
       fontSize: fs(16),
       flex: 1,
+      color: theme.SimpuBlack,
+      backgroundColor:'green'
     },
     btnContainer: {
       flexDirection: 'row',
+      backgroundColor:'blue'
     },
     btns: {
       marginHorizontal: hp(8),
@@ -67,7 +71,7 @@ const ChatInput = ({
   });
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.attachContainer}>
+      {attachements?.length>0 && <View style={styles.attachContainer}>
         {attachements?.map((attach, index: number) => (
           <Attachment
             attach={attach}
@@ -76,13 +80,15 @@ const ChatInput = ({
             onDelete={onDelete}
           />
         ))}
-      </View>
+      </View>}
       <View style={styles.inputContainer}>
         <TextInput
           multiline
+          textAlignVertical='top'
           value={message}
           onChangeText={(text) => setMessage(text)}
           placeholder="Write your message"
+          placeholderTextColor={theme.SimpuBlack}
           style={styles.input}
         />
         <View style={styles.btnContainer}>

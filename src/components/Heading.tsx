@@ -3,6 +3,7 @@ import React from 'react';
 import { fs, hp, wp } from '../utils/config';
 import { theme } from '../utils/theme';
 import { useChatProvider } from '../context';
+import { Platform } from 'react-native';
 
 const Heading = ({
   handleCloseLiveChat,
@@ -15,7 +16,7 @@ const Heading = ({
     <View
       style={{
         paddingHorizontal: wp(25),
-        paddingTop: hp(20), //TODO:adjust this
+        paddingTop:Platform.OS==='android' ? hp(5): hp(20), //TODO:adjust this
         backgroundColor: orgSettings?.style.background_color ?? theme.SimpuBlue,
         height: hp(220),
       }}
@@ -55,7 +56,7 @@ const Heading = ({
 
       <TouchableOpacity
         onPress={handleCloseLiveChat}
-        style={{ position: 'absolute', top: hp(80), right: wp(30) }}
+        style={{ position: 'absolute', top:Platform.OS==='android' ?hp(60): hp(80), right: wp(30) }}
       >
         <Image
           style={{ height: hp(18), width: hp(20) }}

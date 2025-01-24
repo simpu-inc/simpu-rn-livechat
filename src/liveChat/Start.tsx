@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View ,Platform} from 'react-native';
 import React from 'react';
 import { theme } from '../utils/theme';
 import AgentsCard from '../components/AgentsCard';
@@ -6,6 +6,7 @@ import SocialCard from '../components/SocialCard';
 import { useChatProvider } from '../context';
 import { responseTimeLabelRegister, useBusinessHoursCheck } from '../utils';
 import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
+
 
 const Start = () => {
   const { setViewIndex, orgSettings } = useChatProvider();
@@ -15,7 +16,7 @@ const Start = () => {
   const styles = StyleSheet.create({
     container: {
       height: SCREEN_HEIGHT * 0.55,
-      marginTop: -SCREEN_HEIGHT * 0.03,
+      marginTop:Platform.OS==='android' ? -SCREEN_HEIGHT * 0.06 : -SCREEN_HEIGHT*0.04,
       marginHorizontal: wp(20),
     },
     headerContainer: {
@@ -24,8 +25,8 @@ const Start = () => {
       borderRadius: hp(15),
     },
     SocialsContainer: {
-      marginTop: hp(25),
-      paddingTop: hp(20),
+      marginTop: hp(20),
+      paddingTop: hp(15),
       borderTopColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       borderTopWidth: hp(4),
       backgroundColor: theme.SimpuWhite,
@@ -33,13 +34,13 @@ const Start = () => {
       padding: hp(10),
     },
     sendMsgBtn: {
-      height: hp(44),
+      height: hp(40),
       backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: hp(10),
       marginHorizontal: hp(15),
-      marginVertical: hp(15),
+      marginVertical: hp(10),
     },
     sendMsgTxt: {
       color: theme.SimpuWhite,
@@ -48,6 +49,7 @@ const Start = () => {
 
     openHrsText: {
       fontSize: fs(16),
+      color: theme.SimpuBlack,
     },
   });
 
@@ -72,8 +74,8 @@ const Start = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <View style={{ padding: hp(20) }}>
-          <Text style={{ fontSize: fs(20), paddingVertical: hp(5) }}>
+        <View style={{ padding: hp(16) }}>
+          <Text style={{ fontSize: fs(20), paddingVertical: hp(4),color: theme.SimpuBlack}}>
             Start a conversation
           </Text>
           {hasBusinessHours ? (

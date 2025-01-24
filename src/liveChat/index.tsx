@@ -12,6 +12,8 @@ import { KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
 import Heading from '../components/Heading';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';
 import Chat from './chat';
+import { KeyboardAwareScrollView } from '../components/KeyboardView';
+
 
 const LiveChatContainer = (Props: LiveChatProps) => {
   const { name, email, app_id, user_id, public_key, setOpenliveChat } = Props;
@@ -109,6 +111,9 @@ const LiveChatContainer = (Props: LiveChatProps) => {
   };
 
   return (
+
+
+
     <View
       style={{
         flex: 1,
@@ -125,6 +130,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
       {viewIndex === 3 && <Chat />}
       {(viewIndex === 1 || viewIndex === 2) && <Footer />}
     </View>
+
   );
 };
 

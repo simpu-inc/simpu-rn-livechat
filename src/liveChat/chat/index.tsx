@@ -38,6 +38,7 @@ import { theme } from '../../utils/theme';
 import { useChatProvider } from '../../context';
 import ChatItem from './chatItem';
 import { usePusherWebsocket } from '../../Hooks/pusherSocket';
+import apiClient from '../../Provider';
 
 const Chat = () => {
   const queryClient = useQueryClient();
@@ -53,15 +54,18 @@ const Chat = () => {
 
   const { mutate: mutateSendMessage } = useMutation({
     mutationFn: (payload) => {
+      console.log('===payload===', JSON.stringify(payload, null, 3));
       return sendMessage(payload, AppId, userHash);
     },
     onMutate: async (data) => {
-      const { attachments, user_id, content } = data;
+      const { attachments, body } = data;
+
+      console.log("data",JSON.stringify(data,null,3))
 
       const newMessage = generateNewMessage({
         attachments,
         user_id,
-        content,
+        body,
       });
 
       // console.log(
@@ -132,11 +136,12 @@ const Chat = () => {
     {
       app_id: AppId,
       session_id: sessionID,
+      signed_request:userHash
     },
     { enabled: !!sessionID, initialData: orgSettings?.members }
   );
 
-  // console.log('Session from use session', JSON.stringify(session, null, 3));
+
 
   const {
     data: threadMessages,
@@ -146,13 +151,29 @@ const Chat = () => {
     refetch: threadMessagesRefetch,
   } = useInfiniteQuery({
     queryKey: ['messages', sessionID],
-    queryFn: ({ pageParam }) =>
-      fetchThreadMessages({
-        pageParam,
-        app_id: AppId,
-        session_id: sessionID,
-        user_hash: userHash,
-      }),
+    queryFn: ({ pageParam = 1, }) => {
+      return apiClient.inbox.livechat.getConversationMessages(
+        AppId,
+        sessionID,
+        {
+          page: pageParam,
+        },
+        {
+          headers: {
+            Authorization: userHash
+              ? `ssr__${userHash}`
+              : undefined,
+          },
+        }
+      );
+    },
+    // queryFn: ({ pageParam }) =>
+    //   fetchThreadMessages({
+    //     pageParam,
+    //     app_id: AppId,
+    //     session_id: sessionID,
+    //     user_hash: userHash,
+    //   }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       // console.log(
@@ -172,9 +193,7 @@ const Chat = () => {
       []
     ) ?? [];
 
-  // const groupedMessages = groupBy(messages, (message) =>
-  //   format(new Date(message.created_datetime), 'MMM dd, yyyy')
-  // );
+
 
   // console.log('=====Thread message:===', JSON.stringify(threadMessages, null, 3));
 
@@ -255,12 +274,10 @@ const Chat = () => {
   };
 
   const handleSendMessage = () => {
-    // console.log('message from input=====', message);
     if (userHash) {
       mutateSendMessage({
-        user_id: AppId,
-        content: message,
-        attachment_ids: uploadedFiles,
+        body: message,
+        attachments: uploadedFiles,
       });
     } else {
       // clearState();
@@ -331,11 +348,6 @@ const Chat = () => {
                 source={require('../../assets/backIcon.png')}
                 style={{ height: hp(18), width: hp(18) }}
               />
-              {/* <Image
-                 resizeMode="contain"
-                 style={styles.imageStyle}
-                 source={{ uri: `https://i.pravatar.cc/150?img=${3}` }}
-               /> */}
               <AgentsCard size="small" />
             </TouchableOpacity>
             <View style={{ marginLeft: hp(15) }}>

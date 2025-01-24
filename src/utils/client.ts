@@ -76,7 +76,7 @@ const axiosResponseInterceptor = Axios.interceptors.response.use(
     return response;
   },
   function (error: AxiosError) {
-    console.log('Error occurred===', JSON.stringify(error, null, 3));
+    // console.log('Error occurred===', JSON.stringify(error, null, 3));
     if (error.response && error.response.data) {
       if (
         error.response &&

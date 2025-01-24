@@ -61,7 +61,7 @@ export async function addOrUpdateUser({
 }
 
 export async function sendMessage(
-  message:{body:string},
+  message:{body:string, attachments?: string[];},
   app_id: string,
   signed_request?: string
 ) {
