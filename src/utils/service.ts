@@ -78,10 +78,6 @@ export async function sendMessage(
 export async function getConversationMessages(params) {
   const { session_id, page, app_id, signed_request, ...rest } = params;
 
-  // console.log(
-  //   'SIgned request insed to get conversation messages',
-  //   signed_request
-  // );
 
   let query = {
     page,

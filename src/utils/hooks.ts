@@ -49,10 +49,16 @@ export const useSessionQuery = (
     ...options,
   });
 
-export const useWidgetAppsQuery = ({ app_id, public_key }) => {
-  return useQuery(['widget-apps', app_id], () =>
-    getWidgetApps({ app_id, public_key })
-  );
+export const useWidgetAppsQuery = ({ app_id, public_key }:{app_id:string,public_key:string}) => {
+  return useQuery({
+    queryKey: ['widget-apps', app_id],
+    queryFn: () => 
+      apiClient.inbox.livechat.getApps(app_id,{
+        headers:{
+          Authorization: public_key,
+        }
+      })
+  });
 };
 
 export const useNotificationsQuery = ({ app_id }) => {

@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import { useChatProvider } from '../context';
 import ContactForm from './ContactForm';
 import type { LiveChatProps } from '../@types/types';
-import { addOrUpdateUser, getUserHash, useSettingsQuery } from '../utils';
+import { addOrUpdateUser, getUserHash, useSettingsQuery, useWidgetAppsQuery } from '../utils';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/config';
 import { KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
 import Heading from '../components/Heading';
@@ -18,7 +18,7 @@ import { KeyboardAwareScrollView } from '../components/KeyboardView';
 const LiveChatContainer = (Props: LiveChatProps) => {
   const { name, email, app_id, user_id, public_key, setOpenliveChat } = Props;
 
-  const { viewIndex, setOrgSettings, setApp_id, setPublic_key } =
+  const { viewIndex, setOrgSettings, setApp_id, setPublic_key ,setWidgetApps} =
     useChatProvider();
   const { pusherInit } = usePusherWebsocket();
 
@@ -28,6 +28,15 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     app_id,
     public_key,
   });
+
+
+  const { data: apps } = useWidgetAppsQuery({
+app_id,
+    public_key,
+  });
+
+
+
 
   // console.log({ app_id, public_key });
 
@@ -109,6 +118,16 @@ const LiveChatContainer = (Props: LiveChatProps) => {
       ]
     );
   };
+
+
+
+  useEffect(() => {
+    if (apps) {
+      setWidgetApps(apps?.apps);
+    }
+  }, [apps]);
+
+
 
   return (
 

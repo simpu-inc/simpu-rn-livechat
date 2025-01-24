@@ -9,15 +9,18 @@ import React, {
 } from 'react';
 import type { OrgSettingType } from '../@types/types';
 import { getCompanyConfig } from '../utils/cache';
+import type { LivechatWidgetApp, LivechatWidgetApps } from 'simpu-api-sdk';
 
 type ChatContextType = {
   AppId: string;
+  apps: LivechatWidgetApp[]
   publicKey: string;
   sessionID: string;
   orgSettings: OrgSettingType;
   openChatBot: boolean;
   viewIndex: number;
   userHash: string;
+  setWidgetApps: React.Dispatch<React.SetStateAction<LivechatWidgetApp[]>>
   setUserHash: React.Dispatch<React.SetStateAction<string>>;
   setApp_id: React.Dispatch<React.SetStateAction<string>>;
   setSessionID: React.Dispatch<React.SetStateAction<string>>;
@@ -39,6 +42,7 @@ export const useChatProvider = () => {
 const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [orgSettings, setOrgSettings] = useState<OrgSettingType | null>(null);
   const [AppId, setApp_id] = useState('');
+  const [apps, setWidgetApps] = useState<LivechatWidgetApp[]>([]);
   const [publicKey, setPublic_key] = useState('');
   const [sessionID, setSessionID] = useState('');
   const [openChatBot, setOpenChatBot] = useState(false);
@@ -61,6 +65,7 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const values = useMemo(
     () => ({
       AppId,
+      apps,
       publicKey,
       orgSettings,
       openChatBot,
@@ -74,9 +79,12 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPublic_key,
       setSessionID,
       setUserHash,
+      setWidgetApps
     }),
     [
       AppId,
+      apps,
+      setWidgetApps,
       publicKey,
       orgSettings,
       openChatBot,

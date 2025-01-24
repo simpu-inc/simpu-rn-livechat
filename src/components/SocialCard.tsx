@@ -3,11 +3,12 @@ import React from 'react';
 import { theme } from '../utils/theme';
 import { useChatProvider } from '../context';
 import { fs, hp, wp } from '../utils/config';
+import { Linking } from 'react-native';
 
-type SocialsProps = {};
 
 const SocialBtn = ({ title, url }: { title: string; url: string }) => {
   const { orgSettings } = useChatProvider();
+
   const styles = StyleSheet.create({
     btn: {
       height: hp(44),
@@ -31,6 +32,7 @@ const SocialBtn = ({ title, url }: { title: string; url: string }) => {
       fontSize: fs(14),
       fontWeight: '600',
       paddingLeft: wp(7),
+      textTransform: 'capitalize',
     },
   });
 
@@ -57,7 +59,7 @@ const SocialBtn = ({ title, url }: { title: string; url: string }) => {
             source={require('../assets/messenger.png')}
           />
         );
-      case 'WhatsApp':
+      case 'whatsapp':
         return (
           <Image
             style={styles.btnIcon}
@@ -66,25 +68,32 @@ const SocialBtn = ({ title, url }: { title: string; url: string }) => {
         );
 
       default:
-        break;
+        return '';
     }
   };
+
+  const openLink = () => {
+    if (url) {
+      Linking.openURL(url);
+    }
+  };
+
   return (
-    <TouchableOpacity style={styles.btn}>
+    <TouchableOpacity style={styles.btn} onPress={openLink}>
       {Icon(title)}
       <Text style={styles.btnTxt}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
-const SocialCard = ({}: SocialsProps) => {
-  const styles = StyleSheet.create({});
+const SocialCard = () => {
+  const { apps } = useChatProvider();
+
   return (
     <View>
-      <SocialBtn title={'Twitter'} url={''} />
-      <SocialBtn title={'Instagram'} url={''} />
-      <SocialBtn title={'Messenger'} url={''} />
-      <SocialBtn title={'WhatsApp'} url={''} />
+      {apps?.map((app, index) => (
+        <SocialBtn key={index} title={app?.type} url={app.url} />
+      ))}
     </View>
   );
 };
