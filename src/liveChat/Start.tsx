@@ -9,7 +9,7 @@ import { SCREEN_HEIGHT, fs, hp, wp } from '../utils/config';
 import LongBtn from '../components/LongBtn';
 import apiClient from '../Provider';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { acceptedFileTypes } from '../@types/types';
+
 
 const Start = () => {
   const { AppId, setViewIndex, orgSettings, apps, userHash, userId,setSessionID } =
@@ -115,13 +115,15 @@ const Start = () => {
 
 
   const handleSendMessage = () => {
+
     if (userId) {
       if (!!activeSession.session) {
+
         setSessionID(activeSession?.session?.session_id)
-        // history.push(`/chat/${activeSession?.session?.session_id}`);
+
         setViewIndex(3)
       } else {
-        // history.push("/chat");
+   
         setViewIndex(3)
       }
     } else {

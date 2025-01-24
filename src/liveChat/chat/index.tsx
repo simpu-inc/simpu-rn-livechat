@@ -42,12 +42,15 @@ import apiClient from '../../Provider';
 
 const Chat = () => {
   const queryClient = useQueryClient();
-  const { AppId, userHash, sessionID, setViewIndex, orgSettings } =
+  const { AppId, userHash, sessionID, setViewIndex, orgSettings,userId } =
     useChatProvider();
 
   const { subscribeTochannels } = usePusherWebsocket();
 
   const [message, setMessage] = useState('');
+
+
+  console.log("current session id",sessionID)
 
   const [attachements, setAttachements] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState();
@@ -60,11 +63,11 @@ const Chat = () => {
     onMutate: async (data) => {
       const { attachments, body } = data;
 
-      console.log("data",JSON.stringify(data,null,3))
+      console.log("chat data mutation",JSON.stringify(data,null,3))
 
       const newMessage = generateNewMessage({
         attachments,
-        user_id,
+        user_id:userId,
         body,
       });
 
@@ -118,6 +121,8 @@ const Chat = () => {
       //     />
       //   ),
       // });
+
+      console.log("error from mutation",error)
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({

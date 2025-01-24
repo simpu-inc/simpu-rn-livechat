@@ -102,12 +102,12 @@ export function html2Text(html: string) {
 
 export const generateNewMessage = ({
   attachments,
-  content,
+  body,
   user_id,
   user_name,
 }: {
   attachments: any;
-  content: string;
+  body: string;
   user_name: string;
   user_id: string;
 }) => {
@@ -122,7 +122,7 @@ export const generateNewMessage = ({
       status: 'sent',
       uuid: Date.now(),
       content: {
-        body: content,
+        body: body,
       },
       meta: { type: 'normal' },
       has_attachment: !!attachments?.length,

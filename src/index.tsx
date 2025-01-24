@@ -28,7 +28,7 @@ const SimpuLiveChat = (Props: LiveChatProps) => {
     },
   });
 
-  // console.log('Prps  LiveChat index===', Props);
+
   return (
     <QueryClientProvider client={queryClient}>
       <App {...Props} />
