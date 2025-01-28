@@ -20,8 +20,12 @@ const EventType = {
   MESSAGE_NEW: 'message_new',
   USER_TYPING: 'user_typing',
 };
+
+
 const play_notification_sound = '';
 const profile = '';
+
+
 export const usePusherWebsocket = () => {
   const queryClient = useQueryClient();
   const { viewIndex, AppId } = useChatProvider();
@@ -86,7 +90,9 @@ export const usePusherWebsocket = () => {
       apiKey: PUSHER_APP_KEY_DEMO,
       cluster: PUSHER_APP_CLUSTER,
       authEndpoint: buildConversationUrl(
-        `channels/livechat/${app_id}/websocket2?token=${user_hash}`
+        `/accounts/${app_id}/websocket/mobile?token=${user_hash}`
+      // authEndpoint: buildConversationUrl(
+      //   `channels/livechat/${app_id}/websocket2?token=${user_hash}`
       ),
 
       onConnectionStateChange,
