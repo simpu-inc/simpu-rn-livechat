@@ -10,16 +10,16 @@ type AvatarPopsTypes = {
   name: string;
   imgUrl?: string;
   orgColor?: string;
-  index: number;
-  agentLength: number;
+  index?: number;
+  agentLength?: number;
   size?: 'small' | 'big';
 };
 
 const Avatar = ({
   name,
-  index,
+  index=0,
   imgUrl,
-  agentLength,
+  agentLength=0,
   size,
 }: AvatarPopsTypes) => {
   const { orgSettings } = useChatProvider();
@@ -30,7 +30,7 @@ const Avatar = ({
       height: size === 'small' ? hp(40) : hp(50),
       width: size === 'small' ? hp(40) : hp(50),
       borderRadius: size === 'small' ? hp(20) : hp(50),
-      backgroundColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
+      backgroundColor: orgSettings?.style?.background_color ?? theme?.SimpuBlue,
       borderWidth: 1,
       borderColor: theme.SimpuWhite,
       zIndex: agentLength - index,

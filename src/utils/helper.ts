@@ -158,3 +158,40 @@ export const generateUUID = () => {
     return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
   });
 };
+
+//snippet to trim length of string
+export const trimText = (text: string | undefined, lenght: number) => {
+  if (!text?.length) return '';
+  if (text?.length <= lenght) return text;
+
+  return text?.substring(0, lenght) + '..';
+};
+
+export const formatDate  = (date:Date) =>{
+
+  if (!(date instanceof Date) || isNaN(date)) {
+    throw new Error("Invalid date");
+  }
+
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
+  const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+  const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+  const formattedTime = date.toLocaleTimeString('en-GB', timeOptions);
+
+  if (dateOnly.getTime() === today.getTime()) {
+    // return `Today ${formattedTime}`;
+    return `Today`;
+  } else if (dateOnly.getTime() === yesterday.getTime()) {
+    // return `Yesterday ${formattedTime}`;
+    return `Yesterday`;
+  } else {
+    const dateOptions = { day: '2-digit', month: 'long', year: 'numeric' };
+    const formattedDate = date.toLocaleDateString('en-GB', dateOptions);
+    return `${formattedDate}, ${formattedTime}`;
+  }
+}

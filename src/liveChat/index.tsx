@@ -17,6 +17,7 @@ import { getCache, KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
 import Heading from '../components/Heading';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';
 import Chat from './chat';
+import { pusherInstance } from 'simpu-rn-livechat';
 
 const LiveChatContainer = (Props: LiveChatProps) => {
   const { name, email, app_id, user_id, public_key, setOpenliveChat } = Props;
@@ -64,11 +65,16 @@ const LiveChatContainer = (Props: LiveChatProps) => {
         signed_request: user_hash,
       });
 
-      pusherInit({ app_id, user_hash, user_id: user_id ?? '' });
+
+      if (pusherInstance?.connectionState !== 'CONNECTED') {   
+        pusherInit({ app_id, user_hash, user_id: user_id ?? '' });
+      }
+
 
       await storeCache(KEYS.UUID, uuid);
       await storeCache(KEYS.SIGNED_REQUEST, user_hash);
       await storeCache(KEYS.USER_ID, userId);
+
       // saveState({
       //   ...(loadState() ?? {}),
       //   uuid,

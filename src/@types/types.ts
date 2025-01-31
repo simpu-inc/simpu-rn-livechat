@@ -97,12 +97,14 @@ export type UserTyingType = {
 
 export type messageType = {
   type: string;
+  sub_type: string;
   author: AuthorType;
   entity: EntityType;
   id: number;
   uuid: string;
   account_id: string;
-  by_account: any;
+  session_id: string;
+  by_account: boolean;
   show_in_thread: any;
   created_datetime: string;
   updated_datetime: any;
@@ -155,3 +157,11 @@ export type EntityType = {
 export type ContentType = {
   body: string;
 };
+
+
+export type conversationType ={
+  last_message: messageType
+  uuid: string
+  created_datetime: string
+  updated_datetime: string
+}

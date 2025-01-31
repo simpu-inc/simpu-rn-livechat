@@ -112,6 +112,8 @@ const ContactForm = () => {
       //   signed_request: user_hash,
       // });
 
+
+      //save to storage
       await storeCache(KEYS.UUID, uuid);
       await storeCache(KEYS.SIGNED_REQUEST, user_hash);
       await storeCache(KEYS.USER_ID, user_id);
@@ -140,7 +142,7 @@ const ContactForm = () => {
       // history.push(`/chat/${session_id}`);
     } catch (error) {
       // alert(error);
-      console.log(error);
+      // console.log(error);
       // setIsSubmittingContactForm(false);
     } finally {
       setIsLoading(false);

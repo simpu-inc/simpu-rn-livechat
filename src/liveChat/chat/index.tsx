@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import groupBy from 'lodash/groupBy';
 import { format } from 'date-fns';
 import DocumentPicker from 'react-native-document-picker';
@@ -39,18 +39,20 @@ import { useChatProvider } from '../../context';
 import ChatItem from './chatItem';
 import { usePusherWebsocket } from '../../Hooks/pusherSocket';
 import apiClient from '../../Provider';
+import { Pusher } from '@pusher/pusher-websocket-react-native';
+import { pusherInstance } from 'simpu-rn-livechat';
 
 const Chat = () => {
   const queryClient = useQueryClient();
   const { AppId, userHash, sessionID, setViewIndex, orgSettings,userId } =
     useChatProvider();
 
-  const { subscribeTochannels } = usePusherWebsocket();
+  const { subscribeTochannels ,pusherInit} = usePusherWebsocket();
 
   const [message, setMessage] = useState('');
 
 
-  console.log("current session id",sessionID)
+  // console.log("current session id",sessionID)
 
   const [attachements, setAttachements] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState();
@@ -63,7 +65,7 @@ const Chat = () => {
     onMutate: async (data) => {
       const { attachments, body } = data;
 
-      console.log("chat data mutation",JSON.stringify(data,null,3))
+      // console.log("chat data mutation",JSON.stringify(data,null,3))
 
       const newMessage = generateNewMessage({
         attachments,
@@ -185,8 +187,8 @@ const Chat = () => {
       //   'nextPage from inifinite query',
       //   JSON.stringify(lastPage, null, 3)
       // );
-      return lastPage.meta.page < lastPage.meta.page_count
-        ? lastPage.meta.page + 1
+      return lastPage?.meta?.page < lastPage?.meta?.page_count
+        ? lastPage?.meta?.page + 1
         : undefined;
     },
     enabled: !!sessionID,
@@ -332,10 +334,23 @@ const Chat = () => {
     );
   };
 
-  console.log(
-    '==== UPLoaded Files=== ',
-    JSON.stringify(uploadedFiles, null, 3)
-  );
+
+  useEffect(() => {
+    // console.log("pusher connection state ===",pusherInstance?.connectionState)
+
+    if (pusherInstance?.connectionState === 'CONNECTED') return;
+
+    if (userId) {
+      pusherInit({ app_id: AppId, user_hash:userHash, user_id: userId ?? '' });
+    }
+
+  }, [userId,userHash,AppId])
+  
+
+  // console.log(
+  //   '==== UPLoaded Files=== ',
+  //   JSON.stringify(uploadedFiles, null, 3)
+  // );
 
   return (
     <KeyboardAvoidingView
@@ -367,9 +382,7 @@ const Chat = () => {
             </View>
           </View>
           <TouchableOpacity
-            // onPress={handleCloseLiveChat}
-            onPress={subscribeTochannels}
-            // style={{ position: 'absolute', top: hp(70), right: wp(30) }}
+            onPress={handleCloseLiveChat}
             style={{ alignSelf: 'center', marginRight: wp(10) }}
           >
             <Image
