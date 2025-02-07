@@ -104,7 +104,7 @@ export const usePusherWebsocket = () => {
     });
 
     await pusherInstance.connect();
-    await subscribeTochannels();
+    // await subscribeTochannels();
   };
 
   // console.log(

@@ -10,6 +10,7 @@ import React, {
 import type { OrgSettingType } from '../@types/types';
 import { getCompanyConfig } from '../utils/cache';
 import type { LivechatWidgetApp, LivechatWidgetApps } from 'simpu-api-sdk';
+import { set } from 'lodash';
 
 type ChatContextType = {
   AppId: string;
@@ -30,6 +31,8 @@ type ChatContextType = {
   setOpenChatBot: React.Dispatch<React.SetStateAction<boolean>>;
   setViewIndex: React.Dispatch<React.SetStateAction<number>>;
   setUserId: React.Dispatch<React.SetStateAction<string>>
+  openLiveChat:()=>void
+  closeLiveChat:()=>void
 };
 
 export const ChatContext = createContext<ChatContextType | null>(null);
@@ -37,7 +40,7 @@ export const ChatContext = createContext<ChatContextType | null>(null);
 export const useChatProvider = () => {
   const context = useContext(ChatContext) as ChatContextType;
   // console.log('context', viewIndex, setOpenChatBot);
-  if (!context) throw new Error('you need to use a chat provider');
+  if (!context) throw new Error('you need to use a chat provider to use this context');
   return context;
 };
 
@@ -65,6 +68,19 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
     // }
   }, []);
 
+
+  const openLiveChat  = () =>{
+setOpenChatBot(true)
+  };
+
+
+
+  const closeLiveChat = ()=>{
+    setOpenChatBot(false)
+  }
+
+  
+
   const values = useMemo(
     () => ({
       AppId,
@@ -84,7 +100,10 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setSessionID,
       setUserHash,
       setWidgetApps,
-      setUserId
+      setUserId,
+      openLiveChat,
+      closeLiveChat
+      
     }),
     [
       AppId,
@@ -103,6 +122,8 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setPublic_key,
       setSessionID,
       setUserHash,
+      openLiveChat,
+      closeLiveChat
     ]
   );
 

@@ -1,7 +1,19 @@
-import type { SetStateAction } from 'react';
 import { types } from 'react-native-document-picker';
 //@ts-ignore
 import { CountryCode } from 'react-native-country-picker-modal';
+
+export type LiveChatType = {
+  app_id: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  public_key: string;
+  user_id?: string;
+  image_url?: string;
+  openLiveChat?: (params: LiveChatOpenParams) => void;
+  closeLiveChat?: (params: LiveCloseParams) => void;
+};
+
 export type LiveChatProps = {
   app_id: string;
   name?: string;
@@ -10,9 +22,22 @@ export type LiveChatProps = {
   public_key: string;
   user_id?: string;
   image_url?: string;
-  setOpenliveChat: React.Dispatch<SetStateAction<boolean>>;
+  openLiveChat?: (params: LiveChatOpenParams) => void;
+  closeLiveChat?: (params: LiveCloseParams) => void;
+  // setOpenliveChat: React.Dispatch<SetStateAction<boolean>>;
+};
+export type LiveChatActions = {
+  openLiveChat?: () => void;
+  closeLiveChat?: () => void;
 };
 
+export type LiveChatOpenParams = LiveChatProps & LiveChatActions;
+export type LiveCloseParams = void;
+
+export type ChatActionRef = {
+  openLiveChat: (params: LiveChatOpenParams) => void;
+  closeLiveChat: (params: LiveCloseParams) => void;
+};
 export type welcomeType = {
   greeting: string;
   language: string;
@@ -158,10 +183,9 @@ export type ContentType = {
   body: string;
 };
 
-
-export type conversationType ={
-  last_message: messageType
-  uuid: string
-  created_datetime: string
-  updated_datetime: string
-}
+export type conversationType = {
+  last_message: messageType;
+  uuid: string;
+  created_datetime: string;
+  updated_datetime: string;
+};

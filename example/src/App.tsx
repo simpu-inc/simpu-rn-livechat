@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import SimpuLiveChat from 'simpu-rn-livechat';
 
 export default function App() {
-  const [openLiveChat, setOpenliveChat] = useState(false);
+
 
   /*
   app_id: "e3e8ae1e",
@@ -14,9 +14,12 @@ export default function App() {
   // app_id: "e3e8ae1e",
   //       public_key: "spk__T4sfafLijwz09Po1ivc7g8NCGJBn67zclxG6wGINRn2LnnYCsS"
 
+
+
+
   return (
     <View style={styles.container}>
-      {!openLiveChat && (
+      {/* {!openLiveChat && ( */}
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
@@ -31,7 +34,8 @@ export default function App() {
             </Text>
           </View>
           <TouchableOpacity
-            onPress={() => setOpenliveChat(!openLiveChat)}
+            // onPress={() => setOpenliveChat(!openLiveChat)}
+            onPress={() => SimpuLiveChat.open()}
             style={{
               backgroundColor: '#4166F5',
               height: 40,
@@ -46,16 +50,18 @@ export default function App() {
             </Text>
           </TouchableOpacity>
         </View>
-      )}
-      {openLiveChat && (
+      {/* )} */}
+      {/* {openLiveChat && ( */}
         <SimpuLiveChat
           // app_id={'f2f37798'}
           // public_key={'spk__FdGQKmc3jsHc1ndqdyYsODZWyuQGF2hJVtLuQPxBpQKRKY0a2b'}
           app_id={"54edf912"}
           public_key={"spk__AWecxUYSEhk7AyWIUpDhRY0c2JVD8saYTqlfZAqvi4Fh3xpQZH"}
-          setOpenliveChat={setOpenliveChat}
+          // setOpenliveChat={setOpenliveChat}
+          // openLiveChat={openLiveChat}   
+          // closeLiveChat={closeLiveChat}
         />
-      )}
+      {/* )} */}
     </View>
   );
 }
