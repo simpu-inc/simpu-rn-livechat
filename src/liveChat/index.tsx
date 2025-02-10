@@ -146,10 +146,22 @@ const LiveChatContainer = (Props: LiveChatProps) => {
   return (
     <View
       style={{
-        flex: 1,
+        // flex: 1,
         height: SCREEN_HEIGHT,
         width: SCREEN_WIDTH,
         backgroundColor: theme.SimpuPaleWhite,
+
+        //styling to place livechat above all views
+        position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    // backgroundColor: "rgba(255, 0, 0, 0.8)",
+    // padding: 10,
+    alignItems: "center",
+    zIndex: 9999, // Ensure it's always on top
+    elevation: 9999, // For Android
+        
       }}
     >
       {(viewIndex === 1 || viewIndex === 2) && (
