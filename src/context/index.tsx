@@ -9,8 +9,9 @@ import React, {
 } from 'react';
 import type { OrgSettingType } from '../@types/types';
 import { getCompanyConfig } from '../utils/cache';
-import type { LivechatWidgetApp, LivechatWidgetApps } from 'simpu-api-sdk';
-import { set } from 'lodash';
+import type { LivechatWidgetApp } from 'simpu-api-sdk';
+import { Alert } from 'react-native';
+
 
 type ChatContextType = {
   AppId: string;
@@ -30,9 +31,10 @@ type ChatContextType = {
   setOrgSettings: React.Dispatch<React.SetStateAction<OrgSettingType | null>>;
   setOpenChatBot: React.Dispatch<React.SetStateAction<boolean>>;
   setViewIndex: React.Dispatch<React.SetStateAction<number>>;
-  setUserId: React.Dispatch<React.SetStateAction<string>>
-  openLiveChat:()=>void
-  closeLiveChat:()=>void
+  setUserId: React.Dispatch<React.SetStateAction<string>>;
+  openLiveChat:()=>void;
+  closeLiveChat:()=>void;
+  handleCloseLiveChat:()=>void;
 };
 
 export const ChatContext = createContext<ChatContextType | null>(null);
@@ -77,7 +79,27 @@ setOpenChatBot(true)
 
   const closeLiveChat = ()=>{
     setOpenChatBot(false)
+    setViewIndex(1)
   }
+
+    const handleCloseLiveChat = () => {
+      Alert.alert(
+        'Close LiveChat',
+        'you are about to close the live chat window',
+        [
+          {
+            text: 'Stay',
+            onPress: () => console.log('Cancel Pressed'),
+            // style: 'default',
+          },
+          {
+            text: 'Close',
+            onPress: closeLiveChat,
+            // style: 'cancel',
+          },
+        ]
+      );
+    };
 
   
 
@@ -102,7 +124,8 @@ setOpenChatBot(true)
       setWidgetApps,
       setUserId,
       openLiveChat,
-      closeLiveChat
+      closeLiveChat,
+      handleCloseLiveChat
       
     }),
     [
@@ -123,7 +146,8 @@ setOpenChatBot(true)
       setSessionID,
       setUserHash,
       openLiveChat,
-      closeLiveChat
+      closeLiveChat,
+      handleCloseLiveChat
     ]
   );
 

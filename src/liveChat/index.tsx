@@ -12,7 +12,7 @@ import {
   useSettingsQuery,
   useWidgetAppsQuery,
 } from '../utils';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/config';
+// import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/config';
 import { getCache, KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
 import Heading from '../components/Heading';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';
@@ -20,9 +20,9 @@ import Chat from './chat';
 import { pusherInstance } from 'simpu-rn-livechat';
 
 const LiveChatContainer = (Props: LiveChatProps) => {
-  const { name, email, app_id, user_id, public_key, setOpenliveChat } = Props;
+  const { name, email, app_id, user_id, public_key } = Props;
 
-  const { userId,viewIndex, setOrgSettings, setApp_id, setPublic_key, setWidgetApps,setUserHash,setUserId } =
+  const { userId,viewIndex,handleCloseLiveChat,setOrgSettings, setApp_id, setPublic_key, setWidgetApps,setUserHash,setUserId } =
     useChatProvider();
   const { pusherInit } = usePusherWebsocket();
 
@@ -103,24 +103,7 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     }
   }, [data, user_id, public_key, handleSaveUserId]);
 
-  const handleCloseLiveChat = () => {
-    Alert.alert(
-      'Close LiveChat',
-      'you are about to close the live chat window',
-      [
-        {
-          text: 'Stay',
-          onPress: () => console.log('Cancel Pressed'),
-          // style: 'default',
-        },
-        {
-          text: 'Close',
-          onPress: () => setOpenliveChat((prev) => !prev),
-          // style: 'cancel',
-        },
-      ]
-    );
-  };
+
 
   useEffect(() => {
     (async () => {
@@ -147,8 +130,8 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     <View
       style={{
         // flex: 1,
-        height: SCREEN_HEIGHT,
-        width: SCREEN_WIDTH,
+        // height: SCREEN_HEIGHT,
+        // width: SCREEN_WIDTH,
         backgroundColor: theme.SimpuPaleWhite,
 
         //styling to place livechat above all views
@@ -156,9 +139,9 @@ const LiveChatContainer = (Props: LiveChatProps) => {
     top: 0,
     left: 0,
     right: 0,
-    // backgroundColor: "rgba(255, 0, 0, 0.8)",
+    bottom:0,
     // padding: 10,
-    alignItems: "center",
+    // alignItems: "center",
     zIndex: 9999, // Ensure it's always on top
     elevation: 9999, // For Android
         

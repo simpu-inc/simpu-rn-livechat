@@ -1,5 +1,4 @@
 import {
-  Alert,
   FlatList,
   Image,
   KeyboardAvoidingView,
@@ -44,7 +43,7 @@ import { pusherInstance } from 'simpu-rn-livechat';
 
 const Chat = () => {
   const queryClient = useQueryClient();
-  const { AppId, userHash, sessionID, setViewIndex, orgSettings,userId } =
+  const { AppId, userHash, sessionID, setViewIndex, orgSettings,userId ,handleCloseLiveChat} =
     useChatProvider();
 
   const { subscribeTochannels ,pusherInit} = usePusherWebsocket();
@@ -293,24 +292,7 @@ const Chat = () => {
     }
   };
 
-  const handleCloseLiveChat = () => {
-    Alert.alert(
-      'Close LiveChat',
-      'you are about to close the live chat window',
-      [
-        {
-          text: 'Stay',
-          onPress: () => console.log('Cancel Pressed'),
-          // style: 'default',
-        },
-        {
-          text: 'Close',
-          onPress: () => console.log('OK Pressed'),
-          // style: 'cancel',
-        },
-      ]
-    );
-  };
+
 
   const handleFileUploadCompleted = (file) => {
     console.log('==== on - UPLoaded Files=== ', JSON.stringify(file, null, 3));
