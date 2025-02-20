@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import groupBy from 'lodash/groupBy';
-import { format } from 'date-fns';
+import {format} from 'date-fns';
 import DocumentPicker from 'react-native-document-picker';
 import {
   fetchThreadMessages,
@@ -28,47 +28,52 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { acceptedFileTypes } from '../../@types/types';
+import {acceptedFileTypes} from '../../@types/types';
 import Attachment from '../../components/Attachment';
 import AgentsCard from '../../components/AgentsCard';
 import ChatInput from './ChatInput';
-import { fs, hp, SCREEN_HEIGHT, SCREEN_WIDTH, wp } from '../../utils/config';
-import { theme } from '../../utils/theme';
-import { useChatProvider } from '../../context';
+import {fs, hp, SCREEN_HEIGHT, SCREEN_WIDTH, wp} from '../../utils/config';
+import {theme} from '../../utils/theme';
+import {useChatProvider} from '../../context';
 import ChatItem from './chatItem';
-import { usePusherWebsocket } from '../../Hooks/pusherSocket';
+import {usePusherWebsocket} from '../../Hooks/pusherSocket';
 import apiClient from '../../Provider';
-import { Pusher } from '@pusher/pusher-websocket-react-native';
-import { pusherInstance } from 'simpu-rn-livechat';
+import {pusherInstance} from '../..';
 
 const Chat = () => {
   const queryClient = useQueryClient();
-  const { AppId, userHash, sessionID, setViewIndex, orgSettings,userId ,handleCloseLiveChat} =
-    useChatProvider();
+  const {
+    AppId,
+    userHash,
+    sessionID,
+    setViewIndex,
+    orgSettings,
+    userId,
+    handleCloseLiveChat,
+  } = useChatProvider();
 
-  const { subscribeTochannels ,pusherInit} = usePusherWebsocket();
+  const {subscribeTochannels, pusherInit} = usePusherWebsocket();
 
   const [message, setMessage] = useState('');
-
 
   // console.log("current session id",sessionID)
 
   const [attachements, setAttachements] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState();
 
-  const { mutate: mutateSendMessage } = useMutation({
-    mutationFn: (payload) => {
+  const {mutate: mutateSendMessage} = useMutation({
+    mutationFn: payload => {
       // console.log('===payload===', JSON.stringify(payload, null, 3));
       return sendMessage(payload, AppId, userHash);
     },
-    onMutate: async (data) => {
-      const { attachments, body } = data;
+    onMutate: async data => {
+      const {attachments, body} = data;
 
       // console.log("chat data mutation",JSON.stringify(data,null,3))
 
       const newMessage = generateNewMessage({
         attachments,
-        user_id:userId,
+        user_id: userId,
         body,
       });
 
@@ -87,9 +92,9 @@ const Chat = () => {
         sessionID,
       ]);
 
-      queryClient.setQueryData(['messages', sessionID], (old) => ({
+      queryClient.setQueryData(['messages', sessionID], old => ({
         ...old,
-        pages: old?.pages?.map((page) => {
+        pages: old?.pages?.map(page => {
           if (page.meta.page === 1) {
             return {
               ...page,
@@ -106,9 +111,9 @@ const Chat = () => {
 
       setMessage('');
 
-      return { previousMessages };
+      return {previousMessages};
     },
-    onError: (error) => {
+    onError: error => {
       // toast({
       //   position: "top",
       //   render: ({ onClose }) => (
@@ -123,9 +128,9 @@ const Chat = () => {
       //   ),
       // });
 
-      console.log("error from mutation",error)
+      console.log('error from mutation', error);
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       queryClient.invalidateQueries({
         queryKey: ['messages', data.session_id],
         exact: true,
@@ -138,16 +143,14 @@ const Chat = () => {
 
   // console.log('userHassh inside chat...', userHash);
 
-  const { data: session } = useSessionQuery(
+  const {data: session} = useSessionQuery(
     {
       app_id: AppId,
       session_id: sessionID,
-      signed_request:userHash
+      signed_request: userHash,
     },
-    { enabled: !!sessionID, initialData: orgSettings?.members }
+    {enabled: !!sessionID, initialData: orgSettings?.members},
   );
-
-
 
   const {
     data: threadMessages,
@@ -157,7 +160,7 @@ const Chat = () => {
     refetch: threadMessagesRefetch,
   } = useInfiniteQuery({
     queryKey: ['messages', sessionID],
-    queryFn: ({ pageParam = 1, }) => {
+    queryFn: ({pageParam = 1}) => {
       return apiClient.inbox.livechat.getConversationMessages(
         AppId,
         sessionID,
@@ -166,11 +169,9 @@ const Chat = () => {
         },
         {
           headers: {
-            Authorization: userHash
-              ? `ssr__${userHash}`
-              : undefined,
+            Authorization: userHash ? `ssr__${userHash}` : undefined,
           },
-        }
+        },
       );
     },
     // queryFn: ({ pageParam }) =>
@@ -181,7 +182,7 @@ const Chat = () => {
     //     user_hash: userHash,
     //   }),
     initialPageParam: 1,
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: lastPage => {
       // console.log(
       //   'nextPage from inifinite query',
       //   JSON.stringify(lastPage, null, 3)
@@ -196,10 +197,8 @@ const Chat = () => {
   const messages =
     threadMessages?.pages?.reduce(
       (acc, page) => [...acc, ...page.messages],
-      []
+      [],
     ) ?? [];
-
-
 
   // console.log('=====Thread message:===', JSON.stringify(threadMessages, null, 3));
 
@@ -254,7 +253,7 @@ const Chat = () => {
 
       // console.log('FILE====', JSON.stringify(file, null, 3));
 
-      setAttachements((prev) => [...prev, file]);
+      setAttachements(prev => [...prev, file]);
       // if (isFileTooLarge) {
       //   Toast.show({
       //     type: ToastTypes.WARNING,
@@ -292,12 +291,10 @@ const Chat = () => {
     }
   };
 
-
-
-  const handleFileUploadCompleted = (file) => {
+  const handleFileUploadCompleted = file => {
     console.log('==== on - UPLoaded Files=== ', JSON.stringify(file, null, 3));
 
-    setUploadedFiles((prevUploadedFiles) => {
+    setUploadedFiles(prevUploadedFiles => {
       if (!!prevUploadedFiles && !!prevUploadedFiles?.length) {
         return prevUploadedFiles.concat(file);
       }
@@ -311,11 +308,10 @@ const Chat = () => {
     //   prevUploadedFiles.filter((item, index) => item?.id !== id)
     // );
 
-    setAttachements((prevAttachments) =>
-      prevAttachments.filter((item, index) => item?.id !== id)
+    setAttachements(prevAttachments =>
+      prevAttachments.filter((item, index) => item?.id !== id),
     );
   };
-
 
   useEffect(() => {
     // console.log("pusher connection state ===",pusherInstance?.connectionState)
@@ -323,36 +319,46 @@ const Chat = () => {
     if (pusherInstance?.connectionState === 'CONNECTED') return;
 
     if (userId) {
-      pusherInit({ app_id: AppId, user_hash:userHash, user_id: userId ?? '' });
+      pusherInit({app_id: AppId, user_hash: userHash, user_id: userId ?? ''});
     }
-
-  }, [userId,userHash,AppId])
-  
+  }, [userId, userHash, AppId]);
 
   // console.log(
   //   '==== UPLoaded Files=== ',
   //   JSON.stringify(uploadedFiles, null, 3)
   // );
+  console.log('====Pusher connection=== ', pusherInstance.connectionState);
+
+
+  useEffect(() => {
+    (async () => {
+      if (pusherInstance.connectionState==='CONNECTED') {
+        const socketId = await pusherInstance.getSocketId();
+        console.log('socket ID ==>', socketId);
+        
+      }
+    })();
+
+    return () => {};
+  }, [pusherInstance]);
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <TouchableOpacity
-              style={{ flexDirection: 'row', alignItems: 'center' }}
-              onPress={() => setViewIndex(1)}
-            >
+              style={{flexDirection: 'row', alignItems: 'center'}}
+              onPress={() => setViewIndex(1)}>
               <Image
                 source={require('../../assets/backIcon.png')}
-                style={{ height: hp(18), width: hp(18) }}
+                style={{height: hp(18), width: hp(18)}}
               />
               <AgentsCard size="small" />
             </TouchableOpacity>
-            <View style={{ marginLeft: hp(15) }}>
+            <View style={{marginLeft: hp(15)}}>
               <Text style={styles.NameText}>{orgSettings?.name}</Text>
               <Text style={styles.responseTimeText}>
                 {orgSettings?.response_time
@@ -365,10 +371,9 @@ const Chat = () => {
           </View>
           <TouchableOpacity
             onPress={handleCloseLiveChat}
-            style={{ alignSelf: 'center', marginRight: wp(10) }}
-          >
+            style={{alignSelf: 'center', marginRight: wp(10)}}>
             <Image
-              style={{ height: hp(16), width: hp(16) }}
+              style={{height: hp(16), width: hp(16)}}
               source={require('../../assets/closeIcon.png')}
             />
           </TouchableOpacity>
@@ -389,9 +394,7 @@ const Chat = () => {
           }
           data={messages ?? []}
           keyExtractor={(_, i) => i.toString()}
-          renderItem={({ item, index }) => (
-            <ChatItem item={item} index={index} />
-          )}
+          renderItem={({item, index}) => <ChatItem item={item} index={index} />}
           ListEmptyComponent={() => (
             <View>
               <Text>Start a conversation</Text>

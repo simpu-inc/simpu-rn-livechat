@@ -3,10 +3,10 @@ import { APIClient } from "simpu-api-sdk";
 // import {  pusher, useWidget ,loadState} from "../utils";
 
 // const CONVERSATION_API_URL = "https://conversation.v1.simpu.co/chat";
-const CONVERSATION_API_URL = "https://conversation.v1.simpu.sh/chat";
+export const CONVERSATION_API_URL = "https://conversation.v1.simpu.sh/chat";
 
 // const AI_API_URL = "https://ai.simpu.co/";
-const AI_API_URL = "https://ai.simpu.sh/";
+export const AI_API_URL = "https://ai.simpu.sh/";
 
  const apiClient = new APIClient({
   graph: "",

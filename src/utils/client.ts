@@ -2,12 +2,8 @@
 // import { pusher } from "./pusher";
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { KEYS, getCache } from './cache';
+import { AI_API_URL, CONVERSATION_API_URL } from '../Provider';
 
-// const CONVERSATION_API_URL = "https://conversation.simpu.co/api/v1";
-const CONVERSATION_API_URL = 'https://conversation.simpu.sh/api/v1';
-
-// const AI_API_URL = "https://ai.simpu.co/";
-const AI_API_URL = 'https://ai.simpu.sh/';
 
 export const buildConversationUrl = (url: string) =>
   `${CONVERSATION_API_URL}/${url}`;

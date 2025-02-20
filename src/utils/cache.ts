@@ -50,3 +50,12 @@ export const clearCache = async (Key: string) => {
     // remove error
   }
 };
+
+
+export const resetCache = async () => {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {
+    // remove error
+  }
+};

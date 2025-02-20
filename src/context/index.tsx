@@ -11,11 +11,11 @@ import type { OrgSettingType } from '../@types/types';
 import { getCompanyConfig } from '../utils/cache';
 import type { LivechatWidgetApp } from 'simpu-api-sdk';
 import { Alert } from 'react-native';
-
+import { pusherInstance } from 'simpu-rn-livechat';
 
 type ChatContextType = {
   AppId: string;
-  apps: LivechatWidgetApp[]
+  apps: LivechatWidgetApp[];
   publicKey: string;
   sessionID: string;
   orgSettings: OrgSettingType;
@@ -23,7 +23,7 @@ type ChatContextType = {
   viewIndex: number;
   userHash: string;
   userId: string;
-  setWidgetApps: React.Dispatch<React.SetStateAction<LivechatWidgetApp[]>>
+  setWidgetApps: React.Dispatch<React.SetStateAction<LivechatWidgetApp[]>>;
   setUserHash: React.Dispatch<React.SetStateAction<string>>;
   setApp_id: React.Dispatch<React.SetStateAction<string>>;
   setSessionID: React.Dispatch<React.SetStateAction<string>>;
@@ -32,9 +32,9 @@ type ChatContextType = {
   setOpenChatBot: React.Dispatch<React.SetStateAction<boolean>>;
   setViewIndex: React.Dispatch<React.SetStateAction<number>>;
   setUserId: React.Dispatch<React.SetStateAction<string>>;
-  openLiveChat:()=>void;
-  closeLiveChat:()=>void;
-  handleCloseLiveChat:()=>void;
+  openLiveChat: () => void;
+  closeLiveChat: () => void;
+  handleCloseLiveChat: () => void;
 };
 
 export const ChatContext = createContext<ChatContextType | null>(null);
@@ -42,7 +42,8 @@ export const ChatContext = createContext<ChatContextType | null>(null);
 export const useChatProvider = () => {
   const context = useContext(ChatContext) as ChatContextType;
   // console.log('context', viewIndex, setOpenChatBot);
-  if (!context) throw new Error('you need to use a chat provider to use this context');
+  if (!context)
+    throw new Error('you need to use a chat provider to use this context');
   return context;
 };
 
@@ -55,7 +56,9 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [openChatBot, setOpenChatBot] = useState(false);
   const [viewIndex, setViewIndex] = useState(1);
   const [userHash, setUserHash] = useState('');
-  const [userId, setUserId] = useState('')
+  const [userId, setUserId] = useState('');
+
+
 
   const getOrgSettingsLocalStorage = async () => {
     const config = await getCompanyConfig();
@@ -70,38 +73,43 @@ const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
     // }
   }, []);
 
-
-  const openLiveChat  = () =>{
-setOpenChatBot(true)
+  const openLiveChat = () => {
+    setOpenChatBot(true);
   };
 
-
-
-  const closeLiveChat = ()=>{
-    setOpenChatBot(false)
-    setViewIndex(1)
-  }
-
-    const handleCloseLiveChat = () => {
-      Alert.alert(
-        'Close LiveChat',
-        'you are about to close the live chat window',
-        [
-          {
-            text: 'Stay',
-            onPress: () => console.log('Cancel Pressed'),
-            // style: 'default',
-          },
-          {
-            text: 'Close',
-            onPress: closeLiveChat,
-            // style: 'cancel',
-          },
-        ]
-      );
-    };
-
   
+  
+  const closePusherConnction = async()=>{
+    if (pusherInstance?.connectionState==='CONNECTED') {
+      await pusherInstance.disconnect();
+      
+    }
+  };
+
+  const closeLiveChat = async () => {
+    setOpenChatBot(false);
+    setViewIndex(1);
+    await closePusherConnction();
+  };
+
+  const handleCloseLiveChat = () => {
+    Alert.alert(
+      'Close LiveChat',
+      'you are about to close the live chat window',
+      [
+        {
+          text: 'Stay',
+          onPress: () => console.log('Cancel Pressed'),
+          // style: 'default',
+        },
+        {
+          text: 'Close',
+          onPress: closeLiveChat,
+          // style: 'cancel',
+        },
+      ]
+    );
+  };
 
   const values = useMemo(
     () => ({
@@ -125,8 +133,7 @@ setOpenChatBot(true)
       setUserId,
       openLiveChat,
       closeLiveChat,
-      handleCloseLiveChat
-      
+      handleCloseLiveChat,
     }),
     [
       AppId,
@@ -147,7 +154,7 @@ setOpenChatBot(true)
       setUserHash,
       openLiveChat,
       closeLiveChat,
-      handleCloseLiveChat
+      handleCloseLiveChat,
     ]
   );
 

@@ -191,7 +191,7 @@ const Start = () => {
             isAvailable ? (
               <Text style={styles.openHrsText}>
                 {response_time
-                  ? `The team typically replies ${responseTimeLabelRegister[response_time]}`
+                  ? `The team typically replies ${responseTimeLabelRegister?.[response_time]}`
                   : "We'll reply as soon as we can"}
               </Text>
             ) : (

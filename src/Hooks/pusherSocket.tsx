@@ -4,33 +4,30 @@ import {
   PusherChannel,
   PusherEvent,
 } from '@pusher/pusher-websocket-react-native';
-import { buildConversationUrl,  getWebsocketChannel } from '../utils';
+import { buildConversationUrl, getWebsocketChannel } from '../utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { getCache, KEYS } from '../utils/cache';
 import { useChatProvider } from '../context';
 import type { UserTyingType } from '../@types/types';
 import { Platform } from 'react-native';
-import { pusherInstance } from 'simpu-rn-livechat';
 import apiClient from '../Provider';
+import { pusherInstance } from '..';
 
 const PUSHER_APP_CLUSTER = 'eu';
 const PUSHER_APP_KEY_DEMO = '37a83ec66a78f2436be5';
-
 
 const EventType = {
   MESSAGE_NEW: 'message_new',
   USER_TYPING: 'user_typing',
 };
 
-
 const play_notification_sound = '';
 const profile = '';
 
-
 export const usePusherWebsocket = () => {
   const queryClient = useQueryClient();
-  const { viewIndex, AppId,userHash } = useChatProvider();
+  const { viewIndex, AppId, userHash } = useChatProvider();
 
   let clearTypingTimerId: ReturnType<typeof setTimeout>;
 
@@ -44,11 +41,14 @@ export const usePusherWebsocket = () => {
   }
 
   function onError(message: string, code: Number, error: any) {
+    console.error(error);
     console.log(`onError: ${message} code: ${code} exception: ${error}`);
   }
 
   async function onEvent(event: PusherEvent) {
     const data = await JSON.parse(event?.data);
+    console.log('listening to event', event);
+
     console.log(
       'listening to event from pusher init event',
       JSON.stringify(data, null, 2)
@@ -66,9 +66,21 @@ export const usePusherWebsocket = () => {
       )}`
     );
 
-    //@ts-ignore
-    const channel: PusherChannel = pusher.getChannel(channelName);
-    const me = channel.me;
+    const channel = pusherInstance.getChannel(channelName) as PusherChannel;
+    const me = channel?.me;
+  }
+
+  function onSubscriptionError(channelName: string, message: string, e: any) {
+    console.log('subscription error', e);
+    console.log(
+      ` ${
+        Platform.OS
+      } onSubscriptionSucceeded: ${channelName} data: ${JSON.stringify(
+        message,
+        null,
+        2
+      )}`
+    );
   }
 
   const pusherInit = async ({
@@ -84,27 +96,26 @@ export const usePusherWebsocket = () => {
 
     if (!(app_id && user_hash)) return;
 
-    // console.log('COPY APP_ID: ====' + app_id);
-    // console.log('COPY USER_HASH: ====' + user_hash);
+    console.log('COPY APP_ID: ====' + app_id);
+    console.log('COPY USER_HASH: ====' + user_hash);
 
     await pusherInstance.init({
       //     apiKey: ENVIROMENT ? PUSHER_APP_KEY_DEMO : PUSHER_APP_KEY_PRODUCTION,
       apiKey: PUSHER_APP_KEY_DEMO,
       cluster: PUSHER_APP_CLUSTER,
       authEndpoint: buildConversationUrl(
-        `/accounts/${app_id}/websocket/mobile?token=${user_hash}`
-      // authEndpoint: buildConversationUrl(
-      //   `channels/livechat/${app_id}/websocket2?token=${user_hash}`
+        `accounts/${app_id}/websocket/mobile?token=ssr__${user_hash}`
       ),
 
       onConnectionStateChange,
       onError,
       onEvent,
       onSubscriptionSucceeded,
+      onSubscriptionError,
     });
 
     await pusherInstance.connect();
-    // await subscribeTochannels();
+    await subscribeTochannels();
   };
 
   // console.log(
@@ -168,41 +179,37 @@ export const usePusherWebsocket = () => {
     channelName: string,
     eventHandler: (event: PusherEvent) => void
   ) => {
+    // console.log("pusherInstamnce  ==>",pusherInstance)
 
     const channel1 = await pusherInstance?.subscribe({
       channelName,
       onEvent: eventHandler,
     });
-
-
-
-    // console.log("subscription response ===>",channel1)
   };
 
   //call all subscribe  channels
   const subscribeTochannels = async () => {
     // const user_hash = await getCache(KEYS.SIGNED_REQUEST);
 
-
-
-    const [privateChannelName, presenceChannelName] = (await apiClient.inbox.livechat.getWebsocketChannel(AppId,{
-      headers:{
-        Authorization:userHash ? `ssr__${userHash}` : undefined
-      }
-    }));
-  
-
-
-    const socketId = await pusherInstance?.getSocketId()
-
-    // console.log("full pusher instance socket~ID",socketId)
-    // console.log('private channel===>', privateChannelName);
-    // console.log('presence channel===>', presenceChannelName);
-
-    const user_id = await getCache(KEYS.USER_ID);
-    const privateChanel = `private-${user_id}`;
+    console.log('Subscribe to channels got called');
 
     try {
+      const [privateChannelName, presenceChannelName] =
+        (await apiClient.inbox.livechat.getWebsocketChannel(AppId, {
+          headers: {
+            Authorization: userHash ? `ssr__${userHash}` : undefined,
+          },
+        }));
+
+      // const socketId = await pusherInstance?.getSocketId()
+
+      // console.log("full pusher instance socket~ID",socketId)
+      console.log('private channel===>', privateChannelName);
+      console.log('presence channel===>', presenceChannelName);
+
+      const user_id = await getCache(KEYS.USER_ID);
+      const privateChanel = `private-${user_id}`;
+
       await subscribeHandler(privateChanel, EventHandler);
       await subscribeHandler(privateChannelName, EventHandler);
       await subscribeHandler(presenceChannelName, EventHandler);
@@ -215,7 +222,6 @@ export const usePusherWebsocket = () => {
     if (pusherInstance.connectionState !== 'CONNECTED') return;
     await pusherInstance.disconnect();
   };
-
 
   //  console.log("full pusher instance",pusherInstance)
   return {
