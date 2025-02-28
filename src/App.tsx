@@ -27,9 +27,9 @@ const App = forwardRef((props: LiveChatProps,ref) => {
       
     }
   return (
-    // <ChatProvider>
+
       <LiveChatContainer {...props} />
-    // </ChatProvider>
+
   );
 });
 

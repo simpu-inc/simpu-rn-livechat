@@ -22,9 +22,8 @@ export type LiveChatProps = {
   public_key: string;
   user_id?: string;
   image_url?: string;
-  openLiveChat?: (params: LiveChatOpenParams) => void;
+  openLiveChat?: (params?: LiveChatOpenParams) => void;
   closeLiveChat?: (params: LiveCloseParams) => void;
-  // setOpenliveChat: React.Dispatch<SetStateAction<boolean>>;
 };
 export type LiveChatActions = {
   openLiveChat?: () => void;
@@ -35,8 +34,8 @@ export type LiveChatOpenParams = LiveChatProps & LiveChatActions;
 export type LiveCloseParams = void;
 
 export type ChatActionRef = {
-  openLiveChat: (params: LiveChatOpenParams) => void;
-  closeLiveChat: (params: LiveCloseParams) => void;
+  openLiveChat: (params?: LiveChatOpenParams) => void;
+  closeLiveChat: (params?: LiveCloseParams) => void;
 };
 export type welcomeType = {
   greeting: string;

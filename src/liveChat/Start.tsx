@@ -6,6 +6,7 @@ import SocialCard from '../components/SocialCard';
 import { useChatProvider } from '../context';
 import {
   formatDate,
+  formatMessageDateTime,
   responseTimeLabelRegister,
   trimText,
   useActiveSessionQuery,
@@ -19,7 +20,7 @@ import { FlatList } from 'react-native';
 import Avatar from '../components/Avatar';
 import type { conversationType } from '../@types/types';
 import { TouchableOpacity } from 'react-native';
-import { Pressable } from 'react-native';
+
 
 const Start = () => {
   const {
@@ -53,6 +54,8 @@ const Start = () => {
 
   // console.log("activeSession",JSON.stringify(activeSession,null,3))
 
+
+  //@ts-ignore
   const { data } = useInfiniteQuery({
     queryKey: ['conversations'],
     queryFn: fetchConversations,
@@ -118,21 +121,8 @@ const Start = () => {
       backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalView: {
-      height: SCREEN_HEIGHT * 0.5,
-      width: SCREEN_HEIGHT * 0.4,
-      margin: hp(15),
-      backgroundColor: 'white',
-      borderRadius: 20,
-      paddingTop: hp(20),
-      alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
+      height: hp(300),
+      maxHeight: hp(400),
     },
   });
 
@@ -154,7 +144,7 @@ const Start = () => {
 
   const handleSendMessage = () => {
     if (userId) {
-      if (!!activeSession.session) {
+      if (!!activeSession?.session) {
         setSessionID(activeSession?.session?.session_id);
 
         setViewIndex(3);
@@ -209,48 +199,56 @@ const Start = () => {
         <LongBtn btnTitle="Send us a message" handlePress={handleSendMessage} />
       </View>
       <View style={styles.bottomContainer}>
-        {userId && !!conversations?.length && (
-          <View style={{ marginVertical: hp(6) }}>
-            <LongBtn
-              btnTitle="Continue your conversation"
-              handlePress={openConversationBox}
-            />
-          </View>
+        {!showConversations && (
+          <>
+            {userId && !!conversations?.length && (
+              <View style={{ marginVertical: hp(6) }}>
+                <LongBtn
+                  btnTitle="Continue your conversation"
+                  handlePress={openConversationBox}
+                />
+              </View>
+            )}
+          </>
         )}
 
-        {apps?.length > 0 && (
-          <View>
-            <Text
+        {showConversations && (
+          <View style={styles.modalView}>
+            <View
               style={{
-                paddingHorizontal: wp(10),
-                color: theme.SimpuBlack,
-                fontSize: fs(16),
-                fontWeight: '600',
+                marginVertical: hp(8),
+                alignItems: 'center',
+                flexDirection: 'row',
               }}
             >
-              Contact us on our socials
-            </Text>
-            <SocialCard />
-          </View>
-        )}
-      </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showConversations}
-        onRequestClose={() => {
-          setshowConversations(!showConversations);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={{ marginBottom: hp(10) }}>
-              <Text
-                style={{ color: 'black', fontSize: fs(18), fontWeight: '600' }}
+              <TouchableOpacity
+                onPress={() => setshowConversations(false)}
+                style={{
+                  height: hp(30),
+                  aspectRatio: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
               >
-                Your Conversations
-              </Text>
+                <Image
+                  source={require('../assets/arrowIcon.png')}
+                  style={{ height: hp(24), width: hp(24), padding: hp(10) }}
+                />
+              </TouchableOpacity>
+
+              <View style={{ alignSelf: 'center', flex: 1 }}>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: fs(16),
+                    fontWeight: '600',
+                    textAlign: 'center',
+                    marginRight: hp(20),
+                  }}
+                >
+                  Your Conversations
+                </Text>
+              </View>
             </View>
             <FlatList
               data={conversations ?? []}
@@ -264,28 +262,29 @@ const Start = () => {
                 />
               )}
             />
-            <Pressable
-              onPress={() => setshowConversations(false)}
-              style={{
-                backgroundColor:
-                  orgSettings?.style?.background_color ?? theme.SimpuBlue,
-
-                height: hp(40),
-                marginBottom: hp(20),
-                borderRadius: hp(10),
-                padding: hp(7),
-                width: '70%',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Text style={{ color: theme.SimpuWhite, fontWeight: '600' }}>
-                Close
-              </Text>
-            </Pressable>
           </View>
-        </View>
-      </Modal>
+        )}
+
+        {!showConversations && (
+          <>
+            {apps?.length > 0 && (
+              <View>
+                <Text
+                  style={{
+                    paddingHorizontal: wp(10),
+                    color: theme.SimpuBlack,
+                    fontSize: fs(16),
+                    fontWeight: '600',
+                  }}
+                >
+                  Contact us on our socials
+                </Text>
+                <SocialCard />
+              </View>
+            )}
+          </>
+        )}
+      </View>
     </View>
   );
 };
@@ -318,20 +317,27 @@ const ConversationItem = ({
           imgUrl={item.last_message?.author?.image_url}
           size="small"
         />
-        <View style={{ marginLeft: hp(20), width: '80%' }}>
+        <View style={{ marginLeft: hp(20), width: '85%'}}>
           <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
           >
             <Text style={{ color: theme.SimpuBlack }}>
-              {trimText(item.last_message?.author?.name,28)}
+              {trimText(item.last_message?.author?.name, 25)}
             </Text>
-            <Text style={{ color: theme.SimpuDarkGray }}>
-              {formatDate(new Date(item.last_message?.created_datetime))}
+            <Text style={{ color: theme.SimpuDarkGray, fontSize: fs(12) }}>
+              {new Date(
+                item?.last_message?.created_datetime
+              )?.toLocaleDateString()}
             </Text>
           </View>
           <View>
             <Text style={{ color: theme.SimpuDarkGray }}>
-              {item.last_message?.entity.content?.body}
+              {trimText(item.last_message?.entity.content?.body, 30)}
             </Text>
           </View>
         </View>

@@ -39,6 +39,7 @@ import ChatItem from './chatItem';
 import {usePusherWebsocket} from '../../Hooks/pusherSocket';
 import apiClient from '../../Provider';
 import {pusherInstance} from '../..';
+import MoreMessage from '../../components/MoreMessage';
 
 const Chat = () => {
   const queryClient = useQueryClient();
@@ -56,10 +57,13 @@ const Chat = () => {
 
   const [message, setMessage] = useState('');
 
+  let clearTypingTimerId: ReturnType<typeof setTimeout>;
+
   // console.log("current session id",sessionID)
 
   const [attachements, setAttachements] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState();
+  const [showOlderMessageBox, setshowOlderMessageBox] = useState(false);
 
   const {mutate: mutateSendMessage} = useMutation({
     mutationFn: payload => {
@@ -141,7 +145,7 @@ const Chat = () => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  // console.log('userHassh inside chat...', userHash);
+
 
   const {data: session} = useSessionQuery(
     {
@@ -342,6 +346,16 @@ const Chat = () => {
     return () => {};
   }, [pusherInstance]);
 
+  function fetchNextPageHandler() {
+    if (!threadMessagesHasNextPage) return;
+    setshowOlderMessageBox(true);
+    threadMessagesFetchNextPage();
+    clearTypingTimerId = setTimeout(() => {
+      setshowOlderMessageBox(false);
+    }, 3000);
+  }
+
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -386,13 +400,15 @@ const Chat = () => {
             backgroundColor: theme.SimpuWhite,
             paddingHorizontal: hp(10),
           }}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={threadMessagesRefetch}
-            />
-          }
+          // refreshControl={
+          //   <RefreshControl
+          //     refreshing={refreshing}
+          //     onRefresh={threadMessagesRefetch}
+          //   />
+          // }
           data={messages ?? []}
+          onEndReached={fetchNextPageHandler}
+          onEndReachedThreshold={0.7}
           keyExtractor={(_, i) => i.toString()}
           renderItem={({item, index}) => <ChatItem item={item} index={index} />}
           ListEmptyComponent={() => (
@@ -413,6 +429,7 @@ const Chat = () => {
           />
         </View>
       </View>
+      {showOlderMessageBox && <MoreMessage position="top" />}
     </KeyboardAvoidingView>
   );
 };

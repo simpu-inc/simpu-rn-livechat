@@ -19,6 +19,8 @@ const PUSHER_APP_KEY_DEMO = '37a83ec66a78f2436be5';
 
 const EventType = {
   MESSAGE_NEW: 'message_new',
+  MESSAGE_RETRY: 'message_retry',
+  MESSAGE_UPDATE: 'message_update',
   USER_TYPING: 'user_typing',
 };
 
@@ -126,21 +128,25 @@ export const usePusherWebsocket = () => {
   //events bindings
   const handleMessageEvent = useCallback(
     async (Event: PusherEvent) => {
-      const { eventName, data, channelName } = Event;
+      const { data} = Event;
       const eventData = await JSON.parse(data);
-      const { author_id, thread_id } = eventData?.messages[0];
+      const  thread_ids = eventData?.thread_ids;
+      const author_id = eventData?.author_id;
+    
 
-      // await Promise.all(
-      //   ['filters-unread-count', ['conversations', thread_id], 'threads'].map(
-      //     (filter) => queryClient.invalidateQueries(filter)
-      //   )
-      // ).finally(() => {
-      //   if (author_id !== profile?.id) {
-      //     play_notification_sound &&
-      //       AppState.currentState === 'active' &&
-      //       notificicationSound?.play();
-      //   }
-      // });
+      const messagesQueryKey = thread_ids.map((t:any) => ['conversations', t]);
+
+      await Promise.all(
+        ['messages','filters-unread-count', 'threads',...messagesQueryKey].map(
+          filter => queryClient.invalidateQueries({queryKey:[filter]}),
+        ),
+      ).finally(() => {
+        // if (author_id !== profile?.id) {
+        //   play_notification_sound &&
+        //     AppState.currentState === 'active' &&
+        //     notificicationSound?.play();
+        // }
+      });
     },
     [play_notification_sound, pusherInstance, profile]
   );
@@ -159,7 +165,7 @@ export const usePusherWebsocket = () => {
   const EventHandler = (event: PusherEvent) => {
     const eventName = event?.eventName;
 
-    // console.log('Event name from event handler===', eventName);
+    console.log('Event name from event handler===', eventName);
 
     switch (eventName) {
       case EventType.MESSAGE_NEW:
@@ -186,6 +192,7 @@ export const usePusherWebsocket = () => {
       onEvent: eventHandler,
     });
   };
+
 
   //call all subscribe  channels
   const subscribeTochannels = async () => {

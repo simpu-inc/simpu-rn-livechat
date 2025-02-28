@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import SimpuLiveChat from 'simpu-rn-livechat';
 
@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {/* {!openLiveChat && ( */}
+    
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
@@ -34,7 +34,6 @@ export default function App() {
             </Text>
           </View>
           <TouchableOpacity
-            // onPress={() => setOpenliveChat(!openLiveChat)}
             onPress={() => SimpuLiveChat.open()}
             style={{
               backgroundColor: '#4166F5',
@@ -50,18 +49,13 @@ export default function App() {
             </Text>
           </TouchableOpacity>
         </View>
-      {/* )} */}
-      {/* {openLiveChat && ( */}
+
+{/* add live chat componet */}
         <SimpuLiveChat
-          // app_id={'f2f37798'}
-          // public_key={'spk__FdGQKmc3jsHc1ndqdyYsODZWyuQGF2hJVtLuQPxBpQKRKY0a2b'}
           app_id={"54edf912"}
           public_key={"spk__AWecxUYSEhk7AyWIUpDhRY0c2JVD8saYTqlfZAqvi4Fh3xpQZH"}
-          // setOpenliveChat={setOpenliveChat}
-          // openLiveChat={openLiveChat}   
-          // closeLiveChat={closeLiveChat}
         />
-      {/* )} */}
+ 
     </View>
   );
 }
