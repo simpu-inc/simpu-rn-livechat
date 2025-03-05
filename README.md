@@ -50,13 +50,16 @@ const App = () => {
   return (
     <View>
       ... // place component anywhere around your App.js or App.tsx
-      <SimpuLiveChat />
+      <SimpuLiveChat 
+          app_id={"app id"}
+          public_key={"publik key"}
+      />
     </View>
   );
 };
 ```
 
-## Props
+ ## Props
 
 The complete set of **options** is described below:
 
@@ -68,7 +71,9 @@ The complete set of **options** is described below:
 | `email`      | email of the logged in user                                          | `string`             | `''`          |
 | `phone`      | email of the logged in user                                          | `string`             | `''`          |
 | `user_id`    | a unique id of the logged in user                                    | `string` or `number` | `""`          |
-| `OpenChat`   | Open live chat                                                       | `Function`           | `()=>void`    |
+
+
+## Methods 
 
 <!-- ## Contributing
 
