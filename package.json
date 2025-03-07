@@ -1,6 +1,6 @@
 {
   "name": "@simpu/simpu-rn-livechat",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "simpu react-native livechat sdk",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -54,7 +54,7 @@
   },
   "homepage": "https://github.com/simpu-inc/simpu-rn-livechat#readme",
   "publishConfig": {
-    "access":"public",
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
