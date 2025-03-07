@@ -1,8 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useChatProvider } from '../context';
-import { theme } from '../utils/theme';
 import { fs, hp } from '../utils/config';
+import { theme } from '../utils/theme';
 
 const LongBtn = ({ handlePress ,btnTitle}: { btnTitle:string;handlePress: () => void }) => {
   const { orgSettings } = useChatProvider();

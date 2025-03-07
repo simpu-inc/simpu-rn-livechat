@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
 import { fs, hp, SCREEN_WIDTH } from '../../utils/config';
 import { theme } from '../../utils/theme';
@@ -6,16 +6,28 @@ import { useChatProvider } from '../../context';
 import { format } from 'date-fns';
 import type { messageType } from '../../@types/types';
 import File from './File';
+import TimeInterval from '../../components/TimeInterval';
 
-const ChatItem = ({ item, index }: { item: messageType; index: number }) => {
-  // console.log('itemsss', JSON.stringify(item, null, 2));
-  const { AppId, userHash, sessionID, orgSettings } = useChatProvider();
+const ChatItem = ({
+  item,
+  index,
+}: {
+  item: messageType | { type: string; marginalTime: Date };
+  index: number;
+}) => {
+  const { orgSettings } = useChatProvider();
+
+  
+  if (item?.type === 'time/interval') {
+    return <TimeInterval {...item} />;
+  }
 
   const { entity } = item;
 
   if (entity?.attachments?.length > 0) {
     <File files={entity?.attachments} />;
   }
+
 
   return (
     <View
@@ -53,7 +65,7 @@ const ChatItem = ({ item, index }: { item: messageType; index: number }) => {
             alignSelf: 'flex-end',
           }}
         >
-          {format(new Date(item?.created_datetime) ?? new Date(), 'p')}
+          {format(new Date(item?.created_datetime) ?? new Date(), 'paa')}
         </Text>
       </View>
       {item?.by_account && (
@@ -64,7 +76,7 @@ const ChatItem = ({ item, index }: { item: messageType; index: number }) => {
             fontSize: fs(12),
           }}
         >
-          Agent: {item?.author?.name ?? item?.author?.Platform_name}
+          Agent: {item?.author?.name ?? item?.author?.platform_name}
         </Text>
       )}
     </View>

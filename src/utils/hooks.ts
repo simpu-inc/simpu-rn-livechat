@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { getUnreadMessageCount, getWidgetApps, loadState, useWidget } from '.';
 // import { saveState } from "./localstorage";

@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import ChatProvider, { useChatProvider } from './context';
+import  { useChatProvider } from './context';
 import LiveChatContainer from './liveChat';
 import type { LiveChatProps } from './@types/types';
 

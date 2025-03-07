@@ -1,6 +1,4 @@
 import React, {
-  ReactNode,
-  FC,
   createContext,
   useContext,
   useState,
@@ -11,14 +9,14 @@ import type { OrgSettingType } from '../@types/types';
 import { getCompanyConfig } from '../utils/cache';
 import type { LivechatWidgetApp } from 'simpu-api-sdk';
 import { Alert } from 'react-native';
-import { pusherInstance } from 'simpu-rn-livechat';
+import { pusherInstance } from '@simpu/simpu-rn-livechat';
 
 type ChatContextType = {
   AppId: string;
   apps: LivechatWidgetApp[];
   publicKey: string;
   sessionID: string;
-  orgSettings: OrgSettingType;
+  orgSettings: OrgSettingType | null;
   openChatBot: boolean;
   viewIndex: number;
   userHash: string;
@@ -47,7 +45,7 @@ export const useChatProvider = () => {
   return context;
 };
 
-const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
+const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [orgSettings, setOrgSettings] = useState<OrgSettingType | null>(null);
   const [AppId, setApp_id] = useState('');
   const [apps, setWidgetApps] = useState<LivechatWidgetApp[]>([]);

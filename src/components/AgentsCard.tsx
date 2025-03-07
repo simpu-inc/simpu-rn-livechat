@@ -43,10 +43,10 @@ const AgentsCard = ({ size }: AgentsCardProps) => {
           />
         );
       })}
-      {orgSettings?.members?.length > 5 && (
+      {orgSettings?.members?.length! > 5 && (
         <View style={styles.extraContainer}>
           <Text style={styles.extraText}>
-            +{orgSettings?.members?.length - 5}
+            +{orgSettings?.members?.length! - 5}
           </Text>
         </View>
       )}

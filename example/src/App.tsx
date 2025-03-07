@@ -1,19 +1,9 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import SimpuLiveChat from 'simpu-rn-livechat';
+import SimpuLiveChat from '@simpu/simpu-rn-livechat';
 
 export default function App() {
-
-
-  /*
-  app_id: "e3e8ae1e",
-  public_key: "spk__tTecSnzr7KAZtpaizeNmKxflgdmCF4JnPVoOMxKSGYiStSvTVA",
-*/
-
-  // app_id: "e3e8ae1e",
-  //       public_key: "spk__T4sfafLijwz09Po1ivc7g8NCGJBn67zclxG6wGINRn2LnnYCsS"
-
 
 
 

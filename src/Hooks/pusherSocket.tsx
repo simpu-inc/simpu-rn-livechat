@@ -1,18 +1,16 @@
 import {
-  Pusher,
-  PusherMember,
   PusherChannel,
-  PusherEvent,
+  PusherEvent
 } from '@pusher/pusher-websocket-react-native';
-import { buildConversationUrl, getWebsocketChannel } from '../utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { getCache, KEYS } from '../utils/cache';
-import { useChatProvider } from '../context';
-import type { UserTyingType } from '../@types/types';
 import { Platform } from 'react-native';
-import apiClient from '../Provider';
 import { pusherInstance } from '..';
+import type { UserTyingType } from '../@types/types';
+import { useChatProvider } from '../context';
+import apiClient from '../Provider';
+import { buildConversationUrl } from '../utils';
+import { getCache, KEYS } from '../utils/cache';
 
 const PUSHER_APP_CLUSTER = 'eu';
 const PUSHER_APP_KEY_DEMO = '37a83ec66a78f2436be5';
@@ -29,7 +27,7 @@ const profile = '';
 
 export const usePusherWebsocket = () => {
   const queryClient = useQueryClient();
-  const { viewIndex, AppId, userHash } = useChatProvider();
+  const {  AppId, userHash } = useChatProvider();
 
   let clearTypingTimerId: ReturnType<typeof setTimeout>;
 
@@ -69,7 +67,7 @@ export const usePusherWebsocket = () => {
     );
 
     const channel = pusherInstance.getChannel(channelName) as PusherChannel;
-    const me = channel?.me;
+    // const me = channel?.me;
   }
 
   function onSubscriptionError(channelName: string, message: string, e: any) {
@@ -88,7 +86,7 @@ export const usePusherWebsocket = () => {
   const pusherInit = async ({
     app_id,
     user_hash,
-    user_id,
+    // user_id,
   }: {
     app_id: string;
     user_hash: string;
@@ -120,10 +118,7 @@ export const usePusherWebsocket = () => {
     await subscribeTochannels();
   };
 
-  // console.log(
-  //   '------ Notification sound outSide callback is enabled !!!!',
-  //   play_notification_sound,
-  // );
+
 
   //events bindings
   const handleMessageEvent = useCallback(
@@ -131,7 +126,7 @@ export const usePusherWebsocket = () => {
       const { data} = Event;
       const eventData = await JSON.parse(data);
       const  thread_ids = eventData?.thread_ids;
-      const author_id = eventData?.author_id;
+      // const author_id = eventData?.author_id;
     
 
       const messagesQueryKey = thread_ids.map((t:any) => ['conversations', t]);
@@ -151,29 +146,26 @@ export const usePusherWebsocket = () => {
     [play_notification_sound, pusherInstance, profile]
   );
 
-  const handleUserTypingEvent = async (Event: PusherEvent) => {
-    const { data, eventName } = Event;
-    const eventData: UserTyingType = await JSON.parse(data);
-    // console.log('Typing event', JSON.stringify(eventData, null, 2));
-    // dispatch(showTyper(eventData));
-    clearTimeout(clearTypingTimerId);
-    clearTypingTimerId = setTimeout(() => {
-      // dispatch(removeTyper());
-    }, 1500);
-  };
+  // const handleUserTypingEvent = async (Event: PusherEvent) => {
+  //   const { data, eventName } = Event;
+  //   const eventData: UserTyingType = await JSON.parse(data);
+  //   // console.log('Typing event', JSON.stringify(eventData, null, 2));
+  //   // dispatch(showTyper(eventData));
+  //   // clearTimeout(clearTypingTimerId);
+  //   // clearTypingTimerId = setTimeout(() => {
+  //   //   // dispatch(removeTyper());
+  //   // }, 1500);
+  // };
 
   const EventHandler = (event: PusherEvent) => {
     const eventName = event?.eventName;
-
-    console.log('Event name from event handler===', eventName);
-
     switch (eventName) {
       case EventType.MESSAGE_NEW:
         handleMessageEvent(event);
         break;
-      case EventType.USER_TYPING:
-        handleUserTypingEvent(event);
-        break;
+      // case EventType.USER_TYPING:
+      //   handleUserTypingEvent(event);
+      //   break;
       default:
         break;
     }
@@ -198,8 +190,6 @@ export const usePusherWebsocket = () => {
   const subscribeTochannels = async () => {
     // const user_hash = await getCache(KEYS.SIGNED_REQUEST);
 
-    console.log('Subscribe to channels got called');
-
     try {
       const [privateChannelName, presenceChannelName] =
         (await apiClient.inbox.livechat.getWebsocketChannel(AppId, {
@@ -211,8 +201,8 @@ export const usePusherWebsocket = () => {
       // const socketId = await pusherInstance?.getSocketId()
 
       // console.log("full pusher instance socket~ID",socketId)
-      console.log('private channel===>', privateChannelName);
-      console.log('presence channel===>', presenceChannelName);
+      // console.log('private channel===>', privateChannelName);
+      // console.log('presence channel===>', presenceChannelName);
 
       const user_id = await getCache(KEYS.USER_ID);
       const privateChanel = `private-${user_id}`;

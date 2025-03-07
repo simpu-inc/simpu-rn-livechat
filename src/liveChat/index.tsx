@@ -1,4 +1,4 @@
-import { View, Alert } from 'react-native';
+import { View } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
 import Start from './Start';
 import { theme } from '../utils/theme';
@@ -12,12 +12,11 @@ import {
   useSettingsQuery,
   useWidgetAppsQuery,
 } from '../utils';
-// import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../utils/config';
 import { getCache, KEYS, storeCache, storeCompanyConfig } from '../utils/cache';
 import Heading from '../components/Heading';
 import { usePusherWebsocket } from '../Hooks/pusherSocket';
 import Chat from './chat';
-import { pusherInstance } from 'simpu-rn-livechat';
+import { pusherInstance } from '../index'
 
 const LiveChatContainer = (Props: LiveChatProps) => {
   const { name, email, app_id, user_id, public_key } = Props;

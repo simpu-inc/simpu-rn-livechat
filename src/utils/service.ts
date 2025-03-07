@@ -1,3 +1,4 @@
+//@ts-nocheck
 import apiClient from '../Provider';
 import { buildAIUrl, client } from './client';
 

@@ -1,13 +1,7 @@
-import hmacSHA256 from 'crypto-js/hmac-sha256';
-import * as cryptojs from 'crypto-js';
 import buffer from 'buffer';
+import * as cryptojs from 'crypto-js';
+import hmacSHA256 from 'crypto-js/hmac-sha256';
 import unescape from 'lodash/unescape';
-import differenceInYears from 'date-fns/differenceInYears';
-import differenceInDays from 'date-fns/differenceInDays';
-import differenceInSeconds from 'date-fns/differenceInSeconds';
-import format from 'date-fns/format';
-import isToday from 'date-fns/isToday';
-import isYesterday from 'date-fns/isYesterday';
 
 export const formatName = (name: string) => {
   if (name === '') return '';
@@ -53,32 +47,16 @@ export const getUserHash = ({
   return `${encoded}.${stringifyPayload}`;
 };
 
-export const formatMessageDateTime = (time) => {
-  const now = new Date();
-  switch (true) {
-    case differenceInSeconds(now, time) < 60:
-      return 'a few seconds ago';
-    case isToday(time):
-      return format(time, 'hh:mm a');
-    case isYesterday(time):
-      return `Yesterday, ${format(time, 'hh:mm a')}`;
-    case differenceInDays(now, time) < 7:
-      return format(time, 'eee, hh:mm a ');
-    case differenceInYears(now, time) === 0:
-      return format(time, 'dd MMM hh:mm a');
-    default:
-      return format(time, 'dd MMM yyyy hh:mm a');
-  }
-};
+
 
 export function hexToRgb(hex: string) {
   var result: RegExpExecArray | null =
     /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
+        r: parseInt(result[1]!, 16),
+        g: parseInt(result[2]!, 16),
+        b: parseInt(result[3]!, 16),
       }
     : null;
 }
@@ -167,31 +145,76 @@ export const trimText = (text: string | undefined, lenght: number) => {
   return text?.substring(0, lenght) + '..';
 };
 
-export const formatDate  = (date:Date) =>{
 
-  if (!(date instanceof Date) || isNaN(date)) {
-    throw new Error("Invalid date");
+
+
+
+export const formatMessageTimeLine = <T extends {created_datetime: string}>(
+  MessageList: Array<T>,
+): (
+  | T
+  | {
+      type: string;
+      marginalTime: string;
+    }
+)[] => {
+
+
+  if (MessageList?.length === 0) return [];
+
+  const tempMessages: (
+    | T
+    | {
+        type: string;
+        marginalTime: string;
+      }
+  )[] = [];
+
+  for (let i = 0; i < MessageList?.length; i++) {
+    const item = MessageList?.[i];
+
+    const itemDate = new Date(item?.created_datetime as unknown as Date);
+    const itemDateString = getDayString(itemDate);
+
+    tempMessages.push(item as T);
+
+    if (
+      i === MessageList.length - 1 ||
+      itemDateString !==
+        getDayString(new Date(MessageList[i + 1]?.created_datetime as unknown as Date))
+    ) {
+      tempMessages.push({
+        type: 'time/interval',
+        marginalTime: itemDate.toISOString(),
+      });
+    }
   }
 
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return tempMessages;
+};
+
+
+const getDayString = (date: Date): string => {
+  const today = new Date();
   const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
+  yesterday.setDate(yesterday.getDate() - 1);
 
-  const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  if (isSameDay(date, today)) return 'Today';
+  if (isSameDay(date, yesterday)) return 'Yesterday';
+  return formatDate(date);
+};
 
-  const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-  const formattedTime = date.toLocaleTimeString('en-GB', timeOptions);
+const isSameDay = (date1: Date, date2: Date): boolean => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+};
 
-  if (dateOnly.getTime() === today.getTime()) {
-    // return `Today ${formattedTime}`;
-    return `Today`;
-  } else if (dateOnly.getTime() === yesterday.getTime()) {
-    // return `Yesterday ${formattedTime}`;
-    return `Yesterday`;
-  } else {
-    const dateOptions = { day: '2-digit', month: 'long', year: 'numeric' };
-    const formattedDate = date.toLocaleDateString('en-GB', dateOptions);
-    return `${formattedDate}, ${formattedTime}`;
-  }
-}
+const formatDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};

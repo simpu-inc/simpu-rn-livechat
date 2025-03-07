@@ -1,23 +1,20 @@
+
 import {
   FlatList,
   Image,
   KeyboardAvoidingView,
   Platform,
-  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import groupBy from 'lodash/groupBy';
-import {format} from 'date-fns';
+import React, {useEffect, useMemo, useState} from 'react';
 import DocumentPicker from 'react-native-document-picker';
 import {
-  fetchThreadMessages,
+  formatMessageTimeLine,
   generateNewMessage,
   generateUUID,
-  getConversationMessages,
   responseTimeRegister,
   sendMessage,
   useSessionQuery,
@@ -32,7 +29,7 @@ import {acceptedFileTypes} from '../../@types/types';
 import Attachment from '../../components/Attachment';
 import AgentsCard from '../../components/AgentsCard';
 import ChatInput from './ChatInput';
-import {fs, hp, SCREEN_HEIGHT, SCREEN_WIDTH, wp} from '../../utils/config';
+import {fs, hp, SCREEN_HEIGHT, wp} from '../../utils/config';
 import {theme} from '../../utils/theme';
 import {useChatProvider} from '../../context';
 import ChatItem from './chatItem';
@@ -53,11 +50,11 @@ const Chat = () => {
     handleCloseLiveChat,
   } = useChatProvider();
 
-  const {subscribeTochannels, pusherInit} = usePusherWebsocket();
+  const { pusherInit} = usePusherWebsocket();
 
   const [message, setMessage] = useState('');
 
-  let clearTypingTimerId: ReturnType<typeof setTimeout>;
+  // let clearTypingTimerId: ReturnType<typeof setTimeout>;
 
   // console.log("current session id",sessionID)
 
@@ -143,7 +140,7 @@ const Chat = () => {
     },
   });
 
-  const [refreshing, setRefreshing] = useState(false);
+  // const [refreshing, setRefreshing] = useState(false);
 
 
 
@@ -198,13 +195,15 @@ const Chat = () => {
     enabled: !!sessionID,
   });
 
-  const messages =
-    threadMessages?.pages?.reduce(
-      (acc, page) => [...acc, ...page.messages],
-      [],
-    ) ?? [];
 
-  // console.log('=====Thread message:===', JSON.stringify(threadMessages, null, 3));
+
+    const messages = useMemo(() => {
+
+      return formatMessageTimeLine(threadMessages?.pages?.reduce((acc,page)=>[...acc,...page.messages],[]));
+  
+    }, [threadMessages]);
+
+
 
   const styles = StyleSheet.create({
     container: {

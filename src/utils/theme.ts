@@ -1,13 +1,6 @@
-type themeType = {
-  SimpuWhite: string;
-  SimpuPaleWhite: string;
-  SimpuBlack: string;
-  SimpuBlue: string;
-  SimpuGray: string;
-  SimpuDarkGray: string;
-};
 
-export const theme: themeType = {
+
+export const theme = {
   SimpuWhite: '#fff',
   SimpuPaleWhite: '#f5f5f5',
   SimpuBlack: '#000',
@@ -15,3 +8,6 @@ export const theme: themeType = {
   SimpuGray: '#d3d3d3',
   SimpuDarkGray: '#808080',
 };
+
+
+export type themeType =  typeof theme;

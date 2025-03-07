@@ -1,12 +1,10 @@
-import { StyleSheet, Text, View, Platform, Modal, Image } from 'react-native';
+import { StyleSheet, Text, View, Platform,  Image } from 'react-native';
 import React, { useState } from 'react';
 import { theme } from '../utils/theme';
 import AgentsCard from '../components/AgentsCard';
 import SocialCard from '../components/SocialCard';
 import { useChatProvider } from '../context';
 import {
-  formatDate,
-  formatMessageDateTime,
   responseTimeLabelRegister,
   trimText,
   useActiveSessionQuery,
@@ -20,6 +18,7 @@ import { FlatList } from 'react-native';
 import Avatar from '../components/Avatar';
 import type { conversationType } from '../@types/types';
 import { TouchableOpacity } from 'react-native';
+import { formatMessageDateTime } from '../utils/date';
 
 
 const Start = () => {
@@ -302,7 +301,7 @@ const ConversationItem = ({
       style={{
         flexDirection: 'row',
         backgroundColor: 'rgba(0,0,0,0.05)',
-        marginHorizontal: hp(20),
+        marginHorizontal: hp(10),
         borderRadius: hp(10),
         paddingHorizontal: hp(10),
         paddingVertical: hp(8),
@@ -329,10 +328,9 @@ const ConversationItem = ({
             <Text style={{ color: theme.SimpuBlack }}>
               {trimText(item.last_message?.author?.name, 25)}
             </Text>
-            <Text style={{ color: theme.SimpuDarkGray, fontSize: fs(12) }}>
-              {new Date(
-                item?.last_message?.created_datetime
-              )?.toLocaleDateString()}
+            <Text style={{ color: theme.SimpuDarkGray, fontSize: fs(12) ,marginRight:hp(10)}}>
+              {formatMessageDateTime(item?.last_message?.created_datetime)
+           }
             </Text>
           </View>
           <View>
@@ -348,6 +346,7 @@ const ConversationItem = ({
         style={{
           width: hp(15),
           height: hp(15),
+          // marginRight:hp(20),
           transform: [{ rotate: '180deg' }],
         }}
       />

@@ -1,18 +1,15 @@
+import React from 'react';
 import {
   Image,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
-  type GestureResponderEvent,
+  type GestureResponderEvent
 } from 'react-native';
-import React from 'react';
-import { theme } from '../../utils/theme';
-import { SCREEN_HEIGHT, fs, hp, wp } from '../../utils/config';
 import Attachment from '../../components/Attachment';
+import { SCREEN_HEIGHT, fs, hp, wp } from '../../utils/config';
+import { theme } from '../../utils/theme';
 
 type ChatInputprops = {
   message: string;

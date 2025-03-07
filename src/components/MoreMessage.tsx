@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {memo} from 'react';
 import { fs, hp, SCREEN_WIDTH } from '../utils/config';
-import { useChatProvider } from '../context';
+
 
 
 
@@ -11,7 +11,6 @@ type moreMessagePropsType = {
 
 const MoreMessage = ({position}: moreMessagePropsType) => {
 
-    const { orgSettings } = useChatProvider();
 
 
   const styles = StyleSheet.create({
