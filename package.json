@@ -54,6 +54,7 @@
   },
   "homepage": "https://github.com/simpu-inc/simpu-rn-livechat#readme",
   "publishConfig": {
+    "access":"public",
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
