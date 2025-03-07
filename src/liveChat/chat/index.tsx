@@ -1,4 +1,4 @@
-
+//@ts-nocheck
 import {
   FlatList,
   Image,

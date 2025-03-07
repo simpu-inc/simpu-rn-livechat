@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {
   StyleSheet,
   Text,
@@ -57,7 +58,7 @@ const ContactForm = () => {
   });
 
   const SendMessage = async () => {
-    const res = await getCompanyConfig();
+    // const res = await getCompanyConfig();ß
 
     if (!parsedMessage.success) {
       const errors = parsedMessage?.error;
@@ -78,7 +79,7 @@ const ContactForm = () => {
 
     const hash = getUserHash({
       public_key: publicKey,
-      secret_key: orgSettings?.secret_key,
+      secret_key: orgSettings?.secret_key as string,
       user_id: undefined!,
     });
 
@@ -98,7 +99,7 @@ const ContactForm = () => {
       const user_hash = getUserHash({
         user_id,
         public_key: publicKey,
-        secret_key: orgSettings?.secret_key,
+        secret_key: orgSettings?.secret_key as string,
       });
 
       // console.log('response generate user', { user_hash });

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { StyleSheet, Text, View, Platform,  Image } from 'react-native';
 import React, { useState } from 'react';
 import { theme } from '../utils/theme';

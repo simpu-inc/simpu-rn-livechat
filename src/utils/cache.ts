@@ -14,6 +14,7 @@ export const getCache = async (Key: string) => {
     return await AsyncStorage.getItem(Key);
   } catch (e) {
     // read error
+    return null;
   }
 };
 

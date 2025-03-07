@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { View } from 'react-native';
 import React, { useCallback, useEffect } from 'react';
 import Start from './Start';

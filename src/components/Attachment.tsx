@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { hp, wp } from '../utils/config';

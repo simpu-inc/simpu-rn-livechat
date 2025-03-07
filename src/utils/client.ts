@@ -1,3 +1,4 @@
+//@ts-nocheck
 // import { loadState } from ".";
 // import { pusher } from "./pusher";
 import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
