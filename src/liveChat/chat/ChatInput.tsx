@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
-  type GestureResponderEvent
+  type GestureResponderEvent,
 } from 'react-native';
 import Attachment from '../../components/Attachment';
 import { SCREEN_HEIGHT, fs, hp, wp } from '../../utils/config';
@@ -68,20 +68,22 @@ const ChatInput = ({
   });
   return (
     <View style={styles.mainContainer}>
-      {attachements?.length>0 && <View style={styles.attachContainer}>
-        {attachements?.map((attach, index: number) => (
-          <Attachment
-            attach={attach}
-            key={`${index}`}
-            onUploaded={onUploaded}
-            onDelete={onDelete}
-          />
-        ))}
-      </View>}
+      {attachements?.length > 0 && (
+        <View style={styles.attachContainer}>
+          {attachements?.map((attach, index: number) => (
+            <Attachment
+              attach={attach}
+              key={`${index}`}
+              onUploaded={onUploaded}
+              onDelete={onDelete}
+            />
+          ))}
+        </View>
+      )}
       <View style={styles.inputContainer}>
         <TextInput
           multiline
-          textAlignVertical='top'
+          textAlignVertical="top"
           value={message}
           onChangeText={(text) => setMessage(text)}
           placeholder="Write your message"
@@ -110,4 +112,4 @@ const ChatInput = ({
   );
 };
 
-export default ChatInput;
+export default memo(ChatInput);
