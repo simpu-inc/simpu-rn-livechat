@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import {
   Image,
   StyleSheet,
@@ -112,4 +112,4 @@ const ChatInput = ({
   );
 };
 
-export default memo(ChatInput);
+export default ChatInput;

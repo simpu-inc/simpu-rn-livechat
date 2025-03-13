@@ -326,16 +326,16 @@ const ConversationItem = ({
               alignItems: 'center',
             }}
           >
-            <Text style={{ color: theme.SimpuBlack }}>
+            <Text style={{ color: theme.SimpuBlack ,fontSize:fs(12),fontWeight:'700'}}>
               {trimText(item.last_message?.author?.name, 25)}
             </Text>
-            <Text style={{ color: theme.SimpuDarkGray, fontSize: fs(12) ,marginRight:hp(10)}}>
+            <Text style={{ color: theme.SimpuDarkGray, fontSize: fs(10) ,marginRight:hp(10)}}>
               {formatMessageDateTime(item?.last_message?.created_datetime)
            }
             </Text>
           </View>
           <View>
-            <Text style={{ color: theme.SimpuDarkGray }}>
+            <Text style={{ color: theme.SimpuDarkGray ,fontSize:fs(12)}}>
               {trimText(item.last_message?.entity.content?.body, 30)}
             </Text>
           </View>
@@ -345,9 +345,11 @@ const ConversationItem = ({
       <Image
         source={require('../assets/backIcon.png')}
         style={{
-          width: hp(15),
-          height: hp(15),
-          // marginRight:hp(20),
+          width: hp(14),
+          height: hp(14),
+          marginRight:hp(5),
+          position:'absolute',
+          right:2,
           transform: [{ rotate: '180deg' }],
         }}
       />

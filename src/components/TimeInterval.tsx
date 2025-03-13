@@ -16,7 +16,7 @@ const TimeInterval = ({
     <View style={{marginVertical: hp(20), position: 'relative'}}>
       <View
         style={{
-          height: hp(0.25),
+          height: hp(0.2),
           width: '100%',
           backgroundColor: theme.SimpuDarkGray,
           position: 'absolute',
@@ -30,6 +30,7 @@ const TimeInterval = ({
           alignSelf: 'center',
           paddingHorizontal: hp(8),
           paddingVertical: hp(4),
+          borderRadius:hp(6)
         }}>
         <Text
           style={{

@@ -56,8 +56,6 @@ const Chat = () => {
 
   // let clearTypingTimerId: ReturnType<typeof setTimeout>;
 
-  // console.log("current session id",sessionID)
-
   const [attachements, setAttachements] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState();
   const [showOlderMessageBox, setshowOlderMessageBox] = useState(false);
@@ -70,18 +68,11 @@ const Chat = () => {
     onMutate: async (data) => {
       const { attachments, body } = data;
 
-      // console.log("chat data mutation",JSON.stringify(data,null,3))
-
       const newMessage = generateNewMessage({
         attachments,
         user_id: userId,
         body,
       });
-
-      // console.log(
-      //   '===new Generated message ===',
-      //   JSON.stringify(newMessage, null, 3)
-      // );
 
       await queryClient.cancelQueries({
         queryKey: ['messages', sessionID],
@@ -136,11 +127,8 @@ const Chat = () => {
         queryKey: ['messages', data.session_id],
         exact: true,
       });
-      // history.push(`/chat/${data.session_id}`);
     },
   });
-
-  // const [refreshing, setRefreshing] = useState(false);
 
   const { data: session } = useSessionQuery(
     {
@@ -173,19 +161,9 @@ const Chat = () => {
         }
       );
     },
-    // queryFn: ({ pageParam }) =>
-    //   fetchThreadMessages({
-    //     pageParam,
-    //     app_id: AppId,
-    //     session_id: sessionID,
-    //     user_hash: userHash,
-    //   }),
+
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      // console.log(
-      //   'nextPage from inifinite query',
-      //   JSON.stringify(lastPage, null, 3)
-      // );
       return lastPage?.meta?.page < lastPage?.meta?.page_count
         ? lastPage?.meta?.page + 1
         : undefined;
@@ -314,20 +292,12 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    // console.log("pusher connection state ===",pusherInstance?.connectionState)
-
     if (pusherInstance?.connectionState === 'CONNECTED') return;
 
     if (userId) {
       pusherInit({ app_id: AppId, user_hash: userHash, user_id: userId ?? '' });
     }
   }, [userId, userHash, AppId]);
-
-  // console.log(
-  //   '==== UPLoaded Files=== ',
-  //   JSON.stringify(uploadedFiles, null, 3)
-  // );
-  console.log('====Pusher connection=== ', pusherInstance.connectionState);
 
   function fetchNextPageHandler() {
     if (!threadMessagesHasNextPage) return;
@@ -385,12 +355,7 @@ const Chat = () => {
             backgroundColor: theme.SimpuWhite,
             paddingHorizontal: hp(10),
           }}
-          // refreshControl={
-          //   <RefreshControl
-          //     refreshing={refreshing}
-          //     onRefresh={threadMessagesRefetch}
-          //   />
-          // }
+   
           data={messages ?? []}
           onEndReached={fetchNextPageHandler}
           onEndReachedThreshold={0.7}

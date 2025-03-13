@@ -74,7 +74,7 @@ const ChatItem = ({
           style={{
             paddingTop: hp(4),
             color: orgSettings?.style?.background_color ?? theme.SimpuBlue,
-            fontSize: fs(12),
+            fontSize: fs(10),
           }}
         >
           Agent: {item?.author?.name ?? item?.author?.platform_name}

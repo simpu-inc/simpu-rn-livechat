@@ -17,7 +17,7 @@ const MoreMessage = ({position}: moreMessagePropsType) => {
     container: {
       zIndex: 100,
       position: 'absolute',
-      ...(position === 'top' && {top: SCREEN_WIDTH * 0.035}),
+      ...(position === 'top' && {top: SCREEN_WIDTH * 0.34}),
       ...(position === 'bottom' && {bottom: SCREEN_WIDTH * 0.12}),
       left: '35%',
       right: '40%',
@@ -40,7 +40,7 @@ const MoreMessage = ({position}: moreMessagePropsType) => {
       elevation: 1,
     },
     messageText: {
-      color: '#000',
+      color: 'gray',
       fontSize: fs(12),
       textAlign: 'center',
     },

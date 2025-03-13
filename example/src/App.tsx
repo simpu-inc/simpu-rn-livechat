@@ -6,7 +6,6 @@ import SimpuLiveChat from '@simpu/simpu-rn-livechat';
 export default function App() {
 
 
-
   return (
     <View style={styles.container}>
     
