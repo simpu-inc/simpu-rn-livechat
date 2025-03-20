@@ -1,16 +1,19 @@
 //@ts-nocheck
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
-import { getUnreadMessageCount, getWidgetApps, loadState, useWidget } from '.';
+import { 
+  // getUnreadMessageCount, 
+  // getWidgetApps,
+   loadState, useWidget } from '.';
 // import { saveState } from "./localstorage";
 // import { pusher, subscribeToPresenceChannel } from './pusher';
 import {
-  getBotOperatorCredentials,
-  getConversationMessages,
-  getCustomBotPath,
-  getCustomBotRootPath,
-  getSessionById,
-  getUserActiveSession,
-  getWidgetSettings,
+  // getBotOperatorCredentials,
+  // getConversationMessages,
+  // getCustomBotPath,
+  // getCustomBotRootPath,
+  // getSessionById,
+  // getUserActiveSession,
+  // getWidgetSettings,
   uploadConversationFile,
 } from './service';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -73,13 +76,13 @@ export const useWidgetAppsQuery = ({
   });
 };
 
-export const useNotificationsQuery = ({ app_id }) => {
-  const { signed_request } = loadState() ?? {};
+// export const useNotificationsQuery = ({ app_id }) => {
+//   const { signed_request } = loadState() ?? {};
 
-  return useQuery('notifications', () => getUnreadMessageCount({ app_id }), {
-    enabled: !!signed_request && !!app_id,
-  });
-};
+//   return useQuery('notifications', () => getUnreadMessageCount({ app_id }), {
+//     enabled: !!signed_request && !!app_id,
+//   });
+// };
 
 export const useActiveSessionQuery = ({ app_id ,signed_request}:{app_id:string,signed_request:string}, options:any) =>
   useQuery({

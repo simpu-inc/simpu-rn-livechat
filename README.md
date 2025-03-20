@@ -4,7 +4,7 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://www.simpu.co/legal/privacy-policy)
 
-[![npm version](https://badge.fury.io/js/@pusher%2Fpusher-websocket-react-native.svg)](https://badge.fury.io/js/@pusher%2Fpusher-websocket-react-native)
+<!-- [![npm version](https://badge.fury.io/js/@pusher%2Fpusher-websocket-react-native.svg)](https://badge.fury.io/js/@pusher%2Fpusher-websocket-react-native) -->
 
 For more information about [Simpu live chat](https://www.simpu.co/) visit the official simpu developer docs.
 
@@ -30,19 +30,19 @@ a minimal application, you can connect your app_id and public_key to test .
 ## Installation
 
 ```sh
-npm install simpu-rn-livechat
+npm install @simpu/simpu-rn-livechat
 ```
 
 or
 
 ```sh
-yarn add simpu-rn-livechat
+yarn add @simpu/simpu-rn-livechat
 ```
 
 ## Usage
 
 ```js
-import SimpuLiveChat from 'simpu-rn-livechat';
+import SimpuLiveChat from '@simpu/simpu-rn-livechat';
 
 // ...
 

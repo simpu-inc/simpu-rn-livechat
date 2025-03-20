@@ -36,52 +36,52 @@ export const usePusherWebsocket = () => {
     currentState: string,
     previousState: string
   ) {
-    console.log(
-      `${Platform.OS} onConnectionStateChange. previousState=${previousState} newState=${currentState}`
-    );
+    // console.log(
+    //   `${Platform.OS} onConnectionStateChange. previousState=${previousState} newState=${currentState}`
+    // );
   }
 
   function onError(message: string, code: Number, error: any) {
-    console.error(error);
+    // console.error(error);
     console.log(`onError: ${message} code: ${code} exception: ${error}`);
   }
 
   async function onEvent(event: PusherEvent) {
     const data = await JSON.parse(event?.data);
-    console.log('listening to event', event);
+    // console.log('listening to event', event);
 
-    console.log(
-      'listening to event from pusher init event',
-      JSON.stringify(data, null, 2)
-    );
+    // console.log(
+    //   'listening to event from pusher init event',
+    //   JSON.stringify(data, null, 2)
+    // );
   }
 
   function onSubscriptionSucceeded(channelName: string, data: any) {
-    console.log(
-      ` ${
-        Platform.OS
-      } onSubscriptionSucceeded: ${channelName} data: ${JSON.stringify(
-        data,
-        null,
-        2
-      )}`
-    );
+    // console.log(
+    //   ` ${
+    //     Platform.OS
+    //   } onSubscriptionSucceeded: ${channelName} data: ${JSON.stringify(
+    //     data,
+    //     null,
+    //     2
+    //   )}`
+    // );
 
     const channel = pusherInstance.getChannel(channelName) as PusherChannel;
     // const me = channel?.me;
   }
 
   function onSubscriptionError(channelName: string, message: string, e: any) {
-    console.log('subscription error', e);
-    console.log(
-      ` ${
-        Platform.OS
-      } onSubscriptionSucceeded: ${channelName} data: ${JSON.stringify(
-        message,
-        null,
-        2
-      )}`
-    );
+    // console.log('subscription error', e);
+    // console.log(
+    //   ` ${
+    //     Platform.OS
+    //   } onSubscriptionSucceeded: ${channelName} data: ${JSON.stringify(
+    //     message,
+    //     null,
+    //     2
+    //   )}`
+    // );
   }
 
   const pusherInit = async ({
@@ -97,8 +97,8 @@ export const usePusherWebsocket = () => {
 
     if (!(app_id && user_hash)) return;
 
-    console.log('COPY APP_ID: ====' + app_id);
-    console.log('COPY USER_HASH: ====' + user_hash);
+    // console.log('COPY APP_ID: ====' + app_id);
+    // console.log('COPY USER_HASH: ====' + user_hash);
 
     await pusherInstance.init({
       //     apiKey: ENVIROMENT ? PUSHER_APP_KEY_DEMO : PUSHER_APP_KEY_PRODUCTION,
