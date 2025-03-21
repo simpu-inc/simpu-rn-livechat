@@ -1,4 +1,4 @@
-# simpu react-native livechat sdk
+# Simpu react-native livechat sdk
 
 [![Twitter](https://img.shields.io/badge/twitter-@simpuinc-blue.svg?style=flat)](http://twitter.com/simpuinc)
 
@@ -27,6 +27,16 @@ a minimal application, you can connect your app_id and public_key to test .
 
 - https://github.com/simpu-inc/simpu-rn-livechat/tree/main/example
 
+<!-- ![ScreenShort](./doc/IOS_image1.png) -->
+### Image Preview
+
+<div style="display: flex; justify-content: space-between;">
+  <img src="./doc/IOS_image1.png" alt="Image 1" width="30%" />
+  <img src="./doc/IOS_image3.png"" alt="Image 3" width="30%" />
+  <img src="./doc/IOS_image2.png" alt="Image 2" width="30%" />
+</div>
+
+
 ## Installation
 
 ```sh
@@ -49,7 +59,7 @@ import SimpuLiveChat from '@simpu/simpu-rn-livechat';
 const App = () => {
   return (
     <View>
-      ... // place component anywhere around your App.js or App.tsx
+      ... // place component anywhere around your App.jsx or App.tsx
       <SimpuLiveChat 
           app_id={"app id"}
           public_key={"publik key"}
@@ -74,6 +84,29 @@ The complete set of **options** is described below:
 
 
 ## Methods 
+
+```js
+import SimpuLiveChat from '@simpu/simpu-rn-livechat';
+
+
+
+const Help = () => {
+
+const handleOpenLiveChat = ()=>{
+//call the live chat open method with or without parameters
+SimpuLiveChat.open()
+}
+
+
+  return (
+    <View>
+      <TouchableOpacity onPress={handleOpenLiveChat}>
+            <Text>Talk to an Agent</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+```
 
 <!-- ## Contributing
 
