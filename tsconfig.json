@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "simpu-rn-livechat": ["./src/index"]
+      "@simpu/simpu-rn-livechat": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

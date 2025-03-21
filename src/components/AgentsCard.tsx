@@ -1,13 +1,15 @@
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import Avatar from './Avatar';
-import {theme} from '../utils/theme';
+import { theme } from '../utils/theme';
+import { useChatProvider } from '../context';
+import { fs, hp } from '../utils/config';
 
 type AgentsCardProps = {
-  agents: any[];
+  size: 'small' | 'big';
 };
-const AgentsCard = ({agents}: AgentsCardProps) => {
-  console.log('agents lentgh', agents?.length);
+const AgentsCard = ({ size }: AgentsCardProps) => {
+  const { orgSettings } = useChatProvider();
   const styles = StyleSheet.create({
     container: {
       padding: 10,
@@ -15,33 +17,37 @@ const AgentsCard = ({agents}: AgentsCardProps) => {
     },
     extraContainer: {
       backgroundColor: theme.SimpuGray,
-      height: 50,
-      width: 50,
-      borderRadius: 25,
+      height: size === 'small' ? hp(20) : hp(50),
+      width: size === 'small' ? hp(20) : hp(50),
+      borderRadius: size === 'small' ? hp(20) : hp(50),
       alignItems: 'center',
       justifyContent: 'center',
     },
     extraText: {
       color: theme.SimpuBlack,
-      fontSize: 16,
+      fontSize: size === 'small' ? fs(12) : fs(16),
       fontWeight: '600',
     },
   });
   return (
     <View style={styles.container}>
-      {agents?.slice(0, 5)?.map((ite, i) => {
+      {orgSettings?.members?.slice(0, 5)?.map((ite, i) => {
         return (
           <Avatar
             name={ite?.name}
+            imgUrl={ite?.image_url}
             key={i}
             index={i}
-            agentLength={agents?.length}
+            agentLength={orgSettings?.members?.length}
+            size={size}
           />
         );
       })}
-      {agents?.length > 5 && (
+      {orgSettings?.members?.length! > 5 && (
         <View style={styles.extraContainer}>
-          <Text style={styles.extraText}>+{agents?.length - 5}</Text>
+          <Text style={styles.extraText}>
+            +{orgSettings?.members?.length! - 5}
+          </Text>
         </View>
       )}
     </View>

@@ -1,0 +1,12 @@
+node_modules
+.DS_Store.DS_Store
+
+
+# Cocoapods
+#
+example
+example/ios/Pods
+
+# Ruby
+example/vendor/
+src

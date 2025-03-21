@@ -1,6 +1,6 @@
 {
-  "name": "simpu-rn-livechat",
-  "version": "0.0.1",
+  "name": "@simpu/simpu-rn-livechat",
+  "version": "0.0.3",
   "description": "simpu react-native livechat sdk",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -32,13 +32,16 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
-    "release": "release-it"
+    "release": "release-it",
+    "ios": "yarn example ios",
+    "android": "yarn example android"
   },
   "keywords": [
     "react-native",
     "ios",
     "android",
-    "LiveChat"
+    "LiveChat",
+    "Simpu"
   ],
   "repository": {
     "type": "git",
@@ -51,18 +54,39 @@
   },
   "homepage": "https://github.com/simpu-inc/simpu-rn-livechat#readme",
   "publishConfig": {
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "@pusher/pusher-websocket-react-native": "^1.3.1",
+    "@react-native-async-storage/async-storage": "^1.22.3",
+    "@tanstack/react-query": "^5.20.5",
+    "axios": "^1.6.7",
+    "buffer": "^6.0.3",
+    "crypto-js": "^4.2.0",
+    "date-fns": "^3.3.1",
+    "i": "^0.3.7",
+    "lodash.groupby": "^4.6.0",
+    "lodash.unescape": "^4.0.1",
+    "npm": "^11.0.0",
+    "pretty-bytes": "^6.1.1",
+    "react-native-document-picker": "^9.1.1",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-phone-number-input": "^2.1.0",
+    "simpu-api-sdk": "^1.2.177",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.5.0",
     "@react-native/eslint-config": "^0.72.2",
     "@release-it/conventional-changelog": "^5.0.0",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^28.1.2",
+    "@types/lodash": "^4.14.202",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.70.0",
     "commitlint": "^17.0.2",
-    "date-fns": "^3.3.1",
     "del-cli": "^5.0.0",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.5.0",
@@ -73,7 +97,6 @@
     "react": "18.2.0",
     "react-native": "0.73.4",
     "react-native-builder-bob": "^0.20.0",
-    "react-native-phone-number-input": "^2.1.0",
     "release-it": "^15.0.0",
     "turbo": "^1.10.7",
     "typescript": "^5.0.2"

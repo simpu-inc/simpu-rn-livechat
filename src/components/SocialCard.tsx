@@ -1,35 +1,38 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import {theme} from '../utils/theme';
-import {useChatProvider} from '../context';
+import { theme } from '../utils/theme';
+import { useChatProvider } from '../context';
+import { fs, hp, wp } from '../utils/config';
+import { Linking } from 'react-native';
 
-type SocialsProps = {};
 
-const SocialBtn = ({title, url}: {title: string; url: string}) => {
-  const {orgSettings} = useChatProvider();
+const SocialBtn = ({ title, url }: { title: string; url: string }) => {
+  const { orgSettings } = useChatProvider();
+
   const styles = StyleSheet.create({
     btn: {
-      height: 40,
+      height: hp(44),
       backgroundColor: theme.SimpuWhite,
-      marginVertical: 10,
-      marginHorizontal: 5,
-      borderRadius: 10,
+      marginVertical: hp(10),
+      marginHorizontal: wp(15),
+      borderRadius: hp(10),
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
       borderWidth: 1,
-      borderColor: orgSettings.brandColor ?? theme.SimpuBlue,
+      borderColor: orgSettings?.style?.background_color ?? theme.SimpuBlue,
     },
     btnIcon: {
-      height: 20,
-      width: 20,
-      paddingRight: 7,
+      height: hp(20),
+      width: hp(20),
+      paddingRight: wp(7),
     },
     btnTxt: {
       color: theme.SimpuBlack,
-      fontSize: 16,
+      fontSize: fs(14),
       fontWeight: '600',
-      paddingLeft: 7,
+      paddingLeft: wp(7),
+      textTransform: 'capitalize',
     },
   });
 
@@ -56,7 +59,7 @@ const SocialBtn = ({title, url}: {title: string; url: string}) => {
             source={require('../assets/messenger.png')}
           />
         );
-      case 'WhatsApp':
+      case 'whatsapp':
         return (
           <Image
             style={styles.btnIcon}
@@ -65,25 +68,32 @@ const SocialBtn = ({title, url}: {title: string; url: string}) => {
         );
 
       default:
-        break;
+        return '';
     }
   };
+
+  const openLink = () => {
+    if (url) {
+      Linking.openURL(url);
+    }
+  };
+
   return (
-    <TouchableOpacity style={styles.btn}>
+    <TouchableOpacity style={styles.btn} onPress={openLink}>
       {Icon(title)}
       <Text style={styles.btnTxt}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
-const SocialCard = ({}: SocialsProps) => {
-  const styles = StyleSheet.create({});
+const SocialCard = () => {
+  const { apps } = useChatProvider();
+
   return (
     <View>
-      <SocialBtn title={'Twitter'} url={''} />
-      <SocialBtn title={'Instagram'} url={''} />
-      <SocialBtn title={'Messenger'} url={''} />
-      <SocialBtn title={'WhatsApp'} url={''} />
+      {apps?.map((app, index) => (
+        <SocialBtn key={index} title={app?.type} url={app.url} />
+      ))}
     </View>
   );
 };
